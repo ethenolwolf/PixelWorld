@@ -16,7 +16,7 @@ public class Assets {
     public static Map<Class, Texture> ENEMY_IMG = new HashMap<Class, Texture>();
     public static BitmapFont font;
 
-    public static final String BACKGROUND = "core/assets/background.jpg";
+    public static Texture BACKGROUND;
     public static final String FONT = "core/assets/Ubuntu-MI.ttf";
 
 
@@ -28,9 +28,9 @@ public class Assets {
 
         ENEMY_IMG.put(Blocker.class, new Texture("core/assets/Enemies/blocker.png"));
 
-        font = TrueTypeFontFactory.createBitmapFont(Gdx.files.internal(FONT), Costants.FONT_CHARACTERS, 50.5f, 50f, 1.0f, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        font = TrueTypeFontFactory.createBitmapFont(Gdx.files.internal(FONT), Constants.FONT_CHARACTERS, 50.5f, 50f, 1.0f, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         font.setColor(1f, 0f, 0f, 1f);
 
-
+        BACKGROUND = new Texture("core/assets/background.jpg");
     }
 }
