@@ -10,7 +10,7 @@ public class NameExtractor {
     final static String FILE_PATH = "core/assets/maleNames.dic";
     final static String DEFAULT_NAME = "Alex";
 
-    public static String extract(){
+    public static String extract() {
         LineNumberReader lnr;
         try {
             lnr = new LineNumberReader(new FileReader(new File(FILE_PATH)));
@@ -28,7 +28,7 @@ public class NameExtractor {
             Random rand = new Random();
             FileInputStream fs = new FileInputStream(FILE_PATH);
             BufferedReader br = new BufferedReader(new InputStreamReader(fs));
-            for(int i = 0; i < rand.nextInt(lnr.getLineNumber())-1; i++)
+            for (int i = 0; i < rand.nextInt(lnr.getLineNumber()) - 1; i++)
                 br.readLine();
             String line = br.readLine();
             String names[] = line.split(" ");

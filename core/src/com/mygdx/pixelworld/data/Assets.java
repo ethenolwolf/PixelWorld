@@ -20,10 +20,10 @@ public class Assets {
     public static final String FONT = "core/assets/Ubuntu-MI.ttf";
 
 
-    public static void init(){
-        CHARACTER_IMG.put(CharacterType.WIZARD,  new Texture("core/assets/Characters/wizard.png"));
-        CHARACTER_IMG.put(CharacterType.ARCHER,  new Texture("core/assets/Characters/wizard.png"));
-        CHARACTER_IMG.put(CharacterType.PRIEST,  new Texture("core/assets/Characters/wizard.png"));
+    public static void init() {
+        CHARACTER_IMG.put(CharacterType.WIZARD, new Texture("core/assets/Characters/wizard.png"));
+        CHARACTER_IMG.put(CharacterType.ARCHER, new Texture("core/assets/Characters/wizard.png"));
+        CHARACTER_IMG.put(CharacterType.PRIEST, new Texture("core/assets/Characters/wizard.png"));
         CHARACTER_IMG.put(CharacterType.WARRIOR, new Texture("core/assets/Characters/wizard.png"));
 
         ENEMY_IMG.put(Blocker.class, new Texture("core/assets/Enemies/blocker.png"));

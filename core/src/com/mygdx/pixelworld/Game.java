@@ -16,7 +16,7 @@ public class Game extends ApplicationAdapter {
     GameCharacter player;
 
     @Override
-    public void create () {
+    public void create() {
         batch = new SpriteBatch();
         map = new Map(Assets.BACKGROUND);
         map.addEnemy(Blocker.class, 250, 150);
@@ -25,7 +25,7 @@ public class Game extends ApplicationAdapter {
     }
 
     @Override
-    public void render () {
+    public void render() {
         deltaTime = Gdx.graphics.getDeltaTime();
 
         Gdx.gl.glClearColor(1, 0, 0, 1);

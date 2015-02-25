@@ -8,8 +8,8 @@ public class Enemy {
 
     protected Vector2 pos;
 
-    public Enemy(float x, float y){
-        pos = new Vector2(x,y);
+    public Enemy(float x, float y) {
+        pos = new Vector2(x, y);
     }
 
     public Vector2 getPos() {
@@ -20,7 +20,7 @@ public class Enemy {
         AI(pp);
     }
 
-    protected void AI(Vector2 playerPos){
+    protected void AI(Vector2 playerPos) {
     }
 
     public void draw(SpriteBatch batch) {

@@ -24,41 +24,41 @@ public class Map {
         set(background);
     }
 
-    public void set(String path){
+    public void set(String path) {
         background = new Texture(path);
     }
 
-    public void addEnemy(Class type, float x, float y){
-        if(type == Blocker.class) enemies.add(new Blocker(x,y));
+    public void addEnemy(Class type, float x, float y) {
+        if (type == Blocker.class) enemies.add(new Blocker(x, y));
     }
 
-    public void update(Vector2 playerPos){
+    public void update(Vector2 playerPos) {
 
-        for(Enemy e : enemies){
+        for (Enemy e : enemies) {
             e.update(playerPos);
         }
 
         float sw = Gdx.graphics.getWidth();
         float sh = Gdx.graphics.getHeight();
 
-            if(playerPos.x <= sw*Costants.X_LIMIT_MIN) offset.add(Game.deltaTime * SPEED, 0);
-            else if(playerPos.x >= sw*Costants.X_LIMIT_MAX) offset.add(-Game.deltaTime * SPEED, 0);
-            if(playerPos.y <= sh*Costants.Y_LIMIT_MIN) offset.add(0, Game.deltaTime * SPEED);
-            else if(playerPos.y >= sh*Costants.Y_LIMIT_MAX) offset.add(0, -Game.deltaTime * SPEED);
+        if (playerPos.x <= sw * Costants.X_LIMIT_MIN) offset.add(Game.deltaTime * SPEED, 0);
+        else if (playerPos.x >= sw * Costants.X_LIMIT_MAX) offset.add(-Game.deltaTime * SPEED, 0);
+        if (playerPos.y <= sh * Costants.Y_LIMIT_MIN) offset.add(0, Game.deltaTime * SPEED);
+        else if (playerPos.y >= sh * Costants.Y_LIMIT_MAX) offset.add(0, -Game.deltaTime * SPEED);
 
-            if(offset.x > 0) offset.x = 0;
-            if(offset.y > 0) offset.y = 0;
-            if(offset.x < -background.getWidth() + sw) offset.x = -background.getWidth() + sw;
-            if(offset.y < -background.getHeight() + sh) offset.y = -background.getHeight() + sh;
+        if (offset.x > 0) offset.x = 0;
+        if (offset.y > 0) offset.y = 0;
+        if (offset.x < -background.getWidth() + sw) offset.x = -background.getWidth() + sw;
+        if (offset.y < -background.getHeight() + sh) offset.y = -background.getHeight() + sh;
 
     }
 
     public void draw(SpriteBatch batch) {
         batch.draw(background, offset.x, offset.y);
 
-        for(Enemy e : enemies){
-            if(e.getPos().x < Gdx.graphics.getWidth()-offset.x && e.getPos().x >= 0-offset.x &&
-               e.getPos().y < Gdx.graphics.getHeight()-offset.y && e.getPos().y-offset.y >= 0) e.draw(batch);
+        for (Enemy e : enemies) {
+            if (e.getPos().x < Gdx.graphics.getWidth() - offset.x && e.getPos().x >= 0 - offset.x &&
+                    e.getPos().y < Gdx.graphics.getHeight() - offset.y && e.getPos().y - offset.y >= 0) e.draw(batch);
         }
     }
 }
