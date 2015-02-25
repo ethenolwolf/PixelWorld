@@ -84,13 +84,7 @@ public class Player {
                 break;
         }
 
-        float pw = Gdx.graphics.getWidth() * Constants.CHARACTER_WIDTH;
-        float ph = Gdx.graphics.getHeight() * Constants.CHARACTER_HEIGHT;
-
-        if (pos.x < 0) pos.x = 0;
-        if (pos.y < 0) pos.y = 0;
-        if (pos.x + pw > Assets.BACKGROUND.getWidth()) pos.x = Assets.BACKGROUND.getWidth() - pw;
-        if (pos.y + ph > Assets.BACKGROUND.getHeight()) pos.y = Assets.BACKGROUND.getHeight() - ph;
+        pos = MapBound.bound(pos, Gdx.graphics.getWidth() * Constants.CHARACTER_WIDTH, Gdx.graphics.getHeight() * Constants.CHARACTER_HEIGHT);
     }
 
     /**

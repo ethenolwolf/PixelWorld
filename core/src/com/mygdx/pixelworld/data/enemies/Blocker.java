@@ -2,6 +2,8 @@ package com.mygdx.pixelworld.data.enemies;
 
 import com.badlogic.gdx.math.Vector2;
 import com.mygdx.pixelworld.Game;
+import com.mygdx.pixelworld.data.Assets;
+import com.mygdx.pixelworld.data.MapBound;
 
 import java.util.Random;
 
@@ -29,5 +31,6 @@ public class Blocker extends Enemy {
             if (rand.nextInt(10) >= 5) y = -y;
             pos.add(x * 5, y * 5);
         }
+        pos = MapBound.bound(pos, Assets.ENEMY_IMG.get(Blocker.class).getWidth(), Assets.ENEMY_IMG.get(Blocker.class).getHeight());
     }
 }
