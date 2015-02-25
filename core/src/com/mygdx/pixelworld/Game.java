@@ -19,7 +19,7 @@ public class Game extends ApplicationAdapter {
     public void create() {
         batch = new SpriteBatch();
         map = new Map(Assets.BACKGROUND);
-        map.addEnemy(Blocker.class, 250, 150);
+        map.addEnemy(Blocker.class, 1250, 150);
         player = new GameCharacter();
         Assets.init();
     }
@@ -33,7 +33,7 @@ public class Game extends ApplicationAdapter {
 
         player.update();
         map.update(player.getPos());
-        player.unMove();
+        //player.unMove();
 
         batch.begin();
         map.draw(batch);

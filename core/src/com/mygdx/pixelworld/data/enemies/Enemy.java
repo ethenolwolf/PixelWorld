@@ -17,13 +17,14 @@ public class Enemy {
     }
 
     public void update(Vector2 pp) {
-        AI(pp);
+        //AI(pp);
     }
 
     protected void AI(Vector2 playerPos) {
     }
 
-    public void draw(SpriteBatch batch) {
-        batch.draw(Assets.ENEMY_IMG.get(this.getClass()), pos.x, pos.y);
+    public void draw(SpriteBatch batch, Vector2 offset) {
+        System.out.println("PRINTING");
+        batch.draw(Assets.ENEMY_IMG.get(this.getClass()), pos.x + offset.x, pos.y + offset.y);
     }
 }

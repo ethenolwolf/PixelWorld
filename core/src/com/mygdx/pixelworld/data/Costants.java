@@ -2,7 +2,7 @@ package com.mygdx.pixelworld.data;
 
 public class Costants {
 
-    public static final String FONT_CHARACTERS = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+    public static final String FONT_CHARACTERS = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789=-";
 
     public static final float CHARACTER_WIDTH = (float) 1 / 13;
     public static final float CHARACTER_HEIGHT = (float) 1 / 6;

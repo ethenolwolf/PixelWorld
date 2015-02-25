@@ -28,7 +28,7 @@ public class Assets {
 
         ENEMY_IMG.put(Blocker.class, new Texture("core/assets/Enemies/blocker.png"));
 
-        font = TrueTypeFontFactory.createBitmapFont(Gdx.files.internal(FONT), Costants.FONT_CHARACTERS, 12.5f, 7.5f, 1.0f, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        font = TrueTypeFontFactory.createBitmapFont(Gdx.files.internal(FONT), Costants.FONT_CHARACTERS, 50.5f, 50f, 1.0f, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         font.setColor(1f, 0f, 0f, 1f);
 
 

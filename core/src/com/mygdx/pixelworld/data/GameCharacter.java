@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
+import com.mygdx.pixelworld.GUI.Map;
 import com.mygdx.pixelworld.Game;
 
 import java.util.Random;
@@ -80,7 +81,14 @@ public class GameCharacter {
     public void draw(SpriteBatch batch) {
         float sw = Gdx.graphics.getWidth();
         float sh = Gdx.graphics.getHeight();
-        batch.draw(Assets.CHARACTER_IMG.get(charType), pos.x, pos.y, Costants.CHARACTER_WIDTH * sw, Costants.CHARACTER_HEIGHT * sh);
-        Assets.font.draw(batch, name, pos.x, pos.y);
+        float cw = Costants.CHARACTER_WIDTH;
+        float ch = Costants.CHARACTER_HEIGHT;
+
+        float x = pos.x - Map.getOffset().x;
+        float y = pos.y - Map.getOffset().y;
+
+        batch.draw(Assets.CHARACTER_IMG.get(charType), x, y, cw * sw, ch * sh);
+        Assets.font.draw(batch, name, x + 10.0f, y + cw * sw + 10.0f);
+        Assets.font.draw(batch, "PX=" + String.valueOf((int) pos.x) + " PY=" + String.valueOf((int) pos.y), 0, 200);
     }
 }
