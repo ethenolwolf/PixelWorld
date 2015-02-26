@@ -18,20 +18,16 @@ import static com.mygdx.pixelworld.data.Directions.*;
  */
 public class Player {
 
-    private String name;
     private final CharacterType charType;
+    private String name;
     private Vector2 pos;
 
     private double fireDelay;
-
-    public void setIsFiring(boolean isFiring) {
-        this.isFiring = isFiring;
-        if (isFiring) fireDelay = 0;
-    }
-
+    private int armor = 10;
+    private int health = 1000;
+    private boolean alive = true;
     private boolean isFiring = false;
     private Vector2 target = new Vector2();
-
     /**
      * Picks a random CharacterType and name.
      *
@@ -43,6 +39,11 @@ public class Player {
         this.charType = CharacterType.values()[pick];
         this.name = NameExtractor.extract();
         this.pos = new Vector2(0, Constants.CHARACTER_HEIGHT * Gdx.graphics.getHeight());
+    }
+
+    public void setIsFiring(boolean isFiring) {
+        this.isFiring = isFiring;
+        if (isFiring) fireDelay = 0;
     }
 
     public Vector2 getPos() {
@@ -59,6 +60,7 @@ public class Player {
      * It also checks for screen resizing.
      */
     public void update(Map map) {
+        if (!alive) System.exit(0);
         //Keyboard events
         if (Gdx.input.isKeyPressed(Keys.A)) move(LEFT);
         else if (Gdx.input.isKeyPressed(Keys.D)) move(RIGHT);
@@ -71,7 +73,7 @@ public class Player {
     private void updateFire(Map map) {
         fireDelay -= Game.deltaTime;
         if (fireDelay <= 0) {
-            map.fire(pos, target, charType);
+            map.fire(pos, target, this.getClass());
             fireDelay += 1 / Algorithms.scale(Constants.PLAYER_DEXTERITY, 1, 100, 1, 8);
         }
     }
@@ -120,6 +122,21 @@ public class Player {
         Assets.font.draw(batch, name, ex + 10.0f, ey + cw * sw + 10.0f);
         Assets.font.draw(batch, "PX = " + String.valueOf((int) pos.x) + " PY = " + String.valueOf((int) pos.y), 0, 200);
         Assets.font.draw(batch, "TX = " + String.valueOf((int) target.x) + " TY = " + String.valueOf((int) target.y), 0, 170);
-        batch.draw(Assets.BULLETS_IMG.get(charType), ex + 50, ey, cw * sw / 2, ch * sh / 3);
+        batch.draw(Assets.BULLETS_IMG.get(this.getClass()), ex + 50, ey, cw * sw / 2, ch * sh / 3);
+    }
+
+    public boolean checkIfInside(Bullet b) {
+        float sw = Gdx.graphics.getWidth();
+        float sh = Gdx.graphics.getHeight();
+        float cw = Constants.CHARACTER_WIDTH;
+        float ch = Constants.CHARACTER_HEIGHT;
+
+        return Algorithms.contains(pos, sw * cw, sh * ch, b.getPos(), b.getWidth(), b.getHeight());
+    }
+
+    public void getHit(Bullet b) {
+        if (b.getDamage() > armor) health -= (b.getDamage() - armor);
+        System.out.println("AHIA! Health = " + health);
+        if (health <= 0) alive = false;
     }
 }

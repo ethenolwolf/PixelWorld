@@ -8,11 +8,11 @@ public class Bullet {
     Vector2 pos;
     Vector2 startPoint;
     Vector2 direction;
-    CharacterType type;
+    Class type;
 
     boolean alive = true;
 
-    public Bullet(Vector2 startingPos, Vector2 endingPos, CharacterType type) {
+    public Bullet(Vector2 startingPos, Vector2 endingPos, Class type) {
         this.startPoint = new Vector2(startingPos);
         this.direction = new Vector2(endingPos.x - startingPos.x, endingPos.y - startingPos.y).nor();
         this.type = type;
@@ -21,7 +21,7 @@ public class Bullet {
 
     public void update() {
         move();
-        if (pos.dst(startPoint) > Constants.BULLET_RANGE) {
+        if (pos.dst(startPoint) > Constants.BULLET_RANGE.get(type)) {
             alive = false;
         }
     }
@@ -31,7 +31,7 @@ public class Bullet {
     }
 
     private void move() {
-        float movement = Game.deltaTime * Constants.BULLET_SPEED;
+        float movement = Game.deltaTime * Constants.BULLET_SPEED.get(type);
         pos.add(direction.x * movement, direction.y * movement);
     }
 
@@ -44,7 +44,7 @@ public class Bullet {
     }
 
     public int getDamage() {
-        return Constants.BULLET_DAMAGE;
+        return Constants.BULLET_DAMAGE.get(type);
     }
 
     public Vector2 getPos() {
@@ -57,5 +57,9 @@ public class Bullet {
 
     public int getHeight() {
         return 7;
+    }
+
+    public Class getType() {
+        return type;
     }
 }

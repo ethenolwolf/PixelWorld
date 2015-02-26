@@ -2,6 +2,7 @@ package com.mygdx.pixelworld.data.enemies;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
+import com.mygdx.pixelworld.GUI.Map;
 import com.mygdx.pixelworld.data.Algorithms;
 import com.mygdx.pixelworld.data.Assets;
 import com.mygdx.pixelworld.data.Bullet;
@@ -22,12 +23,12 @@ public class Enemy {
         return pos;
     }
 
-    public void update(Vector2 pp) {
+    public void update(Vector2 pp, Map map) {
         if (!alive) return;
-        AI(pp);
+        AI(pp, map);
     }
 
-    protected void AI(Vector2 playerPos) {
+    protected void AI(Vector2 playerPos, Map map) {
     }
 
     public void draw(SpriteBatch batch, Vector2 offset) {

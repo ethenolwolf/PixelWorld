@@ -7,6 +7,7 @@ import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.mygdx.pixelworld.GUI.Map;
 import com.mygdx.pixelworld.data.Assets;
+import com.mygdx.pixelworld.data.Constants;
 import com.mygdx.pixelworld.data.Player;
 import com.mygdx.pixelworld.data.enemies.Blocker;
 
@@ -33,8 +34,13 @@ public class Game extends ApplicationAdapter implements InputProcessor {
         batch = new SpriteBatch();
         map = new Map();
         map.addEnemy(Blocker.class, 120, 150);
+        map.addEnemy(Blocker.class, 180, 70);
+        map.addEnemy(Blocker.class, 420, 150);
+        map.addEnemy(Blocker.class, 500, 30);
+        map.addEnemy(Blocker.class, 20, 300);
         player = new Player();
         Assets.init();
+        Constants.init();
         Gdx.input.setInputProcessor(this);
     }
 
@@ -47,7 +53,7 @@ public class Game extends ApplicationAdapter implements InputProcessor {
         deltaTime = Gdx.graphics.getDeltaTime();
 
         player.update(map);
-        map.update(player.getPos());
+        map.update(player);
 
         batch.begin();
         map.draw(batch);

@@ -6,8 +6,8 @@ import com.badlogic.gdx.math.Vector2;
 import com.mygdx.pixelworld.Game;
 import com.mygdx.pixelworld.data.Assets;
 import com.mygdx.pixelworld.data.Bullet;
-import com.mygdx.pixelworld.data.CharacterType;
 import com.mygdx.pixelworld.data.Constants;
+import com.mygdx.pixelworld.data.Player;
 import com.mygdx.pixelworld.data.enemies.Blocker;
 import com.mygdx.pixelworld.data.enemies.Enemy;
 
@@ -17,8 +17,8 @@ import java.util.ListIterator;
 
 public class Map {
 
-    private List<Enemy> enemies = new ArrayList<Enemy>();
     private static Vector2 offset = new Vector2();
+    private List<Enemy> enemies = new ArrayList<Enemy>();
     private List<Bullet> bullets = new ArrayList<Bullet>();
 
     public static Vector2 getOffset() {
@@ -29,12 +29,12 @@ public class Map {
         if (type == Blocker.class) enemies.add(new Blocker(x, y));
     }
 
-    public void update(Vector2 playerPos) {
+    public void update(Player player) {
 
         ListIterator enemyIterator = enemies.listIterator();
         while (enemyIterator.hasNext()) {
             Enemy e = (Enemy) enemyIterator.next();
-            e.update(playerPos);
+            e.update(player.getPos(), this);
             if (!e.isAlive()) enemyIterator.remove();
         }
 
@@ -44,11 +44,19 @@ public class Map {
             Bullet b = (Bullet) bulletIterator.next();
             b.update();
 
-            enemyIterator = enemies.listIterator();
-            while (enemyIterator.hasNext()) {
-                Enemy e = (Enemy) enemyIterator.next();
-                if (e.checkIfInside(b)) {
-                    e.getHit(b);
+            if (b.getType() == Player.class) {
+                enemyIterator = enemies.listIterator();
+                while (enemyIterator.hasNext()) {
+                    Enemy e = (Enemy) enemyIterator.next();
+                    if (e.checkIfInside(b)) {
+                        e.getHit(b);
+                        b.die();
+                        break;
+                    }
+                }
+            } else {
+                if (player.checkIfInside(b)) {
+                    player.getHit(b);
                     b.die();
                     break;
                 }
@@ -61,10 +69,10 @@ public class Map {
         float sh = Gdx.graphics.getHeight();
         float of = Game.deltaTime * Constants.PLAYER_SPEED;
 
-        if (playerPos.x + offset.x < sw * Constants.X_LIMIT_MIN) offset.add(of, 0);
-        else if (playerPos.x + offset.x > sw * Constants.X_LIMIT_MAX) offset.add(-of, 0);
-        if (playerPos.y + offset.y < sh * Constants.Y_LIMIT_MIN) offset.add(0, of);
-        else if (playerPos.y + offset.y > sh * Constants.Y_LIMIT_MAX) offset.add(0, -of);
+        if (player.getPos().x + offset.x < sw * Constants.X_LIMIT_MIN) offset.add(of, 0);
+        else if (player.getPos().x + offset.x > sw * Constants.X_LIMIT_MAX) offset.add(-of, 0);
+        if (player.getPos().y + offset.y < sh * Constants.Y_LIMIT_MIN) offset.add(0, of);
+        else if (player.getPos().y + offset.y > sh * Constants.Y_LIMIT_MAX) offset.add(0, -of);
 
         if (offset.x > 0) offset.x = 0;
         if (offset.y > 0) offset.y = 0;
@@ -86,7 +94,7 @@ public class Map {
 
     }
 
-    public void fire(Vector2 playerPos, Vector2 targetPos, CharacterType type) {
+    public void fire(Vector2 playerPos, Vector2 targetPos, Class type) {
         bullets.add(new Bullet(playerPos, targetPos, type));
     }
 }
