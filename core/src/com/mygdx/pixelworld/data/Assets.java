@@ -18,6 +18,7 @@ public class Assets {
 
     public static Texture BACKGROUND;
     public static final String FONT = "core/assets/Ubuntu-MI.ttf";
+    public static Map<CharacterType, Texture> BULLETS_IMG = new EnumMap<CharacterType, Texture>(CharacterType.class);
 
 
     public static void init() {
@@ -26,11 +27,18 @@ public class Assets {
         CHARACTER_IMG.put(CharacterType.PRIEST, new Texture("core/assets/Characters/wizard.png"));
         CHARACTER_IMG.put(CharacterType.WARRIOR, new Texture("core/assets/Characters/wizard.png"));
 
+        BULLETS_IMG.put(CharacterType.WIZARD, new Texture("core/assets/Bullets/cat.png"));
+        BULLETS_IMG.put(CharacterType.ARCHER, new Texture("core/assets/Bullets/cat.png"));
+        BULLETS_IMG.put(CharacterType.WARRIOR, new Texture("core/assets/Bullets/cat.png"));
+        BULLETS_IMG.put(CharacterType.PRIEST, new Texture("core/assets/Bullets/cat.png"));
+
         ENEMY_IMG.put(Blocker.class, new Texture("core/assets/Enemies/blocker.png"));
 
         font = TrueTypeFontFactory.createBitmapFont(Gdx.files.internal(FONT), Constants.FONT_CHARACTERS, 50.5f, 50f, 1.0f, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         font.setColor(1f, 0f, 0f, 1f);
 
         BACKGROUND = new Texture("core/assets/background.jpg");
+
+
     }
 }

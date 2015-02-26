@@ -5,17 +5,21 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.mygdx.pixelworld.Game;
 import com.mygdx.pixelworld.data.Assets;
+import com.mygdx.pixelworld.data.Bullet;
+import com.mygdx.pixelworld.data.CharacterType;
 import com.mygdx.pixelworld.data.Constants;
 import com.mygdx.pixelworld.data.enemies.Blocker;
 import com.mygdx.pixelworld.data.enemies.Enemy;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.ListIterator;
 
 public class Map {
 
     private List<Enemy> enemies = new ArrayList<Enemy>();
     private static Vector2 offset = new Vector2();
+    private List<Bullet> bullets = new ArrayList<Bullet>();
 
     public static Vector2 getOffset() {
         return offset;
@@ -29,6 +33,13 @@ public class Map {
 
         for (Enemy e : enemies) {
             e.update(playerPos);
+        }
+
+        ListIterator iterator = bullets.listIterator();
+        while (iterator.hasNext()) {
+            Bullet b = (Bullet) iterator.next();
+            b.update();
+            if (!b.isAlive()) iterator.remove();
         }
 
         float sw = Gdx.graphics.getWidth();
@@ -54,7 +65,14 @@ public class Map {
                     e.getPos().y < Gdx.graphics.getHeight() - offset.y && e.getPos().y - offset.y >= 0)
                 e.draw(batch, offset);
         }
+        for (Bullet b : bullets) {
+            b.draw(batch);
+        }
         Assets.font.draw(batch, "OX = " + String.valueOf((int) offset.x) + " OY = " + String.valueOf((int) offset.y), 0, 250);
 
+    }
+
+    public void fire(Vector2 playerPos, Vector2 direction, CharacterType type) {
+        bullets.add(new Bullet(playerPos, direction, type));
     }
 }

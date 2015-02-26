@@ -104,5 +104,10 @@ public class Player {
         Assets.font.draw(batch, name, ex + 10.0f, ey + cw * sw + 10.0f);
         Assets.font.draw(batch, "PX = " + String.valueOf((int) pos.x) + " PY = " + String.valueOf((int) pos.y), 0, 200);
         Assets.font.draw(batch, "EX = " + String.valueOf((int) ex) + " EY = " + String.valueOf((int) ey), 0, 170);
+        batch.draw(Assets.BULLETS_IMG.get(charType), ex + 50, ey, cw * sw / 2, ch * sh / 3);
+    }
+
+    public CharacterType getType() {
+        return charType;
     }
 }
