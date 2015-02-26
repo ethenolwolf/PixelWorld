@@ -31,15 +31,30 @@ public class Map {
 
     public void update(Vector2 playerPos) {
 
-        for (Enemy e : enemies) {
+        ListIterator enemyIterator = enemies.listIterator();
+        while (enemyIterator.hasNext()) {
+            Enemy e = (Enemy) enemyIterator.next();
             e.update(playerPos);
+            if (!e.isAlive()) enemyIterator.remove();
         }
 
-        ListIterator iterator = bullets.listIterator();
-        while (iterator.hasNext()) {
-            Bullet b = (Bullet) iterator.next();
+        ListIterator bulletIterator = bullets.listIterator();
+
+        while (bulletIterator.hasNext()) {
+            Bullet b = (Bullet) bulletIterator.next();
             b.update();
-            if (!b.isAlive()) iterator.remove();
+
+            enemyIterator = enemies.listIterator();
+            while (enemyIterator.hasNext()) {
+                Enemy e = (Enemy) enemyIterator.next();
+                if (e.checkIfInside(b)) {
+                    e.getHit(b);
+                    b.die();
+                    break;
+                }
+            }
+
+            if (!b.isAlive()) bulletIterator.remove();
         }
 
         float sw = Gdx.graphics.getWidth();
@@ -55,7 +70,6 @@ public class Map {
         if (offset.y > 0) offset.y = 0;
         if (offset.x < -Assets.BACKGROUND.getWidth() + sw) offset.x = -Assets.BACKGROUND.getWidth() + sw;
         if (offset.y < -Assets.BACKGROUND.getHeight() + sh) offset.y = -Assets.BACKGROUND.getHeight() + sh;
-
     }
 
     public void draw(SpriteBatch batch) {
@@ -66,13 +80,13 @@ public class Map {
                 e.draw(batch, offset);
         }
         for (Bullet b : bullets) {
-            b.draw(batch);
+            b.draw(batch, offset);
         }
         Assets.font.draw(batch, "OX = " + String.valueOf((int) offset.x) + " OY = " + String.valueOf((int) offset.y), 0, 250);
 
     }
 
-    public void fire(Vector2 playerPos, Vector2 direction, CharacterType type) {
-        bullets.add(new Bullet(playerPos, direction, type));
+    public void fire(Vector2 playerPos, Vector2 targetPos, CharacterType type) {
+        bullets.add(new Bullet(playerPos, targetPos, type));
     }
 }

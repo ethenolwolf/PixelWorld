@@ -5,7 +5,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.math.Vector2;
 import com.mygdx.pixelworld.GUI.Map;
 import com.mygdx.pixelworld.data.Assets;
 import com.mygdx.pixelworld.data.Player;
@@ -33,7 +32,7 @@ public class Game extends ApplicationAdapter implements InputProcessor {
     public void create() {
         batch = new SpriteBatch();
         map = new Map();
-        map.addEnemy(Blocker.class, 1250, 150);
+        map.addEnemy(Blocker.class, 120, 150);
         player = new Player();
         Assets.init();
         Gdx.input.setInputProcessor(this);
@@ -47,13 +46,12 @@ public class Game extends ApplicationAdapter implements InputProcessor {
         //Reads the deltaTime once, for all the moving entities, so that it's the same.
         deltaTime = Gdx.graphics.getDeltaTime();
 
-        player.update();
+        player.update(map);
         map.update(player.getPos());
 
         batch.begin();
         map.draw(batch);
         player.draw(batch);
-
         batch.end();
     }
 
@@ -75,24 +73,28 @@ public class Game extends ApplicationAdapter implements InputProcessor {
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
         if (button == Input.Buttons.LEFT) {
-            if (deltaTime != 0) map.fire(player.getPos(), new Vector2(screenX, screenY), player.getType());
+            player.setIsFiring(true);
+            player.setTarget(screenX - Map.getOffset().x, Gdx.graphics.getHeight() - screenY - Map.getOffset().y);
         }
         return true;
     }
 
     @Override
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-        return false;
+        player.setIsFiring(false);
+        return true;
     }
 
     @Override
     public boolean touchDragged(int screenX, int screenY, int pointer) {
-        return false;
+        player.setTarget(screenX - Map.getOffset().x, Gdx.graphics.getHeight() - screenY - Map.getOffset().y);
+        return true;
     }
 
     @Override
     public boolean mouseMoved(int screenX, int screenY) {
-        return false;
+
+        return true;
     }
 
     @Override

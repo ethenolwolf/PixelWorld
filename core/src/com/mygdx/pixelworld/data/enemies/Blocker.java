@@ -9,11 +9,13 @@ import java.util.Random;
 
 public class Blocker extends Enemy {
 
-    private float ATK_DISTANCE = 200.0f;
-    private float SPEED = 80f;
+    private final float ATK_DISTANCE = 200.0f;
+    private final float SPEED = 80f;
 
     public Blocker(float x, float y) {
         super(x, y);
+        this.health = 100;
+        this.armor = 0;
     }
 
     @Override

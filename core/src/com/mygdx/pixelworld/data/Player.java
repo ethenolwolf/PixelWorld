@@ -22,7 +22,15 @@ public class Player {
     private final CharacterType charType;
     private Vector2 pos;
 
-    private float lastHeight;
+    private double fireDelay;
+
+    public void setIsFiring(boolean isFiring) {
+        this.isFiring = isFiring;
+        if (isFiring) fireDelay = 0;
+    }
+
+    private boolean isFiring = false;
+    private Vector2 target = new Vector2();
 
     /**
      * Picks a random CharacterType and name.
@@ -41,23 +49,31 @@ public class Player {
         return pos;
     }
 
+    public void setTarget(float x, float y) {
+        target.x = x;
+        target.y = y;
+    }
+
     /**
      * Manage keyboard events, and moves() if necessary.
      * It also checks for screen resizing.
      */
-    public void update() {
-        //If screen is resized, move the player
-        if (!(Gdx.graphics.getHeight() == lastHeight)) {
-            pos.y = Constants.CHARACTER_HEIGHT * Gdx.graphics.getHeight();
-        }
-        lastHeight = Gdx.graphics.getHeight();
-
+    public void update(Map map) {
         //Keyboard events
         if (Gdx.input.isKeyPressed(Keys.A)) move(LEFT);
         else if (Gdx.input.isKeyPressed(Keys.D)) move(RIGHT);
         if (Gdx.input.isKeyPressed(Keys.S)) move(DOWN);
         else if (Gdx.input.isKeyPressed(Keys.W)) move(UP);
 
+        if (isFiring) updateFire(map);
+    }
+
+    private void updateFire(Map map) {
+        fireDelay -= Game.deltaTime;
+        if (fireDelay <= 0) {
+            map.fire(pos, target, charType);
+            fireDelay += 1 / Algorithms.scale(Constants.PLAYER_DEXTERITY, 1, 100, 1, 8);
+        }
     }
 
     /**
@@ -103,11 +119,7 @@ public class Player {
         batch.draw(Assets.CHARACTER_IMG.get(charType), ex, ey, cw * sw, ch * sh);
         Assets.font.draw(batch, name, ex + 10.0f, ey + cw * sw + 10.0f);
         Assets.font.draw(batch, "PX = " + String.valueOf((int) pos.x) + " PY = " + String.valueOf((int) pos.y), 0, 200);
-        Assets.font.draw(batch, "EX = " + String.valueOf((int) ex) + " EY = " + String.valueOf((int) ey), 0, 170);
+        Assets.font.draw(batch, "TX = " + String.valueOf((int) target.x) + " TY = " + String.valueOf((int) target.y), 0, 170);
         batch.draw(Assets.BULLETS_IMG.get(charType), ex + 50, ey, cw * sw / 2, ch * sh / 3);
-    }
-
-    public CharacterType getType() {
-        return charType;
     }
 }

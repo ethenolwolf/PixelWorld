@@ -12,17 +12,16 @@ public class Bullet {
 
     boolean alive = true;
 
-    public Bullet(Vector2 startingPos, Vector2 direction, CharacterType type) {
+    public Bullet(Vector2 startingPos, Vector2 endingPos, CharacterType type) {
         this.startPoint = new Vector2(startingPos);
-        this.direction = direction.nor();
+        this.direction = new Vector2(endingPos.x - startingPos.x, endingPos.y - startingPos.y).nor();
         this.type = type;
-        this.pos = new Vector2(startPoint);
+        this.pos = new Vector2(startingPos);
     }
 
     public void update() {
         move();
         if (pos.dst(startPoint) > Constants.BULLET_RANGE) {
-            System.out.println("Dying pos = " + pos.toString() + " st = " + startPoint.toString());
             alive = false;
         }
     }
@@ -36,7 +35,27 @@ public class Bullet {
         pos.add(direction.x * movement, direction.y * movement);
     }
 
-    public void draw(SpriteBatch batch) {
-        batch.draw(Assets.BULLETS_IMG.get(type), pos.x, pos.y, 10, 7);
+    public void draw(SpriteBatch batch, Vector2 offset) {
+        batch.draw(Assets.BULLETS_IMG.get(type), pos.x + offset.x, pos.y + offset.y, 10, 7);
+    }
+
+    public void die() {
+        alive = false;
+    }
+
+    public int getDamage() {
+        return Constants.BULLET_DAMAGE;
+    }
+
+    public Vector2 getPos() {
+        return pos;
+    }
+
+    public int getWidth() {
+        return 10;
+    }
+
+    public int getHeight() {
+        return 7;
     }
 }
