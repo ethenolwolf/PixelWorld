@@ -3,6 +3,7 @@ package com.mygdx.pixelworld.data;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.mygdx.pixelworld.GUI.Map;
 import com.mygdx.pixelworld.Game;
@@ -73,7 +74,7 @@ public class Player {
     private void updateFire(Map map) {
         fireDelay -= Game.deltaTime;
         if (fireDelay <= 0) {
-            map.fire(pos, target, this.getClass());
+            map.fire(pos, target, Player.class);
             fireDelay += 1 / Algorithms.scale(Constants.PLAYER_DEXTERITY, 1, 100, 1, 8);
         }
     }
@@ -110,33 +111,25 @@ public class Player {
      * @param batch SpriteBatch used to draw.
      */
     public void draw(SpriteBatch batch) {
-        float sw = Gdx.graphics.getWidth();
-        float sh = Gdx.graphics.getHeight();
-        float cw = Constants.CHARACTER_WIDTH;
-        float ch = Constants.CHARACTER_HEIGHT;
-
+        float pw = Gdx.graphics.getWidth() * Constants.CHARACTER_WIDTH;
+        float ph = Gdx.graphics.getHeight() * Constants.CHARACTER_HEIGHT;
         float ex = pos.x + Map.getOffset().x;
         float ey = pos.y + Map.getOffset().y;
 
-        batch.draw(Assets.CHARACTER_IMG.get(charType), ex, ey, cw * sw, ch * sh);
-        Assets.font.draw(batch, name, ex + 10.0f, ey + cw * sw + 10.0f);
-        Assets.font.draw(batch, "PX = " + String.valueOf((int) pos.x) + " PY = " + String.valueOf((int) pos.y), 0, 200);
-        Assets.font.draw(batch, "TX = " + String.valueOf((int) target.x) + " TY = " + String.valueOf((int) target.y), 0, 170);
-        batch.draw(Assets.BULLETS_IMG.get(this.getClass()), ex + 50, ey, cw * sw / 2, ch * sh / 3);
+        batch.draw(new TextureRegion(Assets.CHARACTER_IMG.get(charType)), ex, ey, (ex + pw) / 2, (ey + ph) / 2, pw, ph, 1, 1, 0);
+        Assets.font.draw(batch, name, ex + 10.0f, ey + pw + 10.0f);
     }
 
     public boolean checkIfInside(Bullet b) {
-        float sw = Gdx.graphics.getWidth();
-        float sh = Gdx.graphics.getHeight();
-        float cw = Constants.CHARACTER_WIDTH;
-        float ch = Constants.CHARACTER_HEIGHT;
+        float pw = Gdx.graphics.getWidth() * Constants.CHARACTER_WIDTH;
+        float ph = Gdx.graphics.getHeight() * Constants.CHARACTER_HEIGHT;
 
-        return Algorithms.contains(pos, sw * cw, sh * ch, b.getPos(), b.getWidth(), b.getHeight());
+        return Algorithms.contains(pos, pw, ph, b.getPos(), b.getWidth(), b.getHeight());
     }
 
     public void getHit(Bullet b) {
         if (b.getDamage() > armor) health -= (b.getDamage() - armor);
-        System.out.println("AHIA! Health = " + health);
+        //System.out.println("AHIA! Health = " + health);
         if (health <= 0) alive = false;
     }
 }

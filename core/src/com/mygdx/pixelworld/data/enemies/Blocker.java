@@ -49,6 +49,7 @@ public class Blocker extends Enemy {
     private void updateFire(Vector2 playerPos, Map map) {
         fireDelay -= Game.deltaTime;
         if (fireDelay <= 0) {
+            System.out.println("FIRING: myPos=" + pos.toString() + " playerPos=" + playerPos.toString());
             map.fire(pos, playerPos, Blocker.class);
             fireDelay += 2;
         }

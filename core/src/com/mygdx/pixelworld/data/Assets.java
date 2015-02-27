@@ -26,8 +26,9 @@ public class Assets {
         CHARACTER_IMG.put(CharacterType.PRIEST, new Texture("core/assets/Characters/wizard.png"));
         CHARACTER_IMG.put(CharacterType.WARRIOR, new Texture("core/assets/Characters/wizard.png"));
 
-        BULLETS_IMG.put(Player.class, new Texture("core/assets/Bullets/cat.png"));
-        BULLETS_IMG.put(Blocker.class, new Texture("core/assets/Bullets/cat.png"));
+
+        BULLETS_IMG.put(Player.class, new Texture("core/assets/Bullets/blue.png"));
+        BULLETS_IMG.put(Blocker.class, new Texture("core/assets/Bullets/red.png"));
 
         ENEMY_IMG.put(Blocker.class, new Texture("core/assets/Enemies/blocker.png"));
 

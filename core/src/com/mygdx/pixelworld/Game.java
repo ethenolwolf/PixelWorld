@@ -33,11 +33,11 @@ public class Game extends ApplicationAdapter implements InputProcessor {
     public void create() {
         batch = new SpriteBatch();
         map = new Map();
-        map.addEnemy(Blocker.class, 120, 150);
-        map.addEnemy(Blocker.class, 180, 70);
+        //map.addEnemy(Blocker.class, 120, 150);
+        //map.addEnemy(Blocker.class, 180, 70);
         map.addEnemy(Blocker.class, 420, 150);
-        map.addEnemy(Blocker.class, 500, 30);
-        map.addEnemy(Blocker.class, 20, 300);
+        //map.addEnemy(Blocker.class, 500, 30);
+        //map.addEnemy(Blocker.class, 20, 300);
         player = new Player();
         Assets.init();
         Constants.init();

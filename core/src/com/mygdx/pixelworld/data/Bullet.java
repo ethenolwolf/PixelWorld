@@ -1,6 +1,7 @@
 package com.mygdx.pixelworld.data;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.mygdx.pixelworld.Game;
 
@@ -36,10 +37,18 @@ public class Bullet {
     }
 
     public void draw(SpriteBatch batch, Vector2 offset) {
-        batch.draw(Assets.BULLETS_IMG.get(type), pos.x + offset.x, pos.y + offset.y, 10, 7);
+
+        float bw = Assets.BULLETS_IMG.get(type).getWidth();
+        float bh = Assets.BULLETS_IMG.get(type).getHeight();
+        float ex = pos.x + offset.x;
+        float ey = pos.y + offset.y;
+        batch.draw(new TextureRegion(Assets.BULLETS_IMG.get(type)), ex, ey, bw / 2, bh / 2, bw, bh, 2, 2, direction.angle() - 90);
+        //batch.draw(Assets.BULLETS_IMG.get(type), ex, ey, bw, bh);
+
     }
 
     public void die() {
+        //System.out.println("Dying");
         alive = false;
     }
 
@@ -52,11 +61,11 @@ public class Bullet {
     }
 
     public int getWidth() {
-        return 10;
+        return Assets.BULLETS_IMG.get(type).getWidth();
     }
 
     public int getHeight() {
-        return 7;
+        return Assets.BULLETS_IMG.get(type).getHeight();
     }
 
     public Class getType() {

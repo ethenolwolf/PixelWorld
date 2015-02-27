@@ -34,7 +34,7 @@ public class Constants {
         BULLET_RANGE.put(Player.class, 400.0f);
 
         BULLET_DAMAGE.put(Blocker.class, 20);
-        BULLET_SPEED.put(Blocker.class, 100.0f);
+        BULLET_SPEED.put(Blocker.class, 400.0f);
         BULLET_RANGE.put(Blocker.class, 200.0f);
     }
 }

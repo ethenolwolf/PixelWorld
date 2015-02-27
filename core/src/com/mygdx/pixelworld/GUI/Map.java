@@ -39,7 +39,6 @@ public class Map {
         }
 
         ListIterator bulletIterator = bullets.listIterator();
-
         while (bulletIterator.hasNext()) {
             Bullet b = (Bullet) bulletIterator.next();
             b.update();
@@ -51,18 +50,19 @@ public class Map {
                     if (e.checkIfInside(b)) {
                         e.getHit(b);
                         b.die();
-                        break;
                     }
                 }
             } else {
                 if (player.checkIfInside(b)) {
                     player.getHit(b);
                     b.die();
-                    break;
                 }
             }
 
-            if (!b.isAlive()) bulletIterator.remove();
+            if (!b.isAlive()) {
+                bulletIterator.remove();
+                //System.out.println("Removed!");
+            }
         }
 
         float sw = Gdx.graphics.getWidth();
@@ -91,10 +91,14 @@ public class Map {
             b.draw(batch, offset);
         }
         Assets.font.draw(batch, "OX = " + String.valueOf((int) offset.x) + " OY = " + String.valueOf((int) offset.y), 0, 250);
+        Assets.font.draw(batch, "BN = " + String.valueOf(bullets.size()), 0, 280);
+        Assets.font.draw(batch, "EN = " + String.valueOf(enemies.size()), 0, 310);
+        if (bullets.size() > 0)
+            Assets.font.draw(batch, "BX = " + String.valueOf((int) bullets.get(0).getPos().x) + " BY = " + String.valueOf((int) bullets.get(0).getPos().y), 0, 340);
 
     }
 
-    public void fire(Vector2 playerPos, Vector2 targetPos, Class type) {
-        bullets.add(new Bullet(playerPos, targetPos, type));
+    public void fire(Vector2 startPos, Vector2 targetPos, Class type) {
+        bullets.add(new Bullet(startPos, targetPos, type));
     }
 }

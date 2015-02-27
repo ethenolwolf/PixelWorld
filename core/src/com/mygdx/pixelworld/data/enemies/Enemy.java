@@ -1,11 +1,14 @@
 package com.mygdx.pixelworld.data.enemies;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.mygdx.pixelworld.GUI.Map;
 import com.mygdx.pixelworld.data.Algorithms;
 import com.mygdx.pixelworld.data.Assets;
 import com.mygdx.pixelworld.data.Bullet;
+import com.mygdx.pixelworld.data.Constants;
 
 public class Enemy {
 
@@ -32,7 +35,14 @@ public class Enemy {
     }
 
     public void draw(SpriteBatch batch, Vector2 offset) {
-        batch.draw(Assets.ENEMY_IMG.get(this.getClass()), pos.x + offset.x, pos.y + offset.y);
+
+        float ew = Gdx.graphics.getWidth() * Constants.CHARACTER_WIDTH;
+        float eh = Gdx.graphics.getHeight() * Constants.CHARACTER_HEIGHT;
+        float ex = pos.x + offset.x;
+        float ey = pos.y + offset.y;
+
+        batch.draw(new TextureRegion(Assets.ENEMY_IMG.get(this.getClass())), ex, ey, (ex + ew) / 2, (ey + eh) / 2, ew, eh, 1, 1, 0);
+        // batch.draw(Assets.ENEMY_IMG.get(this.getClass()), pos.x + offset.x, pos.y + offset.y);
     }
 
     public boolean isAlive() {
@@ -46,8 +56,8 @@ public class Enemy {
     }
 
     public boolean checkIfInside(Bullet b) {
-        int ew = Assets.ENEMY_IMG.get(this.getClass()).getWidth();
-        int eh = Assets.ENEMY_IMG.get(this.getClass()).getHeight();
+        float ew = Gdx.graphics.getWidth() * Constants.CHARACTER_WIDTH;
+        float eh = Gdx.graphics.getHeight() * Constants.CHARACTER_HEIGHT;
         return Algorithms.contains(pos, ew, eh, b.getPos(), b.getWidth(), b.getHeight());
     }
 }
