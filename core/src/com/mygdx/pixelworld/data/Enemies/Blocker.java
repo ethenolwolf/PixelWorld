@@ -1,10 +1,8 @@
-package com.mygdx.pixelworld.data.enemies;
+package com.mygdx.pixelworld.data.Enemies;
 
 import com.badlogic.gdx.math.Vector2;
 import com.mygdx.pixelworld.GUI.Map;
 import com.mygdx.pixelworld.Game;
-import com.mygdx.pixelworld.data.Assets;
-import com.mygdx.pixelworld.data.MapBound;
 
 import java.util.Random;
 
@@ -15,7 +13,7 @@ public class Blocker extends Enemy {
     private boolean isFiring = false;
     private float fireDelay = 0;
     public Blocker(float x, float y) {
-        super(x, y);
+        super(x, y, Blocker.class);
         this.health = 100;
         this.armor = 0;
     }
@@ -42,14 +40,13 @@ public class Blocker extends Enemy {
             if (rand.nextInt(10) >= 5) y = -y;
             pos.add(x * 5, y * 5);
         }
-        pos = MapBound.bound(pos, Assets.ENEMY_IMG.get(Blocker.class).getWidth(), Assets.ENEMY_IMG.get(Blocker.class).getHeight());
+        pos = img.boundMap(pos);
         if (isFiring) updateFire(playerPos, map);
     }
 
     private void updateFire(Vector2 playerPos, Map map) {
         fireDelay -= Game.deltaTime;
         if (fireDelay <= 0) {
-            System.out.println("FIRING: myPos=" + pos.toString() + " playerPos=" + playerPos.toString());
             map.fire(pos, playerPos, Blocker.class);
             fireDelay += 2;
         }
