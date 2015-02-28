@@ -1,9 +1,10 @@
 package com.mygdx.pixelworld.data;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.collision.BoundingBox;
 import com.mygdx.pixelworld.Game;
+import com.mygdx.pixelworld.data.AssetsManagement.AssetType;
 
 public class Bullet {
     Vector2 pos;
@@ -12,12 +13,15 @@ public class Bullet {
     Class type;
 
     boolean alive = true;
+    private DrawData img;
 
     public Bullet(Vector2 startingPos, Vector2 endingPos, Class type) {
         this.startPoint = new Vector2(startingPos);
         this.direction = new Vector2(endingPos.x - startingPos.x, endingPos.y - startingPos.y).nor();
         this.type = type;
         this.pos = new Vector2(startingPos);
+        img = new DrawData(AssetType.BULLET, type, new Vector2(1, 1), direction.angle() - 90);
+        System.out.println("[" + type.toString() + "] Firing from " + startingPos.toString() + " to " + endingPos.toString());
     }
 
     public void update() {
@@ -36,19 +40,12 @@ public class Bullet {
         pos.add(direction.x * movement, direction.y * movement);
     }
 
-    public void draw(SpriteBatch batch, Vector2 offset) {
-
-        float bw = Assets.BULLETS_IMG.get(type).getWidth();
-        float bh = Assets.BULLETS_IMG.get(type).getHeight();
-        float ex = pos.x + offset.x;
-        float ey = pos.y + offset.y;
-        batch.draw(new TextureRegion(Assets.BULLETS_IMG.get(type)), ex, ey, bw / 2, bh / 2, bw, bh, 2, 2, direction.angle() - 90);
-        //batch.draw(Assets.BULLETS_IMG.get(type), ex, ey, bw, bh);
-
+    public void draw(SpriteBatch batch) {
+        img.draw(batch, pos);
     }
 
     public void die() {
-        //System.out.println("Dying");
+        System.out.println("Dying");
         alive = false;
     }
 
@@ -60,15 +57,19 @@ public class Bullet {
         return pos;
     }
 
-    public int getWidth() {
-        return Assets.BULLETS_IMG.get(type).getWidth();
+    public float getWidth() {
+        return img.getWidth();
     }
 
-    public int getHeight() {
-        return Assets.BULLETS_IMG.get(type).getHeight();
+    public float getHeight() {
+        return img.getHeight();
     }
 
     public Class getType() {
         return type;
+    }
+
+    public BoundingBox getBoundingBox() {
+        return img.getBoundingBox(pos);
     }
 }

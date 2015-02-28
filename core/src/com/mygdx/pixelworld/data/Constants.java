@@ -1,6 +1,7 @@
 package com.mygdx.pixelworld.data;
 
-import com.mygdx.pixelworld.data.enemies.Blocker;
+import com.mygdx.pixelworld.data.Enemies.Blocker;
+import com.mygdx.pixelworld.data.GameClasses.Wizard;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -29,9 +30,9 @@ public class Constants {
     public static Map<Class, Float> BULLET_SPEED = new HashMap<Class, Float>();
 
     public static void init() {
-        BULLET_DAMAGE.put(Player.class, 20);
-        BULLET_SPEED.put(Player.class, 300.0f);
-        BULLET_RANGE.put(Player.class, 400.0f);
+        BULLET_DAMAGE.put(Wizard.class, 20);
+        BULLET_SPEED.put(Wizard.class, 300.0f);
+        BULLET_RANGE.put(Wizard.class, 400.0f);
 
         BULLET_DAMAGE.put(Blocker.class, 20);
         BULLET_SPEED.put(Blocker.class, 400.0f);

@@ -6,10 +6,11 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.mygdx.pixelworld.GUI.Map;
-import com.mygdx.pixelworld.data.Assets;
+import com.mygdx.pixelworld.data.AssetsManagement.Assets;
 import com.mygdx.pixelworld.data.Constants;
-import com.mygdx.pixelworld.data.Player;
-import com.mygdx.pixelworld.data.enemies.Blocker;
+import com.mygdx.pixelworld.data.Enemies.Blocker;
+import com.mygdx.pixelworld.data.GameClasses.Player;
+import com.mygdx.pixelworld.data.GameClasses.Wizard;
 
 /**
  * Main game class.
@@ -26,21 +27,21 @@ public class Game extends ApplicationAdapter implements InputProcessor {
     /**
      * Inits various parts of the program, including batch, map and player.
      *
-     * @see com.mygdx.pixelworld.data.Player
+     * @see com.mygdx.pixelworld.data.GameClasses.Player
      * @see com.mygdx.pixelworld.GUI.Map
      */
     @Override
     public void create() {
         batch = new SpriteBatch();
+        Assets.init();
+        Constants.init();
         map = new Map();
         //map.addEnemy(Blocker.class, 120, 150);
         //map.addEnemy(Blocker.class, 180, 70);
         map.addEnemy(Blocker.class, 420, 150);
         //map.addEnemy(Blocker.class, 500, 30);
         //map.addEnemy(Blocker.class, 20, 300);
-        player = new Player();
-        Assets.init();
-        Constants.init();
+        player = new Wizard();
         Gdx.input.setInputProcessor(this);
     }
 
@@ -56,7 +57,7 @@ public class Game extends ApplicationAdapter implements InputProcessor {
         map.update(player);
 
         batch.begin();
-        map.draw(batch);
+        map.draw(batch, player);
         player.draw(batch);
         batch.end();
     }
