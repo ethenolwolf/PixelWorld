@@ -1,11 +1,14 @@
 package com.mygdx.pixelworld.GUI;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.mygdx.pixelworld.Game;
 import com.mygdx.pixelworld.data.AssetsManagement.AssetType;
 import com.mygdx.pixelworld.data.AssetsManagement.Assets;
+import com.mygdx.pixelworld.data.BoundingCircle;
 import com.mygdx.pixelworld.data.Bullet;
 import com.mygdx.pixelworld.data.Constants;
 import com.mygdx.pixelworld.data.Enemies.Blocker;
@@ -57,14 +60,14 @@ public class Map {
                 while (enemyIterator.hasNext()) {
                     Enemy e = enemyIterator.next();
                     if (e.checkIfInside(b)) {
-                        System.out.println("Inside tha enemy");
+                        //System.out.println("Inside tha enemy");
                         e.getHit(b);
                         b.die();
                     }
                 }
             } else {
                 if (player.checkIfInside(b)) {
-                    System.out.println("Inside tha player");
+                    //System.out.println("Inside tha player");
                     player.getHit(b);
                     b.die();
                 }
@@ -94,20 +97,27 @@ public class Map {
         if (offset.y < -getHeight() + Gdx.graphics.getHeight()) offset.y = -getHeight() + Gdx.graphics.getHeight();
     }
 
-    public void draw(SpriteBatch batch, Player player) {
+    public void draw(SpriteBatch batch) {
         batch.draw(Assets.getTexture(AssetType.BACKGROUND, Map.class), offset.x, offset.y);
         for (Enemy e : enemies) e.draw(batch);
         for (Bullet b : bullets) b.draw(batch);
-
-        Assets.write(batch, "PX = " + (int) player.getPos().x + "  PY = " + (int) player.getPos().y, 0, 450);
-        Assets.write(batch, "EX = " + (int) player.getPos().x + "  EY = " + (int) player.getPos().y, 0, 430);
-        if (enemies.size() > 0)
-            Assets.write(batch, "ENX = " + (int) enemies.get(0).getPos().x + "  ENY = " + (int) enemies.get(0).getPos().y, 0, 410);
-        if (bullets.size() > 0)
-            Assets.write(batch, "BX = " + (int) bullets.get(0).getPos().x + "  BY = " + (int) bullets.get(0).getPos().y, 0, 390);
     }
 
     public void fire(Vector2 startPos, Vector2 targetPos, Class type) {
         bullets.add(new Bullet(startPos, targetPos, type));
+    }
+
+    public void boundingDraw(ShapeRenderer shapeRenderer) {
+        shapeRenderer.setColor(Color.RED);
+        BoundingCircle bc;
+
+        for (Enemy e : enemies) {
+            bc = e.getBoundingCircle();
+            shapeRenderer.circle(bc.getCenter().x + offset.x, bc.getCenter().y + offset.y, bc.getRadius());
+        }
+        for (Bullet b : bullets) {
+            bc = b.getBoundingCircle();
+            shapeRenderer.circle(bc.getCenter().x + offset.x, bc.getCenter().y + offset.y, bc.getRadius());
+        }
     }
 }

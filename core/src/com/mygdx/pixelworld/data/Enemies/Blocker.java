@@ -8,7 +8,7 @@ import java.util.Random;
 
 public class Blocker extends Enemy {
 
-    private final float ATK_DISTANCE = 200.0f;
+    private final float ATK_DISTANCE = 400.0f;
     private final float SPEED = 120f;
     private boolean isFiring = false;
     private float fireDelay = 0;

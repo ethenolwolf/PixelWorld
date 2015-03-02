@@ -14,16 +14,13 @@ import java.util.Map;
 public class Constants {
 
     public static final String FONT_CHARACTERS = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789=-";
-
-    public static final float CHARACTER_WIDTH = (float) 1 / 13;
-    public static final float CHARACTER_HEIGHT = (float) 1 / 6;
     public static final float PLAYER_SPEED = 250.0f;
     public static final int PLAYER_DEXTERITY = 60;
 
     public static final float X_LIMIT_MIN = (float) 0.25;
     public static final float X_LIMIT_MAX = (float) 0.75;
     public static final float Y_LIMIT_MIN = (float) 0.15;
-    public static final float Y_LIMIT_MAX = (float) 0.75;
+    public static final float Y_LIMIT_MAX = (float) 0.3;
 
     public static Map<Class, Integer> BULLET_DAMAGE = new HashMap<Class, Integer>();
     public static Map<Class, Float> BULLET_RANGE = new HashMap<Class, Float>();
@@ -31,11 +28,11 @@ public class Constants {
 
     public static void init() {
         BULLET_DAMAGE.put(Wizard.class, 20);
-        BULLET_SPEED.put(Wizard.class, 300.0f);
+        BULLET_SPEED.put(Wizard.class, 500.0f);
         BULLET_RANGE.put(Wizard.class, 400.0f);
 
         BULLET_DAMAGE.put(Blocker.class, 20);
         BULLET_SPEED.put(Blocker.class, 400.0f);
-        BULLET_RANGE.put(Blocker.class, 200.0f);
+        BULLET_RANGE.put(Blocker.class, 350.0f);
     }
 }

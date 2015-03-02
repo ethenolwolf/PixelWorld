@@ -23,8 +23,8 @@ public class Assets {
         CHARACTER_TEX.put(Wizard.class, new Texture("core/assets/Characters/wizard.png"));
         CHARACTER_TEX.put(Blocker.class, new Texture("core/assets/Enemies/blocker.png"));
 
-        BULLET_TEX.put(Wizard.class, new Texture("core/assets/Bullets/blue.png"));
-        BULLET_TEX.put(Blocker.class, new Texture("core/assets/Bullets/red.png"));
+        BULLET_TEX.put(Wizard.class, new Texture("core/assets/Bullets/red.png"));
+        BULLET_TEX.put(Blocker.class, new Texture("core/assets/Bullets/blue.png"));
 
         font = TrueTypeFontFactory.createBitmapFont(Gdx.files.internal("core/assets/Ubuntu-MI.ttf"), Constants.FONT_CHARACTERS, 50.5f, 50f, 1.0f, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         font.setColor(1f, 0f, 0f, 1f);

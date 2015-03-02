@@ -3,6 +3,7 @@ package com.mygdx.pixelworld.data.GameClasses;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.mygdx.pixelworld.GUI.Map;
 import com.mygdx.pixelworld.Game;
@@ -70,6 +71,7 @@ public class Player {
     }
 
     private void updateFire(Map map) {
+        //TODO FireManager
         fireDelay -= Game.deltaTime;
         if (fireDelay <= 0) {
             map.fire(pos, target, this.getClass());
@@ -111,11 +113,15 @@ public class Player {
     }
 
     public boolean checkIfInside(Bullet b) {
-        return img.getBoundingBox(pos).contains(b.getBoundingBox());
+        return img.getBoundingCircle(pos).intersect(b.getBoundingCircle());
     }
 
     public void getHit(Bullet b) {
         if (b.getDamage() > armor) health -= (b.getDamage() - armor);
         if (health <= 0) alive = false;
+    }
+
+    public void boundingDraw(ShapeRenderer shapeRenderer) {
+        shapeRenderer.rect(img.getEffectivePosition(pos).x, img.getEffectivePosition(pos).y, img.getBoundingBox(pos).getWidth(), img.getBoundingBox(pos).getHeight());
     }
 }

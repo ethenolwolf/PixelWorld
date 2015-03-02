@@ -5,6 +5,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.mygdx.pixelworld.GUI.Map;
 import com.mygdx.pixelworld.data.AssetsManagement.Assets;
 import com.mygdx.pixelworld.data.Constants;
@@ -23,6 +24,7 @@ public class Game extends ApplicationAdapter implements InputProcessor {
     SpriteBatch batch;
     Map map;
     Player player;
+    ShapeRenderer shapeRenderer;
 
     /**
      * Inits various parts of the program, including batch, map and player.
@@ -36,13 +38,14 @@ public class Game extends ApplicationAdapter implements InputProcessor {
         Assets.init();
         Constants.init();
         map = new Map();
-        //map.addEnemy(Blocker.class, 120, 150);
-        //map.addEnemy(Blocker.class, 180, 70);
-        map.addEnemy(Blocker.class, 420, 150);
-        //map.addEnemy(Blocker.class, 500, 30);
-        //map.addEnemy(Blocker.class, 20, 300);
+        map.addEnemy(Blocker.class, 1300, 800);
+        map.addEnemy(Blocker.class, 1000, 200);
+        map.addEnemy(Blocker.class, 600, 600);
+        map.addEnemy(Blocker.class, 900, 400);
+        map.addEnemy(Blocker.class, 1500, 150);
         player = new Wizard();
         Gdx.input.setInputProcessor(this);
+        shapeRenderer = new ShapeRenderer();
     }
 
     /**
@@ -57,9 +60,13 @@ public class Game extends ApplicationAdapter implements InputProcessor {
         map.update(player);
 
         batch.begin();
-        map.draw(batch, player);
+        map.draw(batch);
         player.draw(batch);
         batch.end();
+        shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
+        map.boundingDraw(shapeRenderer);
+        player.boundingDraw(shapeRenderer);
+        shapeRenderer.end();
     }
 
     @Override

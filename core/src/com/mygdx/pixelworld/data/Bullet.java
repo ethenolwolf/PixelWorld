@@ -20,8 +20,7 @@ public class Bullet {
         this.direction = new Vector2(endingPos.x - startingPos.x, endingPos.y - startingPos.y).nor();
         this.type = type;
         this.pos = new Vector2(startingPos);
-        img = new DrawData(AssetType.BULLET, type, new Vector2(1, 1), direction.angle() - 90);
-        System.out.println("[" + type.toString() + "] Firing from " + startingPos.toString() + " to " + endingPos.toString());
+        img = new DrawData(AssetType.BULLET, type, new Vector2(1, 1), direction.angle());
     }
 
     public void update() {
@@ -45,7 +44,6 @@ public class Bullet {
     }
 
     public void die() {
-        System.out.println("Dying");
         alive = false;
     }
 
@@ -53,23 +51,16 @@ public class Bullet {
         return Constants.BULLET_DAMAGE.get(type);
     }
 
-    public Vector2 getPos() {
-        return pos;
-    }
-
-    public float getWidth() {
-        return img.getWidth();
-    }
-
-    public float getHeight() {
-        return img.getHeight();
-    }
-
     public Class getType() {
         return type;
     }
 
+    @Deprecated
     public BoundingBox getBoundingBox() {
         return img.getBoundingBox(pos);
+    }
+
+    public BoundingCircle getBoundingCircle() {
+        return img.getBoundingCircle(pos);
     }
 }
