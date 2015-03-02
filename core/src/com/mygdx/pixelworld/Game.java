@@ -38,11 +38,11 @@ public class Game extends ApplicationAdapter implements InputProcessor {
         Assets.init();
         Constants.init();
         map = new Map();
-        map.addEnemy(Blocker.class, 1300, 800);
-        map.addEnemy(Blocker.class, 1000, 200);
+        //map.addEnemy(Blocker.class, 1300, 800);
+        //map.addEnemy(Blocker.class, 1000, 200);
         map.addEnemy(Blocker.class, 600, 600);
-        map.addEnemy(Blocker.class, 900, 400);
-        map.addEnemy(Blocker.class, 1500, 150);
+        //map.addEnemy(Blocker.class, 900, 400);
+        //map.addEnemy(Blocker.class, 1500, 150);
         player = new Wizard();
         Gdx.input.setInputProcessor(this);
         shapeRenderer = new ShapeRenderer();
@@ -63,10 +63,7 @@ public class Game extends ApplicationAdapter implements InputProcessor {
         map.draw(batch);
         player.draw(batch);
         batch.end();
-        shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
-        map.boundingDraw(shapeRenderer);
-        player.boundingDraw(shapeRenderer);
-        shapeRenderer.end();
+        map.shapeDraw(shapeRenderer, player);
     }
 
     @Override

@@ -1,20 +1,19 @@
 package com.mygdx.pixelworld.GUI;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.mygdx.pixelworld.Game;
 import com.mygdx.pixelworld.data.AssetsManagement.AssetType;
 import com.mygdx.pixelworld.data.AssetsManagement.Assets;
-import com.mygdx.pixelworld.data.BoundingCircle;
 import com.mygdx.pixelworld.data.Bullet;
 import com.mygdx.pixelworld.data.Constants;
 import com.mygdx.pixelworld.data.Enemies.Blocker;
 import com.mygdx.pixelworld.data.Enemies.Enemy;
 import com.mygdx.pixelworld.data.GameClasses.Player;
 import com.mygdx.pixelworld.data.GameClasses.Wizard;
+import com.mygdx.pixelworld.data.ManaPower;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,6 +24,7 @@ public class Map {
     private static Vector2 offset = new Vector2();
     private List<Enemy> enemies = new ArrayList<Enemy>();
     private List<Bullet> bullets = new ArrayList<Bullet>();
+    private List<ManaPower> manaPowers = new ArrayList<ManaPower>();
 
     public static Vector2 getOffset() {
         return offset;
@@ -67,13 +67,22 @@ public class Map {
                 }
             } else {
                 if (player.checkIfInside(b)) {
-                    //System.out.println("Inside tha player");
+                    System.out.println("Inside tha player");
                     player.getHit(b);
                     b.die();
                 }
             }
 
             if (!b.isAlive()) bulletIterator.remove();
+        }
+
+        for (ManaPower mp : manaPowers) {
+            enemyIterator = enemies.listIterator();
+            if (enemyIterator.hasNext()) {
+                Enemy e = enemyIterator.next();
+                if (mp.checkIfInside(e)) e.getHit(mp);
+            }
+
         }
 
         updateOffset(player.getPos());
@@ -101,23 +110,32 @@ public class Map {
         batch.draw(Assets.getTexture(AssetType.BACKGROUND, Map.class), offset.x, offset.y);
         for (Enemy e : enemies) e.draw(batch);
         for (Bullet b : bullets) b.draw(batch);
+        ListIterator iterator = manaPowers.listIterator();
+        while (iterator.hasNext()) {
+            ManaPower mp = (ManaPower) iterator.next();
+            if (!mp.draw(batch)) iterator.remove();
+        }
     }
 
     public void fire(Vector2 startPos, Vector2 targetPos, Class type) {
         bullets.add(new Bullet(startPos, targetPos, type));
     }
 
-    public void boundingDraw(ShapeRenderer shapeRenderer) {
-        shapeRenderer.setColor(Color.RED);
-        BoundingCircle bc;
+    public void manaFire(Class type, float minScale, float maxScale, float step, Vector2 center) {
+        manaPowers.add(new ManaPower(type, minScale, maxScale, step, center));
+    }
 
-        for (Enemy e : enemies) {
-            bc = e.getBoundingCircle();
-            shapeRenderer.circle(bc.getCenter().x + offset.x, bc.getCenter().y + offset.y, bc.getRadius());
-        }
-        for (Bullet b : bullets) {
-            bc = b.getBoundingCircle();
-            shapeRenderer.circle(bc.getCenter().x + offset.x, bc.getCenter().y + offset.y, bc.getRadius());
-        }
+    public void shapeDraw(ShapeRenderer shapeRenderer, Player player) {
+        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+        shapeRenderer.setColor(0.678f, 0.074f, 0.074f, 1.0f);
+        shapeRenderer.rect(0, Gdx.graphics.getHeight() - 20, Gdx.graphics.getWidth() / 2, 20);
+        shapeRenderer.setColor(0.95f, 0.05f, 0.05f, 1.0f);
+        shapeRenderer.rect(0, Gdx.graphics.getHeight() - 20, Gdx.graphics.getWidth() / 2 * player.getHealthPercentage(), 20);
+
+        shapeRenderer.setColor(0.0f, 0.0f, 0.392f, 1.0f);
+        shapeRenderer.rect(0, Gdx.graphics.getHeight() - 40, Gdx.graphics.getWidth() / 2, 20);
+        shapeRenderer.setColor(0.0f, 0.05f, 0.95f, 1.0f);
+        shapeRenderer.rect(0, Gdx.graphics.getHeight() - 40, Gdx.graphics.getWidth() / 2 * player.getManaPercentage(), 20);
+        shapeRenderer.end();
     }
 }

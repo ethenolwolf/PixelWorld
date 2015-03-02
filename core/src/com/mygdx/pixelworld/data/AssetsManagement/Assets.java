@@ -16,6 +16,7 @@ public class Assets {
 
     private static Map<Class, Texture> CHARACTER_TEX = new HashMap<Class, Texture>();
     private static Map<Class, Texture> BULLET_TEX = new HashMap<Class, Texture>();
+    private static Map<Class, Texture> MANA_TEX = new HashMap<Class, Texture>();
     private static BitmapFont font;
     private static Texture BACKGROUND_TEX;
 
@@ -25,6 +26,8 @@ public class Assets {
 
         BULLET_TEX.put(Wizard.class, new Texture("core/assets/Bullets/red.png"));
         BULLET_TEX.put(Blocker.class, new Texture("core/assets/Bullets/blue.png"));
+
+        MANA_TEX.put(Wizard.class, new Texture("core/assets/Mana/wizard.gif"));
 
         font = TrueTypeFontFactory.createBitmapFont(Gdx.files.internal("core/assets/Ubuntu-MI.ttf"), Constants.FONT_CHARACTERS, 50.5f, 50f, 1.0f, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         font.setColor(1f, 0f, 0f, 1f);
@@ -40,6 +43,8 @@ public class Assets {
                 return CHARACTER_TEX.get(type);
             case BULLET:
                 return BULLET_TEX.get(type);
+            case MANA:
+                return MANA_TEX.get(type);
         }
         return new Texture(Gdx.files.internal("badlogic.jpg"));
     }

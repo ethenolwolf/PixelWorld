@@ -2,12 +2,12 @@ package com.mygdx.pixelworld.data.Enemies;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.math.collision.BoundingBox;
 import com.mygdx.pixelworld.GUI.Map;
 import com.mygdx.pixelworld.data.AssetsManagement.AssetType;
 import com.mygdx.pixelworld.data.BoundingCircle;
 import com.mygdx.pixelworld.data.Bullet;
 import com.mygdx.pixelworld.data.DrawData;
+import com.mygdx.pixelworld.data.ManaPower;
 
 public class Enemy {
 
@@ -48,12 +48,12 @@ public class Enemy {
         return img.getBoundingCircle(pos).intersect(b.getBoundingCircle());
     }
 
-    @Deprecated
-    public BoundingBox getBoundingBox() {
-        return img.getBoundingBox(pos);
-    }
-
     public BoundingCircle getBoundingCircle() {
         return img.getBoundingCircle(pos);
+    }
+
+    public void getHit(ManaPower mp) {
+        if (mp.getDamage() > armor) health -= (mp.getDamage() - armor);
+        if (health <= 0) alive = false;
     }
 }

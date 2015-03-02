@@ -21,6 +21,10 @@ public class Constants {
     public static final float X_LIMIT_MAX = (float) 0.75;
     public static final float Y_LIMIT_MIN = (float) 0.15;
     public static final float Y_LIMIT_MAX = (float) 0.3;
+    public static final float MANA_PRICE = 50;
+    public static final float MANA_REGEN = 40.0f;
+    public static final int MANA_DAMAGE = 100;
+    public static final float MANA_ANIMATION_SPEED = 0.1f;
 
     public static Map<Class, Integer> BULLET_DAMAGE = new HashMap<Class, Integer>();
     public static Map<Class, Float> BULLET_RANGE = new HashMap<Class, Float>();

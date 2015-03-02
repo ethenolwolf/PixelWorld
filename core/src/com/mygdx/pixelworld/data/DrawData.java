@@ -24,6 +24,9 @@ public class DrawData {
         texture = new TextureRegion(Assets.getTexture(assetType, type));
     }
 
+    public DrawData() {
+    }
+
 
     public float getWidth() {
         return texture.getRegionWidth();
@@ -46,10 +49,6 @@ public class DrawData {
         rotationAngle = angle;
     }
 
-    public void setScaleFactor(Vector2 scaleFactor) {
-        this.scaleFactor = scaleFactor;
-    }
-
     public void draw(SpriteBatch batch, Vector2 absolutePosition) {
         //TODO draw only if inScreen
         batch.draw(texture, getEffectivePosition(absolutePosition).x, getEffectivePosition(absolutePosition).y, getOriginCenter().x,
@@ -64,7 +63,9 @@ public class DrawData {
         return null;
     }
 
-    public BoundingCircle getBoundingCircle(Vector2 absolutePosition) {
+    public BoundingCircle getBoundingCircle(Vector2 pos) {
+        Vector2 absolutePosition = new Vector2(pos);
+        //System.out.println("[getBounding] center = "+absolutePosition.add(getOriginCenter()).toString()+" scaleFactors = "+scaleFactor.toString());
         BoundingCircle out = new BoundingCircle(new Vector2(absolutePosition.x + getOriginCenter().x, absolutePosition.y + getOriginCenter().y), Math.max(getWidth() / 2, getHeight() / 2));
         if (out.isValid()) return out;
         System.out.println("NOT VALID!");
@@ -84,5 +85,9 @@ public class DrawData {
 
     public void write(SpriteBatch batch, String name, float x, float y) {
         Assets.write(batch, name, x, y);
+    }
+
+    public void setScaleFactor(Vector2 scaleFactor) {
+        this.scaleFactor = scaleFactor;
     }
 }
