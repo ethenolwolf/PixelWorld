@@ -1,10 +1,10 @@
-package com.mygdx.pixelworld.data;
+package com.mygdx.pixelworld.data.draw;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.math.collision.BoundingBox;
 import com.mygdx.pixelworld.Game;
-import com.mygdx.pixelworld.data.AssetsManagement.AssetType;
+import com.mygdx.pixelworld.data.assets.AssetType;
+import com.mygdx.pixelworld.data.utilities.Constants;
 
 public class Bullet {
     Vector2 pos;
@@ -53,11 +53,6 @@ public class Bullet {
 
     public Class getType() {
         return type;
-    }
-
-    @Deprecated
-    public BoundingBox getBoundingBox() {
-        return img.getBoundingBox(pos);
     }
 
     public BoundingCircle getBoundingCircle() {

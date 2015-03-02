@@ -7,11 +7,11 @@ import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.mygdx.pixelworld.GUI.Map;
-import com.mygdx.pixelworld.data.AssetsManagement.Assets;
-import com.mygdx.pixelworld.data.Constants;
-import com.mygdx.pixelworld.data.Enemies.Blocker;
-import com.mygdx.pixelworld.data.GameClasses.Player;
-import com.mygdx.pixelworld.data.GameClasses.Wizard;
+import com.mygdx.pixelworld.data.assets.Assets;
+import com.mygdx.pixelworld.data.classes.Player;
+import com.mygdx.pixelworld.data.classes.Wizard;
+import com.mygdx.pixelworld.data.enemies.Blocker;
+import com.mygdx.pixelworld.data.utilities.Constants;
 
 /**
  * Main game class.
@@ -29,7 +29,7 @@ public class Game extends ApplicationAdapter implements InputProcessor {
     /**
      * Inits various parts of the program, including batch, map and player.
      *
-     * @see com.mygdx.pixelworld.data.GameClasses.Player
+     * @see com.mygdx.pixelworld.data.classes.Player
      * @see com.mygdx.pixelworld.GUI.Map
      */
     @Override

@@ -1,4 +1,4 @@
-package com.mygdx.pixelworld.data;
+package com.mygdx.pixelworld.data.draw;
 
 import com.badlogic.gdx.math.Vector2;
 

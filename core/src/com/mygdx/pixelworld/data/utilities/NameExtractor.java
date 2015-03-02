@@ -1,4 +1,4 @@
-package com.mygdx.pixelworld.data;
+package com.mygdx.pixelworld.data.utilities;
 
 import com.mygdx.pixelworld.GUI.Logger;
 

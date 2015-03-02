@@ -1,13 +1,13 @@
-package com.mygdx.pixelworld.data.AssetsManagement;
+package com.mygdx.pixelworld.data.assets;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.stbtt.TrueTypeFontFactory;
-import com.mygdx.pixelworld.data.Constants;
-import com.mygdx.pixelworld.data.Enemies.Blocker;
-import com.mygdx.pixelworld.data.GameClasses.Wizard;
+import com.mygdx.pixelworld.data.classes.Wizard;
+import com.mygdx.pixelworld.data.enemies.Blocker;
+import com.mygdx.pixelworld.data.utilities.Constants;
 
 import java.util.HashMap;
 import java.util.Map;

@@ -1,13 +1,13 @@
-package com.mygdx.pixelworld.data.Enemies;
+package com.mygdx.pixelworld.data.enemies;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.mygdx.pixelworld.GUI.Map;
-import com.mygdx.pixelworld.data.AssetsManagement.AssetType;
-import com.mygdx.pixelworld.data.BoundingCircle;
-import com.mygdx.pixelworld.data.Bullet;
-import com.mygdx.pixelworld.data.DrawData;
-import com.mygdx.pixelworld.data.ManaPower;
+import com.mygdx.pixelworld.data.assets.AssetType;
+import com.mygdx.pixelworld.data.draw.BoundingCircle;
+import com.mygdx.pixelworld.data.draw.Bullet;
+import com.mygdx.pixelworld.data.draw.DrawData;
+import com.mygdx.pixelworld.data.draw.ManaPower;
 
 public class Enemy {
 

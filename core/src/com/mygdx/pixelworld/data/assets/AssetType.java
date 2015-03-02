@@ -1,4 +1,4 @@
-package com.mygdx.pixelworld.data.AssetsManagement;
+package com.mygdx.pixelworld.data.assets;
 
 public enum AssetType {
     BACKGROUND, CHARACTER, BULLET, MANA

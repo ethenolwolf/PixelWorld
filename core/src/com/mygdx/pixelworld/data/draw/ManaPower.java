@@ -1,11 +1,12 @@
-package com.mygdx.pixelworld.data;
+package com.mygdx.pixelworld.data.draw;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
-import com.mygdx.pixelworld.data.AssetsManagement.AssetType;
-import com.mygdx.pixelworld.data.AssetsManagement.Assets;
-import com.mygdx.pixelworld.data.Enemies.Enemy;
+import com.mygdx.pixelworld.data.assets.AssetType;
+import com.mygdx.pixelworld.data.assets.Assets;
+import com.mygdx.pixelworld.data.enemies.Enemy;
+import com.mygdx.pixelworld.data.utilities.Constants;
 
 public class ManaPower extends DrawData {
 

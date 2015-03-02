@@ -1,7 +1,7 @@
-package com.mygdx.pixelworld.data;
+package com.mygdx.pixelworld.data.utilities;
 
-import com.mygdx.pixelworld.data.Enemies.Blocker;
-import com.mygdx.pixelworld.data.GameClasses.Wizard;
+import com.mygdx.pixelworld.data.classes.Wizard;
+import com.mygdx.pixelworld.data.enemies.Blocker;
 
 import java.util.HashMap;
 import java.util.Map;

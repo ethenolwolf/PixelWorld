@@ -1,13 +1,11 @@
-package com.mygdx.pixelworld.data;
+package com.mygdx.pixelworld.data.draw;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.math.collision.BoundingBox;
 import com.mygdx.pixelworld.GUI.Map;
-import com.mygdx.pixelworld.data.AssetsManagement.AssetType;
-import com.mygdx.pixelworld.data.AssetsManagement.Assets;
+import com.mygdx.pixelworld.data.assets.AssetType;
+import com.mygdx.pixelworld.data.assets.Assets;
 
 public class DrawData {
     TextureRegion texture;
@@ -53,14 +51,6 @@ public class DrawData {
         //TODO draw only if inScreen
         batch.draw(texture, getEffectivePosition(absolutePosition).x, getEffectivePosition(absolutePosition).y, getOriginCenter().x,
                 getOriginCenter().y, getWidth(), getHeight(), scaleFactor.x, scaleFactor.y, rotationAngle);
-    }
-
-    public BoundingBox getBoundingBox(Vector2 absolutePosition) {
-        BoundingBox out = new BoundingBox(new Vector3(absolutePosition.x, absolutePosition.y, 0),
-                new Vector3(absolutePosition.x + getWidth(), absolutePosition.y + getHeight(), 1));
-        if (out.isValid()) return out;
-        System.out.println("NOT VALID!");
-        return null;
     }
 
     public BoundingCircle getBoundingCircle(Vector2 pos) {

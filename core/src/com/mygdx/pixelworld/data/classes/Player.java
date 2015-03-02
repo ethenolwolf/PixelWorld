@@ -1,4 +1,4 @@
-package com.mygdx.pixelworld.data.GameClasses;
+package com.mygdx.pixelworld.data.classes;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
@@ -6,10 +6,15 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.mygdx.pixelworld.GUI.Map;
 import com.mygdx.pixelworld.Game;
-import com.mygdx.pixelworld.data.*;
-import com.mygdx.pixelworld.data.AssetsManagement.AssetType;
+import com.mygdx.pixelworld.data.assets.AssetType;
+import com.mygdx.pixelworld.data.draw.Bullet;
+import com.mygdx.pixelworld.data.draw.DrawData;
+import com.mygdx.pixelworld.data.utilities.Algorithms;
+import com.mygdx.pixelworld.data.utilities.Constants;
+import com.mygdx.pixelworld.data.utilities.Directions;
+import com.mygdx.pixelworld.data.utilities.NameExtractor;
 
-import static com.mygdx.pixelworld.data.Directions.*;
+import static com.mygdx.pixelworld.data.utilities.Directions.*;
 
 /**
  * Class for containing main player.
@@ -34,9 +39,7 @@ public class Player {
 
     /**
      * Picks a random CharacterType and name.
-     *
-     * @see com.mygdx.pixelworld.data.CharacterType
-     * @see com.mygdx.pixelworld.data.NameExtractor
+     * @see com.mygdx.pixelworld.data.utilities.NameExtractor
      */
     public Player() {
         this.name = NameExtractor.extract();

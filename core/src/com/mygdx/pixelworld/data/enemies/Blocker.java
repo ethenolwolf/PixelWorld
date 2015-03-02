@@ -1,4 +1,4 @@
-package com.mygdx.pixelworld.data.Enemies;
+package com.mygdx.pixelworld.data.enemies;
 
 import com.badlogic.gdx.math.Vector2;
 import com.mygdx.pixelworld.GUI.Map;
