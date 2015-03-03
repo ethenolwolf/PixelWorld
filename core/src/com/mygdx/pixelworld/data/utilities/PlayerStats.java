@@ -48,4 +48,8 @@ public class PlayerStats {
     public void setAsInit(StatType statType) {
         setStat(statType, getInit(statType));
     }
+
+    public Class getGameClass() {
+        return type;
+    }
 }

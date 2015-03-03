@@ -18,6 +18,7 @@ import com.mygdx.pixelworld.data.utilities.Constants;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ListIterator;
+import java.util.Random;
 
 public class Map {
 
@@ -60,7 +61,6 @@ public class Map {
                 while (enemyIterator.hasNext()) {
                     Enemy e = enemyIterator.next();
                     if (e.checkIfInside(b)) {
-                        //System.out.println("Inside tha enemy");
                         e.getHit(b);
                         b.die();
                     }
@@ -141,5 +141,12 @@ public class Map {
         shapeRenderer.rect(0, Gdx.graphics.getHeight() - 40, Gdx.graphics.getWidth() / 2 * player.getManaPercentage(), 20);
 
         shapeRenderer.end();
+    }
+
+    public void generateEnemies(int enemyNumber) {
+        Random random = new Random();
+        for (int i = 0; i < enemyNumber; i++)
+            enemies.add(new Blocker(random.nextInt(getWidth()), random.nextInt(getHeight())));
+
     }
 }

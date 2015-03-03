@@ -10,7 +10,6 @@ import com.mygdx.pixelworld.GUI.Map;
 import com.mygdx.pixelworld.data.assets.Assets;
 import com.mygdx.pixelworld.data.classes.Player;
 import com.mygdx.pixelworld.data.classes.Wizard;
-import com.mygdx.pixelworld.data.enemies.Blocker;
 import com.mygdx.pixelworld.data.utilities.Constants;
 
 /**
@@ -38,11 +37,7 @@ public class Game extends ApplicationAdapter implements InputProcessor {
         Assets.init();
         Constants.init();
         map = new Map();
-        map.addEnemy(Blocker.class, 1300, 800);
-        map.addEnemy(Blocker.class, 1000, 200);
-        map.addEnemy(Blocker.class, 600, 600);
-        map.addEnemy(Blocker.class, 900, 400);
-        map.addEnemy(Blocker.class, 1500, 150);
+        map.generateEnemies(5);
         player = new Wizard();
         Gdx.input.setInputProcessor(this);
         shapeRenderer = new ShapeRenderer();
@@ -84,21 +79,21 @@ public class Game extends ApplicationAdapter implements InputProcessor {
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
         if (button == Input.Buttons.LEFT) {
-            player.setIsFiring(true);
-            player.setTarget(screenX - Map.getOffset().x, Gdx.graphics.getHeight() - screenY - Map.getOffset().y);
+            player.getFireManager().setIsFiring(true);
+            player.getFireManager().setTarget(screenX - Map.getOffset().x, Gdx.graphics.getHeight() - screenY - Map.getOffset().y);
         }
         return true;
     }
 
     @Override
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-        player.setIsFiring(false);
+        player.getFireManager().setIsFiring(false);
         return true;
     }
 
     @Override
     public boolean touchDragged(int screenX, int screenY, int pointer) {
-        player.setTarget(screenX - Map.getOffset().x, Gdx.graphics.getHeight() - screenY - Map.getOffset().y);
+        player.getFireManager().setTarget(screenX - Map.getOffset().x, Gdx.graphics.getHeight() - screenY - Map.getOffset().y);
         return true;
     }
 

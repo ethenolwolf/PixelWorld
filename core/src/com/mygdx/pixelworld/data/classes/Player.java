@@ -7,8 +7,10 @@ import com.badlogic.gdx.math.Vector2;
 import com.mygdx.pixelworld.GUI.Map;
 import com.mygdx.pixelworld.Game;
 import com.mygdx.pixelworld.data.assets.AssetType;
+import com.mygdx.pixelworld.data.assets.Assets;
 import com.mygdx.pixelworld.data.draw.Bullet;
 import com.mygdx.pixelworld.data.draw.DrawData;
+import com.mygdx.pixelworld.data.enemies.Blocker;
 import com.mygdx.pixelworld.data.utilities.*;
 
 import static com.mygdx.pixelworld.data.utilities.Directions.*;
@@ -20,15 +22,13 @@ import static com.mygdx.pixelworld.data.utilities.Directions.*;
  */
 public class Player {
 
-    protected DrawData manaPower;
+    protected String name;
+    protected Vector2 pos;
     protected PlayerStats stats;
-    private String name;
-    private Vector2 pos;
+
     private DrawData img;
-    private double fireDelay;
     private boolean alive = true;
-    private boolean isFiring = false;
-    private Vector2 target = new Vector2();
+    private FireManager fireManager;
 
     /**
      * Picks a random CharacterType and name.
@@ -38,22 +38,12 @@ public class Player {
         this.name = NameExtractor.extract();
         this.pos = new Vector2(580, 0);
         img = new DrawData(AssetType.CHARACTER, this.getClass(), new Vector2(1, 1), 0);
-        manaPower = new DrawData(AssetType.MANA, this.getClass(), new Vector2(0.1f, 0.1f), 0);
         stats = new PlayerStats(this.getClass());
-    }
-
-    public void setIsFiring(boolean isFiring) {
-        this.isFiring = isFiring;
-        if (isFiring) fireDelay = 0;
+        fireManager = new FireManager();
     }
 
     public Vector2 getPos() {
         return new Vector2(pos.x, pos.y);
-    }
-
-    public void setTarget(float x, float y) {
-        target.x = x;
-        target.y = y;
     }
 
     /**
@@ -70,7 +60,7 @@ public class Player {
 
         if (Gdx.input.isKeyPressed(Keys.SPACE)) manaTrigger(map);
 
-        if (isFiring) updateFire(map);
+        fireManager.updateFire(pos, stats, map);
         manaRegen();
     }
 
@@ -81,16 +71,6 @@ public class Player {
             map.manaFire(this.getClass(), 0.1f, 1f, Constants.MANA_ANIMATION_SPEED, new Vector2(new Vector2(pos).add(img.getOriginCenter())));
         }
     }
-
-    private void updateFire(Map map) {
-        //TODO FireManager
-        fireDelay -= Game.deltaTime;
-        if (fireDelay <= 0) {
-            map.fire(pos, target, this.getClass());
-            fireDelay += 1 / Algorithms.map(Constants.PLAYER_DEXTERITY, 1, 100, 1, 8);
-        }
-    }
-
 
     /**
      * Applies a movement, determined by deltaTime and PLAYER_SPEED, towards the required direction
@@ -124,6 +104,7 @@ public class Player {
         img.draw(batch, pos);
         //if(isManaFiring) manaPower.drawFromCenter(batch, new Vector2(pos.x + img.getWidth() / 2, pos.y + img.getHeight() / 2));
         img.write(batch, name, img.getEffectivePosition(pos).x + 10.0f, img.getEffectivePosition(pos).y + img.getHeight() + 10.0f);
+        batch.draw(Assets.getTexture(AssetType.BULLET, Blocker.class), 0, 0);
     }
 
     private void manaRegen() {
@@ -149,5 +130,9 @@ public class Player {
 
     public float getManaPercentage() {
         return stats.get(StatType.MANA) / stats.getInit(StatType.MANA);
+    }
+
+    public FireManager getFireManager() {
+        return fireManager;
     }
 }
