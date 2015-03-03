@@ -29,6 +29,7 @@ public class Constants {
     public static Map<Class, Integer> BULLET_DAMAGE = new HashMap<Class, Integer>();
     public static Map<Class, Float> BULLET_RANGE = new HashMap<Class, Float>();
     public static Map<Class, Float> BULLET_SPEED = new HashMap<Class, Float>();
+    public static Map<Class, PlayerStats> initStats = new HashMap<Class, PlayerStats>();
 
     public static void init() {
         BULLET_DAMAGE.put(Wizard.class, 20);
@@ -38,5 +39,16 @@ public class Constants {
         BULLET_DAMAGE.put(Blocker.class, 20);
         BULLET_SPEED.put(Blocker.class, 400.0f);
         BULLET_RANGE.put(Blocker.class, 350.0f);
+
+        initStats.put(Wizard.class, new PlayerStats(
+                100, //health
+                100, //mana
+                50, //spd
+                60, //dex
+                50, //wis
+                50, //vit
+                50, //atk
+                50  //def
+        ));
     }
 }

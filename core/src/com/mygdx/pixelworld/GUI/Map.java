@@ -67,7 +67,6 @@ public class Map {
                 }
             } else {
                 if (player.checkIfInside(b)) {
-                    System.out.println("Inside tha player");
                     player.getHit(b);
                     b.die();
                 }

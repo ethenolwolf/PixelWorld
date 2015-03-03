@@ -9,10 +9,7 @@ import com.mygdx.pixelworld.Game;
 import com.mygdx.pixelworld.data.assets.AssetType;
 import com.mygdx.pixelworld.data.draw.Bullet;
 import com.mygdx.pixelworld.data.draw.DrawData;
-import com.mygdx.pixelworld.data.utilities.Algorithms;
-import com.mygdx.pixelworld.data.utilities.Constants;
-import com.mygdx.pixelworld.data.utilities.Directions;
-import com.mygdx.pixelworld.data.utilities.NameExtractor;
+import com.mygdx.pixelworld.data.utilities.*;
 
 import static com.mygdx.pixelworld.data.utilities.Directions.*;
 
@@ -23,19 +20,15 @@ import static com.mygdx.pixelworld.data.utilities.Directions.*;
  */
 public class Player {
 
-    private final int MAX_HEALTH = 200;
-    private final float MAX_MANA = 100;
     protected DrawData manaPower;
+    protected PlayerStats stats;
     private String name;
     private Vector2 pos;
     private DrawData img;
     private double fireDelay;
-    private int armor = 10;
-    private int health;
     private boolean alive = true;
     private boolean isFiring = false;
     private Vector2 target = new Vector2();
-    private float mana;
 
     /**
      * Picks a random CharacterType and name.
@@ -46,8 +39,7 @@ public class Player {
         this.pos = new Vector2(580, 0);
         img = new DrawData(AssetType.CHARACTER, this.getClass(), new Vector2(1, 1), 0);
         manaPower = new DrawData(AssetType.MANA, this.getClass(), new Vector2(0.1f, 0.1f), 0);
-        health = MAX_HEALTH;
-        mana = MAX_MANA;
+        stats = new PlayerStats(this.getClass());
     }
 
     public void setIsFiring(boolean isFiring) {
@@ -83,8 +75,9 @@ public class Player {
     }
 
     private void manaTrigger(Map map) {
+        float mana = stats.get(StatType.MANA);
         if (mana >= Constants.MANA_PRICE) {
-            mana -= Constants.MANA_PRICE;
+            stats.addStat(StatType.MANA, -Constants.MANA_PRICE);
             map.manaFire(this.getClass(), 0.1f, 1f, Constants.MANA_ANIMATION_SPEED, new Vector2(new Vector2(pos).add(img.getOriginCenter())));
         }
     }
@@ -134,8 +127,9 @@ public class Player {
     }
 
     private void manaRegen() {
-        if (mana < MAX_MANA) mana += Game.deltaTime * Constants.MANA_REGEN;
-        if (mana > MAX_MANA) mana = MAX_MANA;
+        if (stats.get(StatType.MANA) < stats.getInit(StatType.MANA))
+            stats.addStat(StatType.MANA, Game.deltaTime * Constants.MANA_REGEN);
+        if (stats.get(StatType.MANA) > stats.getInit(StatType.MANA)) stats.setAsInit(StatType.MANA);
     }
 
     public boolean checkIfInside(Bullet b) {
@@ -143,15 +137,17 @@ public class Player {
     }
 
     public void getHit(Bullet b) {
+        float armor = stats.get(StatType.DEF) * 0.5f;
+        float health = stats.get(StatType.HEALTH);
         if (b.getDamage() > armor) health -= (b.getDamage() - armor);
         if (health <= 0) alive = false;
     }
 
     public float getHealthPercentage() {
-        return (float) health / (float) MAX_HEALTH;
+        return stats.get(StatType.HEALTH) / stats.getInit(StatType.HEALTH);
     }
 
     public float getManaPercentage() {
-        return mana / MAX_MANA;
+        return stats.get(StatType.MANA) / stats.getInit(StatType.MANA);
     }
 }
