@@ -77,7 +77,7 @@ public class Map {
 
         for (ManaPower mp : manaPowers) {
             enemyIterator = enemies.listIterator();
-            if (enemyIterator.hasNext()) {
+            while (enemyIterator.hasNext()) {
                 Enemy e = enemyIterator.next();
                 if (mp.checkIfInside(e)) e.getHit(mp);
             }
@@ -126,15 +126,20 @@ public class Map {
 
     public void shapeDraw(ShapeRenderer shapeRenderer, Player player) {
         shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+
+        //Health bar background
         shapeRenderer.setColor(0.678f, 0.074f, 0.074f, 1.0f);
         shapeRenderer.rect(0, Gdx.graphics.getHeight() - 20, Gdx.graphics.getWidth() / 2, 20);
+        //Health bar
         shapeRenderer.setColor(0.95f, 0.05f, 0.05f, 1.0f);
         shapeRenderer.rect(0, Gdx.graphics.getHeight() - 20, Gdx.graphics.getWidth() / 2 * player.getHealthPercentage(), 20);
-
+        //Mana bar background
         shapeRenderer.setColor(0.0f, 0.0f, 0.392f, 1.0f);
         shapeRenderer.rect(0, Gdx.graphics.getHeight() - 40, Gdx.graphics.getWidth() / 2, 20);
+        //Mana bar
         shapeRenderer.setColor(0.0f, 0.05f, 0.95f, 1.0f);
         shapeRenderer.rect(0, Gdx.graphics.getHeight() - 40, Gdx.graphics.getWidth() / 2 * player.getManaPercentage(), 20);
+
         shapeRenderer.end();
     }
 }

@@ -3,6 +3,7 @@ package com.mygdx.pixelworld.data.draw;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
+import com.mygdx.pixelworld.GUI.Logger;
 import com.mygdx.pixelworld.data.assets.AssetType;
 import com.mygdx.pixelworld.data.assets.Assets;
 import com.mygdx.pixelworld.data.enemies.Enemy;
@@ -34,10 +35,9 @@ public class ManaPower extends DrawData {
     }
 
     public BoundingCircle getBoundingCircle() {
-        //System.out.println("[getCenterBounding] center = "+center.toString()+" scaleFactors = "+scaleFactor.toString());
         BoundingCircle out = new BoundingCircle(new Vector2(center), Math.max(getWidth() * scaleFactor.x / 2, getHeight() * scaleFactor.x / 2));
         if (out.isValid()) return out;
-        System.out.println("NOT VALID!");
+        Logger.log("[ManaPower.getBoundingCircle()] Circle not valid!");
         return null;
     }
 
