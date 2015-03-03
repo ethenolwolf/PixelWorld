@@ -5,8 +5,9 @@ import com.badlogic.gdx.math.Vector2;
 import com.mygdx.pixelworld.Game;
 import com.mygdx.pixelworld.data.assets.AssetType;
 import com.mygdx.pixelworld.data.utilities.Constants;
+import com.mygdx.pixelworld.data.utilities.Damaging;
 
-public class Bullet {
+public class Bullet implements Damaging {
     Vector2 pos;
     Vector2 startPoint;
     Vector2 direction;
@@ -47,6 +48,7 @@ public class Bullet {
         alive = false;
     }
 
+    @Override
     public int getDamage() {
         return Constants.BULLET_DAMAGE.get(type);
     }

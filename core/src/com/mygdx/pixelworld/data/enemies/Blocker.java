@@ -3,52 +3,43 @@ package com.mygdx.pixelworld.data.enemies;
 import com.badlogic.gdx.math.Vector2;
 import com.mygdx.pixelworld.GUI.Map;
 import com.mygdx.pixelworld.Game;
+import com.mygdx.pixelworld.data.utilities.Algorithms;
+import com.mygdx.pixelworld.data.utilities.FireManager;
+import com.mygdx.pixelworld.data.utilities.StatType;
 
 import java.util.Random;
 
 public class Blocker extends Enemy {
 
-    private final float ATK_DISTANCE = 400.0f;
-    private final float SPEED = 120f;
-    private boolean isFiring = false;
-    private float fireDelay = 0;
+    FireManager fireManager;
+
     public Blocker(float x, float y) {
         super(x, y, Blocker.class);
-        this.health = 100;
-        this.armor = 0;
-    }
-
-    public void setFiring(boolean isFiring) {
-        this.isFiring = isFiring;
-        if (isFiring) fireDelay = 0;
+        fireManager = new FireManager();
     }
 
     @Override
-    protected void AI(Vector2 playerPos, Map map) {
-        if (playerPos.dst(pos) < ATK_DISTANCE) {
-            if (!isFiring) setFiring(true);
-            Vector2 pos2 = new Vector2(playerPos.x - pos.x, playerPos.y - pos.y);
-            pos2.nor();
-            pos.add(pos2.x * Game.deltaTime * SPEED, pos2.y * Game.deltaTime * SPEED);
-        } else {
-            if (isFiring) setFiring(false);
-            Random rand = new Random();
-            float x = rand.nextFloat();
-            float y = rand.nextFloat();
-
-            if (rand.nextInt(10) >= 5) x = -x;
-            if (rand.nextInt(10) >= 5) y = -y;
-            pos.add(x * 5, y * 5);
-        }
+    protected void activeAIUpdate(Vector2 playerPos, Map map) {
+        if (!fireManager.isFiring()) fireManager.setIsFiring(true);
+        Algorithms.moveTowards(pos, playerPos, stats.get(StatType.SPD) * Game.deltaTime);
         pos = img.boundMap(pos);
-        if (isFiring) updateFire(playerPos, map);
+        fireManager.setTarget(playerPos);
+        fireManager.updateFire(pos, stats, map);
     }
 
-    private void updateFire(Vector2 playerPos, Map map) {
-        fireDelay -= Game.deltaTime;
-        if (fireDelay <= 0) {
-            map.fire(pos, playerPos, Blocker.class);
-            fireDelay += 2;
-        }
+    @Override
+    protected void passiveAIUpdate(Vector2 playerPos, Map map) {
+        if (fireManager.isFiring()) fireManager.setIsFiring(false);
+        Random rand = new Random();
+        float x = rand.nextFloat();
+        float y = rand.nextFloat();
+
+        if (rand.nextInt(10) >= 5) x = -x;
+        if (rand.nextInt(10) >= 5) y = -y;
+        pos.add(x * 5, y * 5);
+        pos = img.boundMap(pos);
+        fireManager.setTarget(playerPos);
+        fireManager.updateFire(pos, stats, map);
     }
+
 }

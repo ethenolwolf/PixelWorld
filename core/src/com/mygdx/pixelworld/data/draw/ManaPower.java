@@ -8,8 +8,9 @@ import com.mygdx.pixelworld.data.assets.AssetType;
 import com.mygdx.pixelworld.data.assets.Assets;
 import com.mygdx.pixelworld.data.enemies.Enemy;
 import com.mygdx.pixelworld.data.utilities.Constants;
+import com.mygdx.pixelworld.data.utilities.Damaging;
 
-public class ManaPower extends DrawData {
+public class ManaPower extends DrawData implements Damaging {
 
     Vector2 center;
     float minScale, maxScale, step;
@@ -45,6 +46,7 @@ public class ManaPower extends DrawData {
         return getBoundingCircle().intersect(e.getBoundingCircle());
     }
 
+    @Override
     public int getDamage() {
         return Constants.MANA_DAMAGE;
     }

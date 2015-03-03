@@ -27,12 +27,20 @@ public class FireManager {
     }
 
 
-    public void updateFire(Vector2 pos, PlayerStats playerStats, Map map) {
+    public void updateFire(Vector2 pos, EntityStats entityStats, Map map) {
         if (!isFiring) return;
         fireDelay -= Game.deltaTime;
         if (fireDelay <= 0) {
-            map.fire(pos, target, playerStats.getGameClass());
-            fireDelay += 1 / Algorithms.map(playerStats.get(StatType.DEX), 1, 100, 1, 8);
+            map.fire(pos, target, entityStats.getGameClass());
+            fireDelay += 1 / Algorithms.map(entityStats.get(StatType.DEX), 1, 100, 1, 8);
         }
+    }
+
+    public boolean isFiring() {
+        return isFiring;
+    }
+
+    public void setTarget(Vector2 targetPosition) {
+        target = new Vector2(targetPosition);
     }
 }

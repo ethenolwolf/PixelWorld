@@ -4,17 +4,18 @@ package com.mygdx.pixelworld.data.utilities;
 import java.util.EnumMap;
 import java.util.Map;
 
-public class PlayerStats {
+public class EntityStats {
 
     Class type;
+    boolean alive = true;
     private Map<StatType, Float> stats = new EnumMap<StatType, Float>(StatType.class);
 
-    public PlayerStats(Class type) {
+    public EntityStats(Class type) {
         this(Constants.initStats.get(type));
         this.type = type;
     }
 
-    public PlayerStats(float health, float mana, int speed, int dexterity, int wisdom, int vitality, int attack, int defense) {
+    public EntityStats(float health, float mana, int speed, int dexterity, int wisdom, int vitality, int attack, int defense) {
         stats.put(StatType.HEALTH, health);
         stats.put(StatType.MANA, mana);
         stats.put(StatType.SPD, (float) speed);
@@ -25,7 +26,7 @@ public class PlayerStats {
         stats.put(StatType.DEF, (float) defense);
     }
 
-    public PlayerStats(PlayerStats ps) {
+    public EntityStats(EntityStats ps) {
         for (StatType st : StatType.values()) stats.put(st, ps.get(st));
     }
 
@@ -51,5 +52,14 @@ public class PlayerStats {
 
     public Class getGameClass() {
         return type;
+    }
+
+    public void getHit(int damage) {
+        if (damage > get(StatType.DEF)) addStat(StatType.HEALTH, get(StatType.DEF) - damage);
+        if (get(StatType.HEALTH) <= 0) alive = false;
+    }
+
+    public boolean isAlive() {
+        return alive;
     }
 }

@@ -14,6 +14,8 @@ import com.mygdx.pixelworld.data.draw.ManaPower;
 import com.mygdx.pixelworld.data.enemies.Blocker;
 import com.mygdx.pixelworld.data.enemies.Enemy;
 import com.mygdx.pixelworld.data.utilities.Constants;
+import com.mygdx.pixelworld.data.utilities.EntityStats;
+import com.mygdx.pixelworld.data.utilities.StatType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -84,11 +86,11 @@ public class Map {
 
         }
 
-        updateOffset(player.getPos());
+        updateOffset(player.getPos(), player.getStats());
     }
 
-    private void updateOffset(Vector2 playerPos) {
-        float of = Game.deltaTime * Constants.PLAYER_SPEED;
+    private void updateOffset(Vector2 playerPos, EntityStats stats) {
+        float of = Game.deltaTime * stats.get(StatType.SPD);
         Vector2 pp = new Vector2(playerPos);
         if (pp.x + offset.x < Gdx.graphics.getWidth() * Constants.X_LIMIT_MIN) offset.add(of, 0);
         else if (pp.x + offset.x > Gdx.graphics.getWidth() * Constants.X_LIMIT_MAX) offset.add(-of, 0);
@@ -146,7 +148,7 @@ public class Map {
     public void generateEnemies(int enemyNumber) {
         Random random = new Random();
         for (int i = 0; i < enemyNumber; i++)
-            enemies.add(new Blocker(random.nextInt(getWidth()), random.nextInt(getHeight())));
+            addEnemy(Blocker.class, random.nextInt(getWidth()), random.nextInt(getHeight()));
 
     }
 }

@@ -7,28 +7,32 @@ import com.mygdx.pixelworld.data.assets.AssetType;
 import com.mygdx.pixelworld.data.draw.BoundingCircle;
 import com.mygdx.pixelworld.data.draw.Bullet;
 import com.mygdx.pixelworld.data.draw.DrawData;
-import com.mygdx.pixelworld.data.draw.ManaPower;
+import com.mygdx.pixelworld.data.utilities.Constants;
+import com.mygdx.pixelworld.data.utilities.Damaging;
+import com.mygdx.pixelworld.data.utilities.EntityStats;
 
-public class Enemy {
+public abstract class Enemy {
 
     protected Vector2 pos;
-    protected boolean alive;
-    protected int health;
-    protected int armor;
     protected DrawData img;
+    protected EntityStats stats;
 
     public Enemy(float x, float y, Class type) {
         pos = new Vector2(x, y);
         img = new DrawData(AssetType.CHARACTER, type, new Vector2(1,1), 0);
-        alive = true;
+        stats = new EntityStats(this.getClass());
     }
 
     public void update(Vector2 pp, Map map) {
-        if (!alive) return;
-        AI(pp, map);
+        if (!stats.isAlive()) return;
+        if (pp.dst(pos) < Constants.ATTACK_RANGE) activeAIUpdate(pp, map);
+        else passiveAIUpdate(pp, map);
     }
 
-    protected void AI(Vector2 playerPos, Map map) {
+    protected void activeAIUpdate(Vector2 playerPos, Map map) {
+    }
+
+    protected void passiveAIUpdate(Vector2 playerPos, Map map) {
     }
 
     public void draw(SpriteBatch batch) {
@@ -36,12 +40,11 @@ public class Enemy {
     }
 
     public boolean isAlive() {
-        return alive;
+        return stats.isAlive();
     }
 
-    public void getHit(Bullet b) {
-        if (b.getDamage() > armor) health -= (b.getDamage() - armor);
-        if (health <= 0) alive = false;
+    public void getHit(Damaging d) {
+        stats.getHit(d.getDamage());
     }
 
     public boolean checkIfInside(Bullet b) {
@@ -50,10 +53,5 @@ public class Enemy {
 
     public BoundingCircle getBoundingCircle() {
         return img.getBoundingCircle(pos);
-    }
-
-    public void getHit(ManaPower mp) {
-        if (mp.getDamage() > armor) health -= (mp.getDamage() - armor);
-        if (health <= 0) alive = false;
     }
 }

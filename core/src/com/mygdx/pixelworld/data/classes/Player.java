@@ -4,54 +4,31 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
+import com.mygdx.pixelworld.GUI.Logger;
 import com.mygdx.pixelworld.GUI.Map;
 import com.mygdx.pixelworld.Game;
+import com.mygdx.pixelworld.data.Entity;
 import com.mygdx.pixelworld.data.assets.AssetType;
-import com.mygdx.pixelworld.data.assets.Assets;
 import com.mygdx.pixelworld.data.draw.Bullet;
 import com.mygdx.pixelworld.data.draw.DrawData;
-import com.mygdx.pixelworld.data.enemies.Blocker;
 import com.mygdx.pixelworld.data.utilities.*;
 
 import static com.mygdx.pixelworld.data.utilities.Directions.*;
 
-/**
- * Class for containing main player.
- *
- * @author alessandro
- */
-public class Player {
+public abstract class Player extends Entity {
 
     protected String name;
-    protected Vector2 pos;
-    protected PlayerStats stats;
-
-    private DrawData img;
-    private boolean alive = true;
     private FireManager fireManager;
 
-    /**
-     * Picks a random CharacterType and name.
-     * @see com.mygdx.pixelworld.data.utilities.NameExtractor
-     */
     public Player() {
         this.name = NameExtractor.extract();
         this.pos = new Vector2(580, 0);
         img = new DrawData(AssetType.CHARACTER, this.getClass(), new Vector2(1, 1), 0);
-        stats = new PlayerStats(this.getClass());
+        stats = new EntityStats(this.getClass());
         fireManager = new FireManager();
     }
 
-    public Vector2 getPos() {
-        return new Vector2(pos.x, pos.y);
-    }
-
-    /**
-     * Manage keyboard events, and moves() if necessary.
-     * It also checks for screen resizing.
-     */
     public void update(Map map) {
-        if (!alive) System.exit(0);
         //Keyboard events
         if (Gdx.input.isKeyPressed(Keys.A)) move(LEFT);
         else if (Gdx.input.isKeyPressed(Keys.D)) move(RIGHT);
@@ -72,13 +49,8 @@ public class Player {
         }
     }
 
-    /**
-     * Applies a movement, determined by deltaTime and PLAYER_SPEED, towards the required direction
-     *
-     * @param dir Direction of the movement
-     */
     private void move(Directions dir) {
-        float movement = Game.deltaTime * Constants.PLAYER_SPEED;
+        float movement = Game.deltaTime * stats.get(StatType.SPD) * 5;
         switch (dir) {
             case UP:
                 pos.add(0, movement);
@@ -96,15 +68,10 @@ public class Player {
         pos = img.boundMap(pos);
     }
 
-    /**
-     * Draws player on the screen.
-     * @param batch SpriteBatch used to draw.
-     */
+    @Override
     public void draw(SpriteBatch batch) {
         img.draw(batch, pos);
-        //if(isManaFiring) manaPower.drawFromCenter(batch, new Vector2(pos.x + img.getWidth() / 2, pos.y + img.getHeight() / 2));
         img.write(batch, name, img.getEffectivePosition(pos).x + 10.0f, img.getEffectivePosition(pos).y + img.getHeight() + 10.0f);
-        batch.draw(Assets.getTexture(AssetType.BULLET, Blocker.class), 0, 0);
     }
 
     private void manaRegen() {
@@ -117,11 +84,12 @@ public class Player {
         return img.getBoundingCircle(pos).intersect(b.getBoundingCircle());
     }
 
-    public void getHit(Bullet b) {
-        float armor = stats.get(StatType.DEF) * 0.5f;
-        float health = stats.get(StatType.HEALTH);
-        if (b.getDamage() > armor) health -= (b.getDamage() - armor);
-        if (health <= 0) alive = false;
+    public void getHit(Damaging d) {
+        stats.getHit(d.getDamage());
+        if (!stats.isAlive()) {
+            Logger.log("[Player.getHit()] Player died :(");
+            Gdx.app.exit();
+        }
     }
 
     public float getHealthPercentage() {
