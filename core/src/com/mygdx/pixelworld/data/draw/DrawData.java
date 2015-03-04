@@ -6,23 +6,29 @@ import com.badlogic.gdx.math.Vector2;
 import com.mygdx.pixelworld.GUI.Map;
 import com.mygdx.pixelworld.data.assets.AssetType;
 import com.mygdx.pixelworld.data.assets.Assets;
+import com.mygdx.pixelworld.data.assets.WeaponNames;
 
 public class DrawData {
     TextureRegion texture;
     Vector2 scaleFactor;
     float rotationAngle;
     Class type;
-    AssetType assetType;
 
     public DrawData(AssetType assetType, Class type, Vector2 scaleFactor, float rotationAngle) {
         this.type = type;
-        this.assetType = assetType;
         setScaleFactor(scaleFactor);
         setRotationAngle(rotationAngle);
         texture = new TextureRegion(Assets.getTexture(assetType, type));
     }
 
     public DrawData() {
+    }
+
+    public DrawData(WeaponNames name) {
+        this.type = null;
+        setScaleFactor(new Vector2(1, 1));
+        setRotationAngle(0);
+        texture = new TextureRegion(Assets.getTexture(name));
     }
 
 
@@ -53,6 +59,11 @@ public class DrawData {
                 getOriginCenter().y, getWidth(), getHeight(), scaleFactor.x, scaleFactor.y, rotationAngle);
     }
 
+    public void drawEffective(SpriteBatch batch, Vector2 effectivePosition) {
+        batch.draw(texture, effectivePosition.x, effectivePosition.y, getOriginCenter().x,
+                getOriginCenter().y, getWidth(), getHeight(), scaleFactor.x, scaleFactor.y, rotationAngle);
+    }
+
     public BoundingCircle getBoundingCircle(Vector2 pos) {
         Vector2 absolutePosition = new Vector2(pos);
         //System.out.println("[getBounding] center = "+absolutePosition.add(getOriginCenter()).toString()+" scaleFactors = "+scaleFactor.toString());
@@ -64,8 +75,6 @@ public class DrawData {
 
     public Vector2 boundMap(Vector2 absolutePosition) {
         Vector2 out = new Vector2(absolutePosition);
-        if (out.x < 0 || out.y < 0 || out.x + getWidth() > Map.getWidth() || out.y + getHeight() > Map.getHeight())
-            //System.out.println("[PLAYER] Bounds in action");
         if (out.x < 0) out.x = 0;
         if (out.y < 0) out.y = 0;
         if (out.x + getWidth() > Map.getWidth()) out.x = Map.getWidth() - getWidth();

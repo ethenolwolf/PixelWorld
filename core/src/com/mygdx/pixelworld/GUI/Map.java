@@ -1,6 +1,5 @@
 package com.mygdx.pixelworld.GUI;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
@@ -16,6 +15,7 @@ import com.mygdx.pixelworld.data.enemies.Enemy;
 import com.mygdx.pixelworld.data.utilities.Constants;
 import com.mygdx.pixelworld.data.utilities.EntityStats;
 import com.mygdx.pixelworld.data.utilities.StatType;
+import com.mygdx.pixelworld.data.weapons.WeaponStats;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -63,6 +63,7 @@ public class Map {
                 while (enemyIterator.hasNext()) {
                     Enemy e = enemyIterator.next();
                     if (e.checkIfInside(b)) {
+                        System.out.println("Ouch..dmg = " + b.getDamage());
                         e.getHit(b);
                         b.die();
                     }
@@ -90,12 +91,12 @@ public class Map {
     }
 
     private void updateOffset(Vector2 playerPos, EntityStats stats) {
-        float of = Game.deltaTime * stats.get(StatType.SPD);
+        float of = Game.deltaTime * stats.get(StatType.SPD) * 5;
         Vector2 pp = new Vector2(playerPos);
-        if (pp.x + offset.x < Gdx.graphics.getWidth() * Constants.X_LIMIT_MIN) offset.add(of, 0);
-        else if (pp.x + offset.x > Gdx.graphics.getWidth() * Constants.X_LIMIT_MAX) offset.add(-of, 0);
-        if (pp.y + offset.y < Gdx.graphics.getHeight() * Constants.Y_LIMIT_MIN) offset.add(0, of);
-        else if (pp.y + offset.y > Gdx.graphics.getHeight() * Constants.Y_LIMIT_MAX) offset.add(0, -of);
+        if (pp.x + offset.x < Constants.gameWidth * Constants.X_LIMIT_MIN) offset.add(of, 0);
+        else if (pp.x + offset.x > Constants.gameWidth * Constants.X_LIMIT_MAX) offset.add(-of, 0);
+        if (pp.y + offset.y < Constants.gameHeight * Constants.Y_LIMIT_MIN) offset.add(0, of);
+        else if (pp.y + offset.y > Constants.gameHeight * Constants.Y_LIMIT_MAX) offset.add(0, -of);
 
         limitOffset();
     }
@@ -103,8 +104,8 @@ public class Map {
     private void limitOffset() {
         if (offset.x > 0) offset.x = 0;
         if (offset.y > 0) offset.y = 0;
-        if (offset.x < -getWidth() + Gdx.graphics.getWidth()) offset.x = -getWidth() + Gdx.graphics.getWidth();
-        if (offset.y < -getHeight() + Gdx.graphics.getHeight()) offset.y = -getHeight() + Gdx.graphics.getHeight();
+        if (offset.x < -getWidth() + Constants.gameWidth) offset.x = -getWidth() + Constants.gameWidth;
+        if (offset.y < -getHeight() + Constants.gameHeight) offset.y = -getHeight() + Constants.gameHeight;
     }
 
     public void draw(SpriteBatch batch) {
@@ -118,8 +119,8 @@ public class Map {
         }
     }
 
-    public void fire(Vector2 startPos, Vector2 targetPos, Class type) {
-        bullets.add(new Bullet(startPos, targetPos, type));
+    public void fire(Vector2 startPos, Vector2 targetPos, EntityStats es, WeaponStats ws) {
+        bullets.add(new Bullet(startPos, targetPos, es, ws));
     }
 
     public void manaFire(Class type, float minScale, float maxScale, float step, Vector2 center) {
@@ -129,18 +130,22 @@ public class Map {
     public void shapeDraw(ShapeRenderer shapeRenderer, Player player) {
         shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
 
+        //Panel
+        shapeRenderer.setColor(0.2549f, 0.3215f, 0.3340f, 1.0f);
+        shapeRenderer.rect(Constants.gameWidth, 0, Constants.panelWidth, Constants.gameHeight);
+
         //Health bar background
         shapeRenderer.setColor(0.678f, 0.074f, 0.074f, 1.0f);
-        shapeRenderer.rect(0, Gdx.graphics.getHeight() - 20, Gdx.graphics.getWidth() / 2, 20);
+        shapeRenderer.rect(Constants.gameWidth + 10, Constants.gameHeight / 2, 140, 20);
         //Health bar
         shapeRenderer.setColor(0.95f, 0.05f, 0.05f, 1.0f);
-        shapeRenderer.rect(0, Gdx.graphics.getHeight() - 20, Gdx.graphics.getWidth() / 2 * player.getHealthPercentage(), 20);
+        shapeRenderer.rect(Constants.gameWidth + 10, Constants.gameHeight / 2, 140 * player.getHealthPercentage(), 20);
         //Mana bar background
         shapeRenderer.setColor(0.0f, 0.0f, 0.392f, 1.0f);
-        shapeRenderer.rect(0, Gdx.graphics.getHeight() - 40, Gdx.graphics.getWidth() / 2, 20);
+        shapeRenderer.rect(Constants.gameWidth + 10, Constants.gameHeight / 2 - 30, 140, 20);
         //Mana bar
         shapeRenderer.setColor(0.0f, 0.05f, 0.95f, 1.0f);
-        shapeRenderer.rect(0, Gdx.graphics.getHeight() - 40, Gdx.graphics.getWidth() / 2 * player.getManaPercentage(), 20);
+        shapeRenderer.rect(Constants.gameWidth + 10, Constants.gameHeight / 2 - 30, 140 * player.getManaPercentage(), 20);
 
         shapeRenderer.end();
     }

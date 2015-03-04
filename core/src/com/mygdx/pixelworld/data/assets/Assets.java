@@ -31,23 +31,32 @@ public class Assets {
 
         MANA_TEX.put(Wizard.class, new Texture("core/assets/Mana/wizard.gif"));
 
-        font = TrueTypeFontFactory.createBitmapFont(Gdx.files.internal("core/assets/Ubuntu-MI.ttf"), Constants.FONT_CHARACTERS, 50.5f, 50f, 1.0f, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-        font.setColor(1f, 0f, 0f, 1f);
+        font = TrueTypeFontFactory.createBitmapFont(Gdx.files.internal("core/assets/Ubuntu-MI.ttf"), Constants.FONT_CHARACTERS, 20f, 20f, 1.0f, Constants.gameWidth, Constants.gameHeight);
+        font.setColor(1f, 1f, 1f, 1f);
 
         BACKGROUND_TEX = new Texture("core/assets/background.jpg");
+
         Logger.log("[Assets.init()] Init complete.");
+    }
+
+    public static Texture getTexture(WeaponNames name) {
+        return new Texture("core/assets/Weapons/" + name.toString() + ".png");
     }
 
     public static Texture getTexture(AssetType assetType, Class type) {
         switch (assetType) {
             case BACKGROUND:
                 if (BACKGROUND_TEX != null) return BACKGROUND_TEX;
+                break;
             case CHARACTER:
                 if (CHARACTER_TEX.get(type) != null) return CHARACTER_TEX.get(type);
+                break;
             case BULLET:
                 if (BULLET_TEX.get(type) != null) return BULLET_TEX.get(type);
+                break;
             case MANA:
                 if (MANA_TEX.get(type) != null) return MANA_TEX.get(type);
+                break;
         }
         Logger.log("[Assets.getTexture()] Texture not found. AssetType:" + assetType.toString() + " Class:" + type.toString());
         return new Texture("core/assets/badlogic.jpg");

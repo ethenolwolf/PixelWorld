@@ -4,29 +4,36 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.mygdx.pixelworld.Game;
 import com.mygdx.pixelworld.data.assets.AssetType;
-import com.mygdx.pixelworld.data.utilities.Constants;
 import com.mygdx.pixelworld.data.utilities.Damaging;
+import com.mygdx.pixelworld.data.utilities.EntityStats;
+import com.mygdx.pixelworld.data.utilities.StatType;
+import com.mygdx.pixelworld.data.weapons.WeaponStats;
 
 public class Bullet implements Damaging {
-    Vector2 pos;
-    Vector2 startPoint;
-    Vector2 direction;
-    Class type;
-
-    boolean alive = true;
+    private final Vector2 startPoint;
+    private final Vector2 direction;
+    private final int range;
+    private final Class type;
+    private final int speed;
+    private final int damage;
+    private Vector2 pos;
+    private boolean alive = true;
     private DrawData img;
 
-    public Bullet(Vector2 startingPos, Vector2 endingPos, Class type) {
+    public Bullet(Vector2 startingPos, Vector2 endingPos, EntityStats es, WeaponStats ws) {
         this.startPoint = new Vector2(startingPos);
         this.direction = new Vector2(endingPos.x - startingPos.x, endingPos.y - startingPos.y).nor();
-        this.type = type;
+        this.type = ws.getType();
         this.pos = new Vector2(startingPos);
         img = new DrawData(AssetType.BULLET, type, new Vector2(1, 1), direction.angle());
+        this.damage = (int) (ws.getDamage() + es.get(StatType.ATK));
+        this.range = ws.getRange();
+        this.speed = ws.getSpeed();
     }
 
     public void update() {
         move();
-        if (pos.dst(startPoint) > Constants.BULLET_RANGE.get(type)) {
+        if (pos.dst(startPoint) > range) {
             alive = false;
         }
     }
@@ -36,7 +43,7 @@ public class Bullet implements Damaging {
     }
 
     private void move() {
-        float movement = Game.deltaTime * Constants.BULLET_SPEED.get(type);
+        float movement = Game.deltaTime * speed;
         pos.add(direction.x * movement, direction.y * movement);
     }
 
@@ -50,7 +57,7 @@ public class Bullet implements Damaging {
 
     @Override
     public int getDamage() {
-        return Constants.BULLET_DAMAGE.get(type);
+        return damage;
     }
 
     public Class getType() {

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Weapons>
+    <Weapon Name="glassSword">
+        <Damage>20</Damage>
+        <Range>400</Range>
+        <Speed>400</Speed>
+        <Class>Wizard</Class>
+    </Weapon>
+</Weapons>

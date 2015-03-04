@@ -9,9 +9,11 @@ import com.mygdx.pixelworld.GUI.Map;
 import com.mygdx.pixelworld.Game;
 import com.mygdx.pixelworld.data.Entity;
 import com.mygdx.pixelworld.data.assets.AssetType;
+import com.mygdx.pixelworld.data.assets.WeaponNames;
 import com.mygdx.pixelworld.data.draw.Bullet;
 import com.mygdx.pixelworld.data.draw.DrawData;
 import com.mygdx.pixelworld.data.utilities.*;
+import com.mygdx.pixelworld.data.weapons.Weapon;
 
 import static com.mygdx.pixelworld.data.utilities.Directions.*;
 
@@ -19,6 +21,7 @@ public abstract class Player extends Entity {
 
     protected String name;
     private FireManager fireManager;
+    private Weapon weapon;
 
     public Player() {
         this.name = NameExtractor.extract();
@@ -26,6 +29,20 @@ public abstract class Player extends Entity {
         img = new DrawData(AssetType.CHARACTER, this.getClass(), new Vector2(1, 1), 0);
         stats = new EntityStats(this.getClass());
         fireManager = new FireManager();
+        weapon = new Weapon();
+    }
+
+    public Player(WeaponNames weaponName) {
+        this();
+        equipWeapon(weaponName);
+    }
+
+    public boolean equipWeapon(WeaponNames weaponName) {
+        Weapon w = new Weapon(weaponName);
+        if (w.getStats().getType() == this.getClass()) {
+            weapon = w;
+            return true;
+        } else return false;
     }
 
     public void update(Map map) {
@@ -37,8 +54,8 @@ public abstract class Player extends Entity {
 
         if (Gdx.input.isKeyPressed(Keys.SPACE)) manaTrigger(map);
 
-        fireManager.updateFire(pos, stats, map);
-        manaRegen();
+        fireManager.updateFire(pos, stats, map, weapon.getStats());
+        regen();
     }
 
     private void manaTrigger(Map map) {
@@ -71,12 +88,16 @@ public abstract class Player extends Entity {
     @Override
     public void draw(SpriteBatch batch) {
         img.draw(batch, pos);
-        img.write(batch, name, img.getEffectivePosition(pos).x + 10.0f, img.getEffectivePosition(pos).y + img.getHeight() + 10.0f);
+        if (weapon != null) weapon.draw(batch);
     }
 
-    private void manaRegen() {
+    private void regen() {
+        if (stats.get(StatType.HEALTH) < stats.getInit(StatType.HEALTH))
+            stats.addStat(StatType.HEALTH, Game.deltaTime * stats.get(StatType.VIT));
+        if (stats.get(StatType.HEALTH) > stats.getInit(StatType.HEALTH)) stats.setAsInit(StatType.HEALTH);
+
         if (stats.get(StatType.MANA) < stats.getInit(StatType.MANA))
-            stats.addStat(StatType.MANA, Game.deltaTime * Constants.MANA_REGEN);
+            stats.addStat(StatType.MANA, Game.deltaTime * stats.get(StatType.WIS));
         if (stats.get(StatType.MANA) > stats.getInit(StatType.MANA)) stats.setAsInit(StatType.MANA);
     }
 
@@ -93,14 +114,18 @@ public abstract class Player extends Entity {
     }
 
     public float getHealthPercentage() {
-        return stats.get(StatType.HEALTH) / stats.getInit(StatType.HEALTH);
+        return stats.get(StatType.HEALTH) / stats.getMax(StatType.HEALTH);
     }
 
     public float getManaPercentage() {
-        return stats.get(StatType.MANA) / stats.getInit(StatType.MANA);
+        return stats.get(StatType.MANA) / stats.getMax(StatType.MANA);
     }
 
     public FireManager getFireManager() {
         return fireManager;
+    }
+
+    public void writeName(SpriteBatch batch) {
+        img.write(batch, name, Constants.gameWidth + 10, Constants.gameHeight - 50);
     }
 }

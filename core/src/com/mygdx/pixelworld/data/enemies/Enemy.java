@@ -10,17 +10,20 @@ import com.mygdx.pixelworld.data.draw.DrawData;
 import com.mygdx.pixelworld.data.utilities.Constants;
 import com.mygdx.pixelworld.data.utilities.Damaging;
 import com.mygdx.pixelworld.data.utilities.EntityStats;
+import com.mygdx.pixelworld.data.weapons.WeaponStats;
 
 public abstract class Enemy {
 
     protected Vector2 pos;
     protected DrawData img;
     protected EntityStats stats;
+    protected WeaponStats weaponStats;
 
     public Enemy(float x, float y, Class type) {
         pos = new Vector2(x, y);
         img = new DrawData(AssetType.CHARACTER, type, new Vector2(1,1), 0);
         stats = new EntityStats(this.getClass());
+        weaponStats = new WeaponStats(this.getClass());
     }
 
     public void update(Vector2 pp, Map map) {
