@@ -9,7 +9,7 @@ import com.mygdx.pixelworld.data.assets.Assets;
 import com.mygdx.pixelworld.data.classes.Player;
 import com.mygdx.pixelworld.data.classes.Wizard;
 import com.mygdx.pixelworld.data.draw.Bullet;
-import com.mygdx.pixelworld.data.draw.ManaPower;
+import com.mygdx.pixelworld.data.draw.ManaPowerDraw;
 import com.mygdx.pixelworld.data.enemies.Blocker;
 import com.mygdx.pixelworld.data.enemies.Enemy;
 import com.mygdx.pixelworld.data.utilities.Constants;
@@ -27,7 +27,7 @@ public class Map {
     private static Vector2 offset = new Vector2();
     private List<Enemy> enemies = new ArrayList<Enemy>();
     private List<Bullet> bullets = new ArrayList<Bullet>();
-    private List<ManaPower> manaPowers = new ArrayList<ManaPower>();
+    private List<ManaPowerDraw> manaPowerDraws = new ArrayList<ManaPowerDraw>();
 
     public static Vector2 getOffset() {
         return offset;
@@ -63,7 +63,6 @@ public class Map {
                 while (enemyIterator.hasNext()) {
                     Enemy e = enemyIterator.next();
                     if (e.checkIfInside(b)) {
-                        System.out.println("Ouch..dmg = " + b.getDamage());
                         e.getHit(b);
                         b.die();
                     }
@@ -78,7 +77,9 @@ public class Map {
             if (!b.isAlive()) bulletIterator.remove();
         }
 
-        for (ManaPower mp : manaPowers) {
+        player.checkMana(enemies);
+
+        for (ManaPowerDraw mp : manaPowerDraws) {
             enemyIterator = enemies.listIterator();
             while (enemyIterator.hasNext()) {
                 Enemy e = enemyIterator.next();
@@ -112,9 +113,9 @@ public class Map {
         batch.draw(Assets.getTexture(AssetType.BACKGROUND, Map.class), offset.x, offset.y);
         for (Enemy e : enemies) e.draw(batch);
         for (Bullet b : bullets) b.draw(batch);
-        ListIterator iterator = manaPowers.listIterator();
+        ListIterator iterator = manaPowerDraws.listIterator();
         while (iterator.hasNext()) {
-            ManaPower mp = (ManaPower) iterator.next();
+            ManaPowerDraw mp = (ManaPowerDraw) iterator.next();
             if (!mp.draw(batch)) iterator.remove();
         }
     }
@@ -124,7 +125,7 @@ public class Map {
     }
 
     public void manaFire(Class type, float minScale, float maxScale, float step, Vector2 center) {
-        manaPowers.add(new ManaPower(type, minScale, maxScale, step, center));
+        manaPowerDraws.add(new ManaPowerDraw(type, minScale, maxScale, step, center));
     }
 
     public void shapeDraw(ShapeRenderer shapeRenderer, Player player) {

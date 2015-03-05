@@ -9,10 +9,10 @@ import com.mygdx.pixelworld.data.assets.Assets;
 import com.mygdx.pixelworld.data.assets.WeaponNames;
 
 public class DrawData {
-    TextureRegion texture;
-    Vector2 scaleFactor;
-    float rotationAngle;
-    Class type;
+    protected TextureRegion texture;
+    protected Vector2 scaleFactor;
+    protected float rotationAngle;
+    protected Class type;
 
     public DrawData(AssetType assetType, Class type, Vector2 scaleFactor, float rotationAngle) {
         this.type = type;

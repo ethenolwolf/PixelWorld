@@ -31,7 +31,7 @@ public class Constants {
 
     public static void init() {
         enemyStats.put(Blocker.class, new WeaponStats(Blocker.class,
-                10, //dmg
+                20, //dmg
                 400,//range
                 400//spd
         ));
@@ -42,8 +42,8 @@ public class Constants {
                 50, //spd
                 60, //dex
                 15, //wis
-                50, //vit
-                50, //atk
+                40, //vit
+                7, //atk
                 10  //def
         ));
 

@@ -12,8 +12,13 @@ import com.mygdx.pixelworld.data.assets.AssetType;
 import com.mygdx.pixelworld.data.assets.WeaponNames;
 import com.mygdx.pixelworld.data.draw.Bullet;
 import com.mygdx.pixelworld.data.draw.DrawData;
+import com.mygdx.pixelworld.data.enemies.Enemy;
+import com.mygdx.pixelworld.data.mana.ManaSigil;
+import com.mygdx.pixelworld.data.mana.PowerShock;
 import com.mygdx.pixelworld.data.utilities.*;
 import com.mygdx.pixelworld.data.weapons.Weapon;
+
+import java.util.List;
 
 import static com.mygdx.pixelworld.data.utilities.Directions.*;
 
@@ -22,6 +27,7 @@ public abstract class Player extends Entity {
     protected String name;
     private FireManager fireManager;
     private Weapon weapon;
+    private ManaSigil manaSigil;
 
     public Player() {
         this.name = NameExtractor.extract();
@@ -30,6 +36,7 @@ public abstract class Player extends Entity {
         stats = new EntityStats(this.getClass());
         fireManager = new FireManager();
         weapon = new Weapon();
+        manaSigil = new PowerShock();
     }
 
     public Player(WeaponNames weaponName) {
@@ -56,13 +63,15 @@ public abstract class Player extends Entity {
 
         fireManager.updateFire(pos, stats, map, weapon.getStats());
         regen();
+        manaSigil.update();
     }
 
     private void manaTrigger(Map map) {
         float mana = stats.get(StatType.MANA);
         if (mana >= Constants.MANA_PRICE) {
             stats.addStat(StatType.MANA, -Constants.MANA_PRICE);
-            map.manaFire(this.getClass(), 0.1f, 1f, Constants.MANA_ANIMATION_SPEED, new Vector2(new Vector2(pos).add(img.getOriginCenter())));
+            manaSigil.activate(new Vector2(pos));
+            //map.manaFire(this.getClass(), 0.1f, 1f, Constants.MANA_ANIMATION_SPEED, new Vector2(new Vector2(pos).add(img.getOriginCenter())));
         }
     }
 
@@ -89,6 +98,7 @@ public abstract class Player extends Entity {
     public void draw(SpriteBatch batch) {
         img.draw(batch, pos);
         if (weapon != null) weapon.draw(batch);
+        manaSigil.draw(batch);
     }
 
     private void regen() {
@@ -127,5 +137,14 @@ public abstract class Player extends Entity {
 
     public void writeName(SpriteBatch batch) {
         img.write(batch, name, Constants.gameWidth + 10, Constants.gameHeight - 50);
+    }
+
+    public void checkMana(List<Enemy> e) {
+        for (Enemy enemy : e) {
+            if (manaSigil.checkIfInside(enemy)) {
+                enemy.getHit(manaSigil);
+                System.out.println("Hit me with dmg = " + manaSigil.getDamage());
+            }
+        }
     }
 }

@@ -10,13 +10,14 @@ import com.mygdx.pixelworld.data.enemies.Enemy;
 import com.mygdx.pixelworld.data.utilities.Constants;
 import com.mygdx.pixelworld.data.utilities.Damaging;
 
-public class ManaPower extends DrawData implements Damaging {
+public class ManaPowerDraw extends DrawData implements Damaging {
 
     Vector2 center;
     float minScale, maxScale, step;
     Class type;
+    private int n;
 
-    public ManaPower(Class type, float minScale, float maxScale, float step, Vector2 center) {
+    public ManaPowerDraw(Class type, float minScale, float maxScale, float step, Vector2 center) {
         this.type = type;
         this.minScale = minScale;
         this.scaleFactor = new Vector2(minScale, minScale);
@@ -50,4 +51,5 @@ public class ManaPower extends DrawData implements Damaging {
     public int getDamage() {
         return Constants.MANA_DAMAGE;
     }
+
 }
