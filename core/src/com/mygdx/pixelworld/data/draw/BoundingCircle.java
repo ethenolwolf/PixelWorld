@@ -6,7 +6,7 @@ public class BoundingCircle {
     private float radius;
     private Vector2 center;
 
-    BoundingCircle(Vector2 center, float radius) {
+    public BoundingCircle(Vector2 center, float radius) {
         this.radius = radius;
         this.center = center;
     }
