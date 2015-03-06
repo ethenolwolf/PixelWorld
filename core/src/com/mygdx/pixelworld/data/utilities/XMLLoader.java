@@ -18,13 +18,8 @@ public class XMLLoader {
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
 
         try {
-
-            //Using factory get an instance of document builder
             DocumentBuilder db = dbf.newDocumentBuilder();
-
-            //parse using builder to get DOM representation of the XML file
             dom = db.parse("core/assets/Weapons/weapons.xml");
-
             Element docEle = dom.getDocumentElement();
             NodeList nl = docEle.getElementsByTagName("Weapon");
 

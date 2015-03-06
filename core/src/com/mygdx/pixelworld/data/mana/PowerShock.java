@@ -20,7 +20,6 @@ public class PowerShock extends ManaSigil {
     private final float maxScale = 1f;
     private final float step = 0.1f;
     private final Class type = Wizard.class;
-
     private List<PowerShockBlast> blasts = new ArrayList<PowerShockBlast>();
     private TextureRegion texture;
 
