@@ -9,7 +9,6 @@ import com.mygdx.pixelworld.data.assets.Assets;
 import com.mygdx.pixelworld.data.classes.Player;
 import com.mygdx.pixelworld.data.classes.Wizard;
 import com.mygdx.pixelworld.data.draw.Bullet;
-import com.mygdx.pixelworld.data.draw.ManaPowerDraw;
 import com.mygdx.pixelworld.data.enemies.Blocker;
 import com.mygdx.pixelworld.data.enemies.Enemy;
 import com.mygdx.pixelworld.data.utilities.Constants;
@@ -27,7 +26,6 @@ public class Map {
     private static Vector2 offset = new Vector2();
     private List<Enemy> enemies = new ArrayList<Enemy>();
     private List<Bullet> bullets = new ArrayList<Bullet>();
-    private List<ManaPowerDraw> manaPowerDraws = new ArrayList<ManaPowerDraw>();
 
     public static Vector2 getOffset() {
         return offset;
@@ -57,7 +55,6 @@ public class Map {
         while (bulletIterator.hasNext()) {
             Bullet b = bulletIterator.next();
             b.update();
-
             if (b.getType() == Wizard.class) {
                 enemyIterator = enemies.listIterator();
                 while (enemyIterator.hasNext()) {
@@ -78,16 +75,6 @@ public class Map {
         }
 
         player.checkMana(enemies);
-
-        for (ManaPowerDraw mp : manaPowerDraws) {
-            enemyIterator = enemies.listIterator();
-            while (enemyIterator.hasNext()) {
-                Enemy e = enemyIterator.next();
-                if (mp.checkIfInside(e)) e.getHit(mp);
-            }
-
-        }
-
         updateOffset(player.getPos(), player.getStats());
     }
 
@@ -98,7 +85,6 @@ public class Map {
         else if (pp.x + offset.x > Constants.gameWidth * Constants.X_LIMIT_MAX) offset.add(-of, 0);
         if (pp.y + offset.y < Constants.gameHeight * Constants.Y_LIMIT_MIN) offset.add(0, of);
         else if (pp.y + offset.y > Constants.gameHeight * Constants.Y_LIMIT_MAX) offset.add(0, -of);
-
         limitOffset();
     }
 
@@ -113,19 +99,10 @@ public class Map {
         batch.draw(Assets.getTexture(AssetType.BACKGROUND, Map.class), offset.x, offset.y);
         for (Enemy e : enemies) e.draw(batch);
         for (Bullet b : bullets) b.draw(batch);
-        ListIterator iterator = manaPowerDraws.listIterator();
-        while (iterator.hasNext()) {
-            ManaPowerDraw mp = (ManaPowerDraw) iterator.next();
-            if (!mp.draw(batch)) iterator.remove();
-        }
     }
 
     public void fire(Vector2 startPos, Vector2 targetPos, EntityStats es, WeaponStats ws) {
         bullets.add(new Bullet(startPos, targetPos, es, ws));
-    }
-
-    public void manaFire(Class type, float minScale, float maxScale, float step, Vector2 center) {
-        manaPowerDraws.add(new ManaPowerDraw(type, minScale, maxScale, step, center));
     }
 
     public void shapeDraw(ShapeRenderer shapeRenderer, Player player) {
@@ -155,6 +132,5 @@ public class Map {
         Random random = new Random();
         for (int i = 0; i < enemyNumber; i++)
             addEnemy(Blocker.class, random.nextInt(getWidth()), random.nextInt(getHeight()));
-
     }
 }

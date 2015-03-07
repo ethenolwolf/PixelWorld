@@ -26,4 +26,9 @@ public class BoundingCircle {
     public boolean isValid() {
         return radius > 0 && center != null;
     }
+
+    @Override
+    public String toString() {
+        return "C=" + center.toString() + "-R=" + String.valueOf(radius);
+    }
 }

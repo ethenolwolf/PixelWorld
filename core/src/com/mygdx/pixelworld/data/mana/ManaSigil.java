@@ -9,9 +9,6 @@ public abstract class ManaSigil implements Damaging {
 
     protected int damage;
 
-    public ManaSigil() {
-    }
-
     public abstract void update();
 
     public abstract boolean checkIfInside(Enemy e);

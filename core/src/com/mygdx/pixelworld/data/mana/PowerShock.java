@@ -16,9 +16,6 @@ import java.util.ListIterator;
 
 public class PowerShock extends ManaSigil {
 
-    private final float minScale = 0.1f;
-    private final float maxScale = 1f;
-    private final float step = 0.1f;
     private final Class type = Wizard.class;
     private List<PowerShockBlast> blasts = new ArrayList<PowerShockBlast>();
     private TextureRegion texture;
@@ -31,6 +28,7 @@ public class PowerShock extends ManaSigil {
 
     @Override
     public void activate(Vector2 center) {
+        float minScale = 0.1f;
         blasts.add(new PowerShockBlast(center, minScale));
     }
 
@@ -47,19 +45,22 @@ public class PowerShock extends ManaSigil {
         ListIterator<PowerShockBlast> iterator = blasts.listIterator();
         while (iterator.hasNext()) {
             PowerShockBlast b = iterator.next();
+            float maxScale = 1f;
+            float step = 0.1f;
             if (!b.update(maxScale, step)) iterator.remove();
         }
     }
 
     public BoundingCircle[] getBoundingCircle() {
         BoundingCircle[] bc = new BoundingCircle[blasts.size()];
-        for (int i = 0; i < bc.length; i++) bc[i] = blasts.get(i).getBoundingCircle();
+        for (int i = 0; i < bc.length; i++) bc[i] = blasts.get(i).getBoundingCircle(texture.getRegionWidth());
         return bc;
     }
 
     @Override
     public boolean checkIfInside(Enemy e) {
-        for (BoundingCircle bc : getBoundingCircle()) if (bc.intersect(e.getBoundingCircle())) return true;
+        for (BoundingCircle bc : getBoundingCircle())
+            if (bc.intersect(e.getBoundingCircle())) return true;
         return false;
     }
 
@@ -80,8 +81,8 @@ public class PowerShock extends ManaSigil {
             return center;
         }
 
-        public BoundingCircle getBoundingCircle() {
-            BoundingCircle out = new BoundingCircle(new Vector2(center), currentDimension.x);
+        public BoundingCircle getBoundingCircle(float originalRadius) {
+            BoundingCircle out = new BoundingCircle(new Vector2(center), currentDimension.x * originalRadius);
             if (out.isValid()) return out;
             Logger.log("[PowerShockBlast.getBoundingCircle()] Circle not valid!");
             return null;

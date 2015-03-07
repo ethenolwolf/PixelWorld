@@ -8,7 +8,7 @@ import com.mygdx.pixelworld.data.utilities.Constants;
 public class DesktopLauncher {
 	public static void main (String[] arg) {
         LwjglApplicationConfiguration cfg = new LwjglApplicationConfiguration();
-        cfg.title = "Title";
+        cfg.title = "PixelWorld";
         cfg.height = (int) Constants.gameHeight;
         cfg.width = (int) (Constants.gameWidth + Constants.panelWidth);
         new LwjglApplication(new Game(), cfg);

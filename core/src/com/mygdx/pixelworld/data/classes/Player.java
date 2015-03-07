@@ -59,19 +59,18 @@ public abstract class Player extends Entity {
         if (Gdx.input.isKeyPressed(Keys.S)) move(DOWN);
         else if (Gdx.input.isKeyPressed(Keys.W)) move(UP);
 
-        if (Gdx.input.isKeyPressed(Keys.SPACE)) manaTrigger(map);
+        if (Gdx.input.isKeyPressed(Keys.SPACE)) manaTrigger();
 
         fireManager.updateFire(pos, stats, map, weapon.getStats());
         regen();
         manaSigil.update();
     }
 
-    private void manaTrigger(Map map) {
+    private void manaTrigger() {
         float mana = stats.get(StatType.MANA);
         if (mana >= Constants.MANA_PRICE) {
             stats.addStat(StatType.MANA, -Constants.MANA_PRICE);
             manaSigil.activate(new Vector2(pos));
-            //map.manaFire(this.getClass(), 0.1f, 1f, Constants.MANA_ANIMATION_SPEED, new Vector2(new Vector2(pos).add(img.getOriginCenter())));
         }
     }
 
@@ -140,11 +139,7 @@ public abstract class Player extends Entity {
     }
 
     public void checkMana(List<Enemy> e) {
-        for (Enemy enemy : e) {
-            if (manaSigil.checkIfInside(enemy)) {
-                enemy.getHit(manaSigil);
-                System.out.println("Hit me with dmg = " + manaSigil.getDamage());
-            }
-        }
+        for (Enemy enemy : e)
+            if (manaSigil.checkIfInside(enemy)) enemy.getHit(manaSigil);
     }
 }
