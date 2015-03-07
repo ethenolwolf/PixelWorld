@@ -11,18 +11,7 @@ task run(dependsOn: classes, type: JavaExec) {
     classpath = sourceSets.main.runtimeClasspath
     standardInput = System.in
     workingDir = project.assetsDir
-    ignoreExitValue = true
-}
-
-task dist(type: Jar) {
-    from files(sourceSets.main.output.classesDir)
-    from files(sourceSets.main.output.resourcesDir)
-    from { configurations.compile.collect { zipTree(it) } }
-    from files(project.assetsDir);
-
-    manifest {
-        attributes 'Main-Class': project.mainClassName
-    }
+    ignoreExitValue = true as JavaExecSpec
 }
 
 dist.dependsOn classes

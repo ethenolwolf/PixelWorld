@@ -12,7 +12,7 @@ import java.util.Random;
 
 public class Blocker extends Enemy {
 
-    FireManager fireManager;
+    private FireManager fireManager;
 
     public Blocker(float x, float y) {
         super(x, y, Blocker.class);
