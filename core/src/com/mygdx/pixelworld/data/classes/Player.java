@@ -114,8 +114,9 @@ public abstract class Player extends Entity {
         return img.getBoundingCircle(pos).intersect(b.getBoundingCircle());
     }
 
+    @Override
     public void getHit(Damaging d) {
-        stats.getHit(d.getDamage());
+        super.getHit(d);
         if (!stats.isAlive()) {
             Logger.log("[Player.getHit()] Player died :(");
             Gdx.app.exit();

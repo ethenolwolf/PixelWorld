@@ -3,20 +3,17 @@ package com.mygdx.pixelworld.data.enemies;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.mygdx.pixelworld.GUI.Map;
+import com.mygdx.pixelworld.data.Entity;
 import com.mygdx.pixelworld.data.assets.AssetType;
 import com.mygdx.pixelworld.data.draw.BoundingCircle;
 import com.mygdx.pixelworld.data.draw.Bullet;
 import com.mygdx.pixelworld.data.draw.DrawData;
 import com.mygdx.pixelworld.data.utilities.Constants;
-import com.mygdx.pixelworld.data.utilities.Damaging;
 import com.mygdx.pixelworld.data.utilities.EntityStats;
 import com.mygdx.pixelworld.data.weapons.WeaponStats;
 
-public abstract class Enemy {
+public abstract class Enemy extends Entity {
 
-    protected Vector2 pos;
-    protected DrawData img;
-    protected EntityStats stats;
     protected WeaponStats weaponStats;
 
     public Enemy(float x, float y, Class type) {
@@ -38,16 +35,13 @@ public abstract class Enemy {
     protected void passiveAIUpdate(Vector2 playerPos, Map map) {
     }
 
+    @Override
     public void draw(SpriteBatch batch) {
         img.draw(batch, pos);
     }
 
     public boolean isAlive() {
         return stats.isAlive();
-    }
-
-    public void getHit(Damaging d) {
-        stats.getHit(d.getDamage());
     }
 
     public boolean checkIfInside(Bullet b) {

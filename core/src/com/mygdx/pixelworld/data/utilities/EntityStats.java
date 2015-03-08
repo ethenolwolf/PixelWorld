@@ -1,6 +1,9 @@
 package com.mygdx.pixelworld.data.utilities;
 
 
+import com.mygdx.pixelworld.data.Entity;
+import com.mygdx.pixelworld.data.draw.DrawHitValue;
+
 import java.util.EnumMap;
 import java.util.Map;
 
@@ -61,9 +64,10 @@ public class EntityStats {
         setStat(statType, getInit(statType));
     }
 
-    public void getHit(int damage) {
+    public void getHit(Entity e, int damage) {
         if (damage > get(StatType.DEF)) addStat(StatType.HEALTH, get(StatType.DEF) - damage);
         if (get(StatType.HEALTH) <= 0) alive = false;
+        DrawHitValue.add(e, damage);
     }
 
     public boolean isAlive() {

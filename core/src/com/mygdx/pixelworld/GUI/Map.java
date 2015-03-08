@@ -9,6 +9,7 @@ import com.mygdx.pixelworld.data.assets.Assets;
 import com.mygdx.pixelworld.data.classes.Player;
 import com.mygdx.pixelworld.data.classes.Wizard;
 import com.mygdx.pixelworld.data.draw.Bullet;
+import com.mygdx.pixelworld.data.draw.DrawHitValue;
 import com.mygdx.pixelworld.data.enemies.Blocker;
 import com.mygdx.pixelworld.data.enemies.Enemy;
 import com.mygdx.pixelworld.data.utilities.Constants;
@@ -75,6 +76,8 @@ public class Map {
         }
 
         player.checkMana(enemies);
+        DrawHitValue.update();
+
         updateOffset(player.getPos(), player.getStats());
     }
 
@@ -99,6 +102,7 @@ public class Map {
         batch.draw(Assets.getTexture(AssetType.BACKGROUND, Map.class), offset.x, offset.y);
         for (Enemy e : enemies) e.draw(batch);
         for (Bullet b : bullets) b.draw(batch);
+        DrawHitValue.draw(batch);
     }
 
     public void fire(Vector2 startPos, Vector2 targetPos, EntityStats es, WeaponStats ws) {

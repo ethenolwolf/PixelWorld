@@ -3,6 +3,7 @@ package com.mygdx.pixelworld.data;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.mygdx.pixelworld.data.draw.DrawData;
+import com.mygdx.pixelworld.data.utilities.Damaging;
 import com.mygdx.pixelworld.data.utilities.EntityStats;
 
 public abstract class Entity {
@@ -19,5 +20,13 @@ public abstract class Entity {
 
     public EntityStats getStats() {
         return stats;
+    }
+
+    public void getHit(Damaging d) {
+        stats.getHit(this, d.getDamage());
+    }
+
+    public DrawData getImg() {
+        return img;
     }
 }
