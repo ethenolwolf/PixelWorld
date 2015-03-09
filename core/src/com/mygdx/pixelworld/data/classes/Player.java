@@ -88,6 +88,7 @@ public abstract class Player extends Entity {
         if (weapon != null) weapon.draw(batch);
         if (armor != null) armor.draw(batch);
         manaSigil.draw(batch);
+        img.write(batch, name, Constants.gameWidth + 10, Constants.gameHeight - 50);
     }
 
     private void regen() {
@@ -126,12 +127,16 @@ public abstract class Player extends Entity {
         return fireManager;
     }
 
-    public void writeName(SpriteBatch batch) {
-        img.write(batch, name, Constants.gameWidth + 10, Constants.gameHeight - 50);
-    }
-
     public void checkMana(List<Enemy> e) {
         for (Enemy enemy : e)
             if (manaSigil.checkIfInside(enemy)) enemy.getHit(manaSigil);
+    }
+
+    public Weapon getWeapon() {
+        return weapon;
+    }
+
+    public Armor getArmor() {
+        return armor;
     }
 }

@@ -14,11 +14,11 @@ public abstract class ManaSigil implements Damaging {
     public static ManaSigil getFromName(SigilName name, Player player) {
         switch (name) {
             case powerShock:
-                return new PowerShock(player);
+                return new PowerShock();
             case invisibleCloack:
                 return new InvisibleCloak(player);
             default:
-                return new PowerShock(player);
+                return new PowerShock();
         }
     }
 

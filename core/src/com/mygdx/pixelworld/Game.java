@@ -6,6 +6,7 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.mygdx.pixelworld.GUI.GUI;
 import com.mygdx.pixelworld.GUI.Map;
 import com.mygdx.pixelworld.data.assets.Assets;
 import com.mygdx.pixelworld.data.classes.Player;
@@ -57,11 +58,10 @@ public class Game extends ApplicationAdapter implements InputProcessor {
         batch.begin();
         map.draw(batch);
         player.draw(batch);
+        GUI.draw(batch, player);
         batch.end();
+
         map.shapeDraw(shapeRenderer, player);
-        batch.begin();
-        player.writeName(batch);
-        batch.end();
     }
 
     @Override

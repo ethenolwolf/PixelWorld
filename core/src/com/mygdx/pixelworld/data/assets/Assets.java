@@ -19,6 +19,7 @@ public class Assets {
     private static Map<Class, Texture> MANA_TEX = new HashMap<Class, Texture>();
     private static BitmapFont font;
     private static Texture BACKGROUND_TEX;
+    private static Texture PANEL_TEX;
 
     public static void init() {
         Logger.log("[Assets.init()] Initializing...");
@@ -31,7 +32,7 @@ public class Assets {
         font.setColor(1f, 1f, 1f, 1f);
 
         BACKGROUND_TEX = new Texture("core/assets/background.jpg");
-
+        PANEL_TEX = new Texture("core/assets/panel.png");
         Logger.log("[Assets.init()] Init complete.");
     }
 
@@ -53,6 +54,8 @@ public class Assets {
             case BACKGROUND:
                 if (BACKGROUND_TEX != null) return BACKGROUND_TEX;
                 break;
+            case PANEL:
+                if (PANEL_TEX != null) return PANEL_TEX;
             case CHARACTER:
                 if (CHARACTER_TEX.get(type) != null) return CHARACTER_TEX.get(type);
                 break;

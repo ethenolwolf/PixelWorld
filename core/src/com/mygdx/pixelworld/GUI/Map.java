@@ -111,11 +111,6 @@ public class Map {
 
     public void shapeDraw(ShapeRenderer shapeRenderer, Player player) {
         shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
-
-        //Panel
-        shapeRenderer.setColor(0.2549f, 0.3215f, 0.3340f, 1.0f);
-        shapeRenderer.rect(Constants.gameWidth, 0, Constants.panelWidth, Constants.gameHeight);
-
         //Health bar background
         shapeRenderer.setColor(0.678f, 0.074f, 0.074f, 1.0f);
         shapeRenderer.rect(Constants.gameWidth + 10, Constants.gameHeight / 2, 140, 20);
@@ -128,7 +123,6 @@ public class Map {
         //Mana bar
         shapeRenderer.setColor(0.0f, 0.05f, 0.95f, 1.0f);
         shapeRenderer.rect(Constants.gameWidth + 10, Constants.gameHeight / 2 - 30, 140 * player.getManaPercentage(), 20);
-
         shapeRenderer.end();
     }
 

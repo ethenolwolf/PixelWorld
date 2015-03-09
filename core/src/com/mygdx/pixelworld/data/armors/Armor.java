@@ -17,7 +17,7 @@ public class Armor {
     }
 
     public void draw(SpriteBatch batch) {
-        img.drawEffective(batch, new Vector2(50, Constants.gameHeight - 20));
+        img.drawEffective(batch, new Vector2(Constants.gameWidth + 50, 300));
     }
 
     public int getDefense() {

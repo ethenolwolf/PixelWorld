@@ -1,5 +1,5 @@
 package com.mygdx.pixelworld.data.assets;
 
 public enum AssetType {
-    BACKGROUND, CHARACTER, BULLET, WEAPON, ARMOR, MANA
+    BACKGROUND, PANEL, CHARACTER, BULLET, WEAPON, ARMOR, MANA
 }

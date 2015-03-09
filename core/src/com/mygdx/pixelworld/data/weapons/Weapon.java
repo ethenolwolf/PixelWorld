@@ -25,6 +25,6 @@ public class Weapon {
 
     public void draw(SpriteBatch batch) {
         if (img == null) return;
-        img.drawEffective(batch, new Vector2(20, Constants.gameHeight - 20));
+        img.drawEffective(batch, new Vector2(Constants.gameWidth + 20, 300));
     }
 }
