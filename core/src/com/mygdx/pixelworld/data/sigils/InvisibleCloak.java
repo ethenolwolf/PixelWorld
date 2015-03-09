@@ -14,6 +14,8 @@ public class InvisibleCloak extends ManaSigil {
     private float currentTime = 0;
 
     public InvisibleCloak(Player player) {
+        damage = 0;
+        price = 70;
         playerStats = player.getStats();
     }
 

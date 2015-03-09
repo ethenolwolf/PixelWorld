@@ -66,6 +66,7 @@ public class Game extends ApplicationAdapter implements InputProcessor {
 
     @Override
     public boolean keyDown(int keycode) {
+        if (keycode == Input.Keys.SPACE) player.manaTrigger();
         return false;
     }
 
@@ -102,7 +103,6 @@ public class Game extends ApplicationAdapter implements InputProcessor {
 
     @Override
     public boolean mouseMoved(int screenX, int screenY) {
-
         return true;
     }
 

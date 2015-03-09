@@ -15,8 +15,6 @@ import java.util.Map;
 public class Constants {
 
     public static final String FONT_CHARACTERS = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789=-";
-    public static final float MANA_PRICE = 50;
-    public static final float ATTACK_RANGE = 400.0f;
     public static final float X_LIMIT_MIN = 0.25f;
     public static final float X_LIMIT_MAX = 0.75f;
     public static final float Y_LIMIT_MIN = 0.15f;

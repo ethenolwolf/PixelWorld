@@ -48,17 +48,16 @@ public abstract class Player extends Entity {
         if (Gdx.input.isKeyPressed(Keys.S)) move(DOWN);
         else if (Gdx.input.isKeyPressed(Keys.W)) move(UP);
 
-        if (Gdx.input.isKeyPressed(Keys.SPACE)) manaTrigger();
+
 
         fireManager.updateFire(pos, stats, map, weapon.getStats());
         regen();
         manaSigil.update();
     }
 
-    private void manaTrigger() {
-        float mana = stats.get(StatType.MANA);
-        if (mana >= Constants.MANA_PRICE) {
-            stats.addStat(StatType.MANA, -Constants.MANA_PRICE);
+    public void manaTrigger() {
+        if (stats.get(StatType.MANA) >= manaSigil.getPrice()) {
+            stats.addStat(StatType.MANA, -manaSigil.getPrice());
             manaSigil.activate(new Vector2(pos));
         }
     }

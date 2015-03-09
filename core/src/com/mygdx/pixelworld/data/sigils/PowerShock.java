@@ -20,6 +20,7 @@ public class PowerShock extends ManaSigil {
 
     public PowerShock() {
         damage = 100;
+        price = 40;
         texture = new TextureRegion(new Texture("core/assets/Mana/powerShock.png"));
     }
 

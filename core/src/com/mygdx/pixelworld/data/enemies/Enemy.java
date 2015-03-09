@@ -9,13 +9,13 @@ import com.mygdx.pixelworld.data.classes.Player;
 import com.mygdx.pixelworld.data.draw.BoundingCircle;
 import com.mygdx.pixelworld.data.draw.Bullet;
 import com.mygdx.pixelworld.data.draw.DrawData;
-import com.mygdx.pixelworld.data.utilities.Constants;
 import com.mygdx.pixelworld.data.utilities.EntityStats;
 import com.mygdx.pixelworld.data.weapons.WeaponStats;
 
 public abstract class Enemy extends Entity {
 
     protected WeaponStats weaponStats;
+    protected int ATTACK_RANGE;
 
     public Enemy(float x, float y, Class type) {
         pos = new Vector2(x, y);
@@ -26,7 +26,7 @@ public abstract class Enemy extends Entity {
 
     public void update(Player player, Map map) {
         if (!stats.isAlive()) return;
-        if (player.getPos().dst(pos) < Constants.ATTACK_RANGE) activeAIUpdate(player, map);
+        if (player.getPos().dst(pos) < ATTACK_RANGE) activeAIUpdate(player, map);
         else passiveAIUpdate(player, map);
     }
 
