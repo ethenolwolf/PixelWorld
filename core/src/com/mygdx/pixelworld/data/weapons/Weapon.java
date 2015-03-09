@@ -9,8 +9,8 @@ import com.mygdx.pixelworld.data.utilities.Constants;
 import com.mygdx.pixelworld.data.utilities.XMLLoader;
 
 public class Weapon {
-    WeaponStats weaponStats;
-    DrawData img;
+    private final WeaponStats weaponStats;
+    private final DrawData img;
 
     public Weapon(Class playerClass, int rank) {
         weaponStats = XMLLoader.retrieveWeapon(playerClass, rank);

@@ -14,8 +14,8 @@ import java.util.List;
 import java.util.ListIterator;
 
 public class DrawHitValue {
+    private static final List<Hit> hits = new ArrayList<Hit>();
     private static BitmapFont font = null;
-    private static List<Hit> hits = new ArrayList<Hit>();
 
     public static void add(Entity e, int damage) {
         hits.add(new Hit(e, damage));
@@ -43,10 +43,10 @@ public class DrawHitValue {
 
 
     private static class Hit {
-        public float x;
+        public final float x;
+        public final int damage;
         public float y;
         public float shade;
-        public int damage;
 
         public Hit(Entity e, int damage) {
             this.x = e.getImg().getEffectivePosition(e.getPos()).x;

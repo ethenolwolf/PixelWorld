@@ -3,8 +3,8 @@ package com.mygdx.pixelworld.data.draw;
 import com.badlogic.gdx.math.Vector2;
 
 public class BoundingCircle {
-    private float radius;
-    private Vector2 center;
+    private final float radius;
+    private final Vector2 center;
 
     public BoundingCircle(Vector2 center, float radius) {
         this.radius = radius;
@@ -15,11 +15,11 @@ public class BoundingCircle {
         return isValid() && center.dst(boundingCircle2.getCenter()) <= radius + boundingCircle2.getRadius();
     }
 
-    public Vector2 getCenter() {
+    Vector2 getCenter() {
         return center;
     }
 
-    public float getRadius() {
+    float getRadius() {
         return radius;
     }
 

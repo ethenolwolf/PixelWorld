@@ -9,8 +9,8 @@ import com.mygdx.pixelworld.data.utilities.Damaging;
 
 public abstract class ManaSigil implements Damaging {
 
-    protected int damage;
-    protected float price;
+    int damage;
+    float price;
 
     public static ManaSigil getFromName(SigilName name, Player player) {
         switch (name) {

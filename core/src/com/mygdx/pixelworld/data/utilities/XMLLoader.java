@@ -49,7 +49,7 @@ public class XMLLoader {
                     int speed = getIntValue(el, "Speed");
                     String type = getTextValue(el, "Class");
                     if (playerClass.toString().contains(type) && rank == requiredRank)
-                        return new WeaponStats(playerClass, name, rank, damage, range, speed);
+                        return new WeaponStats(playerClass, name, damage, range, speed);
                 }
             }
         } catch (ParserConfigurationException pce) {
@@ -85,7 +85,7 @@ public class XMLLoader {
                     int defense = getIntValue(el, "Defense");
                     String type = getTextValue(el, "Class");
                     if (playerClass.toString().contains(type) && rank == requiredRank)
-                        return new ArmorStats(playerClass, name, rank, defense);
+                        return new ArmorStats(name, defense);
                 }
             }
         } catch (ParserConfigurationException pce) {

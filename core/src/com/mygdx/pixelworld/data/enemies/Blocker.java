@@ -12,7 +12,7 @@ import java.util.Random;
 
 public class Blocker extends Enemy {
 
-    private FireManager fireManager;
+    private final FireManager fireManager;
 
     public Blocker(float x, float y) {
         super(x, y, Blocker.class);
@@ -34,7 +34,7 @@ public class Blocker extends Enemy {
     }
 
     @Override
-    protected void passiveAIUpdate(Player player, Map map) {
+    void passiveAIUpdate(Player player, Map map) {
         if (fireManager.isFiring()) fireManager.setIsFiring(false);
         Random rand = new Random();
         float x = rand.nextFloat();

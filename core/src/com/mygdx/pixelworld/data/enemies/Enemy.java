@@ -10,18 +10,15 @@ import com.mygdx.pixelworld.data.draw.BoundingCircle;
 import com.mygdx.pixelworld.data.draw.Bullet;
 import com.mygdx.pixelworld.data.draw.DrawData;
 import com.mygdx.pixelworld.data.utilities.EntityStats;
-import com.mygdx.pixelworld.data.weapons.WeaponStats;
 
 public abstract class Enemy extends Entity {
 
-    protected WeaponStats weaponStats;
-    protected int ATTACK_RANGE;
+    int ATTACK_RANGE;
 
     public Enemy(float x, float y, Class type) {
         pos = new Vector2(x, y);
         img = new DrawData(AssetType.CHARACTER, type, new Vector2(1,1), 0);
         stats = new EntityStats(this.getClass());
-        weaponStats = new WeaponStats(this.getClass());
     }
 
     public void update(Player player, Map map) {
@@ -30,10 +27,10 @@ public abstract class Enemy extends Entity {
         else passiveAIUpdate(player, map);
     }
 
-    protected void activeAIUpdate(Player player, Map map) {
+    void activeAIUpdate(Player player, Map map) {
     }
 
-    protected void passiveAIUpdate(Player player, Map map) {
+    void passiveAIUpdate(Player player, Map map) {
     }
 
     @Override

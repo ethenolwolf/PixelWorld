@@ -24,13 +24,13 @@ import static com.mygdx.pixelworld.data.utilities.Directions.*;
 
 public abstract class Player extends Entity {
 
-    protected String name;
-    private FireManager fireManager;
-    private Weapon weapon;
-    private Armor armor;
-    private ManaSigil manaSigil;
+    private final String name;
+    private final FireManager fireManager;
+    private final Weapon weapon;
+    private final Armor armor;
+    private final ManaSigil manaSigil;
 
-    public Player() {
+    Player() {
         this.name = NameExtractor.extract();
         this.pos = new Vector2(580, 0);
         img = new DrawData(AssetType.CHARACTER, this.getClass(), new Vector2(1, 1), 0);

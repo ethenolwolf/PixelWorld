@@ -10,7 +10,7 @@ import com.mygdx.pixelworld.data.utilities.EntityStats;
 public class InvisibleCloak extends ManaSigil {
 
     private static final float TIME = 5.0f;
-    EntityStats playerStats;
+    private final EntityStats playerStats;
     private float currentTime = 0;
 
     public InvisibleCloak(Player player) {

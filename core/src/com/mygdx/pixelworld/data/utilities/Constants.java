@@ -19,11 +19,11 @@ public class Constants {
     public static final float X_LIMIT_MAX = 0.75f;
     public static final float Y_LIMIT_MIN = 0.15f;
     public static final float Y_LIMIT_MAX = 0.30f;
-    public static Map<Class, EntityStats> initStats = new HashMap<Class, EntityStats>();
-    public static Map<Class, WeaponStats> enemyStats = new HashMap<Class, WeaponStats>();
-    public static float gameWidth = 640;
-    public static float gameHeight = 480;
-    public static float panelWidth = 160;
+    public static final Map<Class, EntityStats> initStats = new HashMap<Class, EntityStats>();
+    public static final Map<Class, WeaponStats> enemyStats = new HashMap<Class, WeaponStats>();
+    public static final float gameWidth = 640;
+    public static final float gameHeight = 480;
+    public static final float panelWidth = 160;
 
     public static void init() {
         enemyStats.put(Blocker.class, new WeaponStats(Blocker.class,

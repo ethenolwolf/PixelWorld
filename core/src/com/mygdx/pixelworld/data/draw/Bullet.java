@@ -15,9 +15,9 @@ public class Bullet implements Damaging {
     private final Class type;
     private final int speed;
     private final int damage;
-    private Vector2 pos;
+    private final Vector2 pos;
+    private final DrawData img;
     private boolean alive = true;
-    private DrawData img;
 
     public Bullet(Vector2 startingPos, Vector2 endingPos, EntityStats es, WeaponStats ws) {
         this.startPoint = new Vector2(startingPos);

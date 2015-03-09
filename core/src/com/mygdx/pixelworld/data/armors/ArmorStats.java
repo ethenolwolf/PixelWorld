@@ -2,15 +2,11 @@
 package com.mygdx.pixelworld.data.armors;
 
 public class ArmorStats {
-    Class type;
-    String name;
-    int rank;
-    int defense;
+    private final String name;
+    private final int defense;
 
-    public ArmorStats(Class type, String name, int rank, int defense) {
-        this.type = type;
+    public ArmorStats(String name, int defense) {
         this.name = name;
-        this.rank = rank;
         this.defense = defense;
     }
 

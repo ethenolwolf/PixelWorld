@@ -9,33 +9,29 @@ import com.mygdx.pixelworld.data.assets.AssetType;
 import com.mygdx.pixelworld.data.assets.Assets;
 
 public class DrawData {
-    protected TextureRegion texture;
-    protected Vector2 scaleFactor;
-    protected float rotationAngle;
-    protected Class type;
+    private final TextureRegion texture;
+    private Vector2 scaleFactor;
+    private float rotationAngle;
 
     public DrawData(AssetType assetType, Class classType, Vector2 scaleFactor, float rotationAngle) {
-        this.type = classType;
         setScaleFactor(scaleFactor);
         setRotationAngle(rotationAngle);
         texture = new TextureRegion(Assets.getTexture(assetType, classType));
     }
 
     public DrawData(AssetType assetType, String name) { //Weapon / Armor
-        this.type = null;
         setScaleFactor(new Vector2(1, 1));
         setRotationAngle(0);
         texture = new TextureRegion(Assets.getTexture(assetType, name));
     }
 
     public DrawData(String name, float rotationAngle) {
-        this.type = null;
         setScaleFactor(new Vector2(1, 1));
         setRotationAngle(rotationAngle);
         texture = new TextureRegion(Assets.getTexture(AssetType.BULLET, name));
     }
 
-    public float getWidth() {
+    float getWidth() {
         return texture.getRegionWidth();
     }
 
@@ -43,7 +39,7 @@ public class DrawData {
         return texture.getRegionHeight();
     }
 
-    public Vector2 getOriginCenter() {
+    Vector2 getOriginCenter() {
         return new Vector2(getWidth() / 2, getHeight() / 2);
     }
 
@@ -52,7 +48,7 @@ public class DrawData {
         return out.add(Map.getOffset());
     }
 
-    public void setRotationAngle(float angle) {
+    void setRotationAngle(float angle) {
         rotationAngle = angle;
     }
 
@@ -96,7 +92,7 @@ public class DrawData {
         Assets.write(batch, name, x, y);
     }
 
-    public void setScaleFactor(Vector2 scaleFactor) {
+    void setScaleFactor(Vector2 scaleFactor) {
         this.scaleFactor = scaleFactor;
     }
 }

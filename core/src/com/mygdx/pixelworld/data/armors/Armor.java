@@ -8,8 +8,8 @@ import com.mygdx.pixelworld.data.utilities.Constants;
 import com.mygdx.pixelworld.data.utilities.XMLLoader;
 
 public class Armor {
-    ArmorStats armorStats;
-    DrawData img;
+    private final ArmorStats armorStats;
+    private final DrawData img;
 
     public Armor(Class playerClass, int rank) {
         armorStats = XMLLoader.retrieveArmor(playerClass, rank);

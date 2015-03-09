@@ -15,8 +15,8 @@ import java.util.ListIterator;
 
 public class PowerShock extends ManaSigil {
 
-    private List<PowerShockBlast> blasts = new ArrayList<PowerShockBlast>();
-    private TextureRegion texture;
+    private final List<PowerShockBlast> blasts = new ArrayList<PowerShockBlast>();
+    private final TextureRegion texture;
 
     public PowerShock() {
         damage = 100;
@@ -49,7 +49,7 @@ public class PowerShock extends ManaSigil {
         }
     }
 
-    public BoundingCircle[] getBoundingCircle() {
+    BoundingCircle[] getBoundingCircle() {
         BoundingCircle[] bc = new BoundingCircle[blasts.size()];
         for (int i = 0; i < bc.length; i++) bc[i] = blasts.get(i).getBoundingCircle(texture.getRegionWidth());
         return bc;
@@ -63,8 +63,8 @@ public class PowerShock extends ManaSigil {
     }
 
     private class PowerShockBlast {
-        private Vector2 center;
-        private Vector2 currentDimension;
+        private final Vector2 center;
+        private final Vector2 currentDimension;
 
         public PowerShockBlast(Vector2 center, float minScale) {
             this.center = center;

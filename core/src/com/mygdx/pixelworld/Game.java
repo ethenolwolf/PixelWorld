@@ -21,10 +21,10 @@ import com.mygdx.pixelworld.data.utilities.Constants;
 public class Game extends ApplicationAdapter implements InputProcessor {
 
     public static float deltaTime = 0;
-    SpriteBatch batch;
-    Map map;
-    Player player;
-    ShapeRenderer shapeRenderer;
+    private SpriteBatch batch;
+    private Map map;
+    private Player player;
+    private ShapeRenderer shapeRenderer;
 
     /**
      * Inits various parts of the program, including batch, map and player.

@@ -11,9 +11,9 @@ import static com.mygdx.pixelworld.data.utilities.Constants.initStats;
 
 public class EntityStats {
 
-    Class type;
-    boolean alive = true;
-    private Map<StatType, Float> stats = new EnumMap<StatType, Float>(StatType.class);
+    private final Map<StatType, Float> stats = new EnumMap<StatType, Float>(StatType.class);
+    private Class type;
+    private boolean alive = true;
     private Map<StatType, Float> maxStats;
     private boolean visible = true;
 
@@ -37,11 +37,11 @@ public class EntityStats {
         maxStats.get(StatType.HEALTH);
     }
 
-    public EntityStats(EntityStats ps) {
+    private EntityStats(EntityStats ps) {
         for (StatType st : StatType.values()) stats.put(st, ps.get(st));
     }
 
-    public void setStat(StatType statType, float value) {
+    void setStat(StatType statType, float value) {
         stats.put(statType, value);
     }
 

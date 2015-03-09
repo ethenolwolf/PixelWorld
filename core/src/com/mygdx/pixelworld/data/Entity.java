@@ -22,7 +22,7 @@ public abstract class Entity {
         return stats;
     }
 
-    public void getHit(int damage) {
+    protected void getHit(int damage) {
         stats.getHit(this, damage);
     }
 

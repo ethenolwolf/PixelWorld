@@ -24,9 +24,9 @@ import java.util.Random;
 
 public class Map {
 
-    private static Vector2 offset = new Vector2();
-    private List<Enemy> enemies = new ArrayList<Enemy>();
-    private List<Bullet> bullets = new ArrayList<Bullet>();
+    private final static Vector2 offset = new Vector2();
+    private final List<Enemy> enemies = new ArrayList<Enemy>();
+    private final List<Bullet> bullets = new ArrayList<Bullet>();
 
     public static Vector2 getOffset() {
         return offset;
@@ -40,7 +40,7 @@ public class Map {
         return Assets.getTexture(AssetType.BACKGROUND, Map.class).getHeight();
     }
 
-    public void addEnemy(Class<Blocker> type, float x, float y) {
+    void addEnemy(Class<Blocker> type, float x, float y) {
         if (type == Blocker.class) enemies.add(new Blocker(x, y));
     }
 

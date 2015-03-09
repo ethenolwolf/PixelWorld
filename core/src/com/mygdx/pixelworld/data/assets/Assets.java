@@ -15,8 +15,8 @@ import java.util.Map;
 
 public class Assets {
 
-    private static Map<Class, Texture> CHARACTER_TEX = new HashMap<Class, Texture>();
-    private static Map<Class, Texture> MANA_TEX = new HashMap<Class, Texture>();
+    private static final Map<Class, Texture> CHARACTER_TEX = new HashMap<Class, Texture>();
+    private static final Map<Class, Texture> MANA_TEX = new HashMap<Class, Texture>();
     private static BitmapFont font;
     private static Texture BACKGROUND_TEX;
     private static Texture PANEL_TEX;

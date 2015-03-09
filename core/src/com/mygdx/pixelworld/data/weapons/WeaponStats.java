@@ -1,14 +1,11 @@
 package com.mygdx.pixelworld.data.weapons;
 
-import com.mygdx.pixelworld.data.utilities.Constants;
-
 public class WeaponStats {
-    int damage;
-    int range;
-    int speed;
-    Class type;
-    String name;
-    int rank;
+    private final int damage;
+    private final int range;
+    private final int speed;
+    private final Class type;
+    private final String name;
 
     //Enemies stats constructor
     public WeaponStats(Class type, int damage, int range, int speed, String name) {
@@ -19,23 +16,13 @@ public class WeaponStats {
         this.name = name;
     }
 
-    //Enemies constructor
-    public WeaponStats(Class type) {
-        WeaponStats ws = Constants.enemyStats.get(type);
-        this.type = ws.getType();
-        this.damage = ws.getDamage();
-        this.range = ws.getRange();
-        this.speed = ws.getSpeed();
-    }
-
     //Player constructor
-    public WeaponStats(Class playerClass, String name, int rank, int damage, int range, int speed) {
+    public WeaponStats(Class playerClass, String name, int damage, int range, int speed) {
         this.type = playerClass;
         this.damage = damage;
         this.range = range;
         this.speed = speed;
         this.name = name;
-        this.rank = rank;
     }
 
     public int getDamage() {
@@ -52,10 +39,6 @@ public class WeaponStats {
 
     public Class getType() {
         return type;
-    }
-
-    public void setType(Class type) {
-        this.type = type;
     }
 
     public String getName() {
