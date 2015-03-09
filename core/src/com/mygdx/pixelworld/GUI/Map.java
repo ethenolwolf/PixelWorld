@@ -48,7 +48,7 @@ public class Map {
         ListIterator<Enemy> enemyIterator = enemies.listIterator();
         while (enemyIterator.hasNext()) {
             Enemy e = enemyIterator.next();
-            e.update(player.getPos(), this);
+            e.update(player, this);
             if (!e.isAlive()) enemyIterator.remove();
         }
 

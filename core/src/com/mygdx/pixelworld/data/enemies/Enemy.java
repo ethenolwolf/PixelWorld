@@ -5,6 +5,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.mygdx.pixelworld.GUI.Map;
 import com.mygdx.pixelworld.data.Entity;
 import com.mygdx.pixelworld.data.assets.AssetType;
+import com.mygdx.pixelworld.data.classes.Player;
 import com.mygdx.pixelworld.data.draw.BoundingCircle;
 import com.mygdx.pixelworld.data.draw.Bullet;
 import com.mygdx.pixelworld.data.draw.DrawData;
@@ -23,16 +24,16 @@ public abstract class Enemy extends Entity {
         weaponStats = new WeaponStats(this.getClass());
     }
 
-    public void update(Vector2 pp, Map map) {
+    public void update(Player player, Map map) {
         if (!stats.isAlive()) return;
-        if (pp.dst(pos) < Constants.ATTACK_RANGE) activeAIUpdate(pp, map);
-        else passiveAIUpdate(pp, map);
+        if (player.getPos().dst(pos) < Constants.ATTACK_RANGE) activeAIUpdate(player, map);
+        else passiveAIUpdate(player, map);
     }
 
-    protected void activeAIUpdate(Vector2 playerPos, Map map) {
+    protected void activeAIUpdate(Player player, Map map) {
     }
 
-    protected void passiveAIUpdate(Vector2 playerPos, Map map) {
+    protected void passiveAIUpdate(Player player, Map map) {
     }
 
     @Override

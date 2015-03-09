@@ -1,12 +1,13 @@
 package com.mygdx.pixelworld.data.draw;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.mygdx.pixelworld.GUI.Map;
 import com.mygdx.pixelworld.data.assets.AssetType;
 import com.mygdx.pixelworld.data.assets.Assets;
-import com.mygdx.pixelworld.data.assets.WeaponNames;
+import com.mygdx.pixelworld.data.weapons.WeaponStats;
 
 public class DrawData {
     protected TextureRegion texture;
@@ -14,23 +15,33 @@ public class DrawData {
     protected float rotationAngle;
     protected Class type;
 
-    public DrawData(AssetType assetType, Class type, Vector2 scaleFactor, float rotationAngle) {
-        this.type = type;
+    public DrawData(AssetType assetType, WeaponStats weaponStats, Vector2 scaleFactor, float rotationAngle) {
+        this.type = weaponStats.getType();
         setScaleFactor(scaleFactor);
         setRotationAngle(rotationAngle);
-        texture = new TextureRegion(Assets.getTexture(assetType, type));
+        texture = new TextureRegion(Assets.getTexture(assetType, weaponStats.getName()));
     }
 
-    public DrawData() {
+    public DrawData(AssetType assetType, Class classType, Vector2 scaleFactor, float rotationAngle) {
+        this.type = classType;
+        setScaleFactor(scaleFactor);
+        setRotationAngle(rotationAngle);
+        texture = new TextureRegion(Assets.getTexture(assetType, classType));
     }
 
-    public DrawData(WeaponNames name) {
+    public DrawData(String name) { //Weapon
         this.type = null;
         setScaleFactor(new Vector2(1, 1));
         setRotationAngle(0);
-        texture = new TextureRegion(Assets.getTexture(name));
+        texture = new TextureRegion(Assets.getTexture(AssetType.WEAPON, name));
     }
 
+    public DrawData(String name, float rotationAngle) {
+        this.type = null;
+        setScaleFactor(new Vector2(1, 1));
+        setRotationAngle(rotationAngle);
+        texture = new TextureRegion(Assets.getTexture(AssetType.BULLET, name));
+    }
 
     public float getWidth() {
         return texture.getRegionWidth();
@@ -57,6 +68,13 @@ public class DrawData {
         //TODO draw only if inScreen
         batch.draw(texture, getEffectivePosition(absolutePosition).x, getEffectivePosition(absolutePosition).y, getOriginCenter().x,
                 getOriginCenter().y, getWidth(), getHeight(), scaleFactor.x, scaleFactor.y, rotationAngle);
+    }
+
+    public void draw(SpriteBatch batch, Vector2 absolutePosition, float alpha) {
+        Color c = batch.getColor();
+        batch.setColor(c.r, c.g, c.b, alpha);
+        draw(batch, absolutePosition);
+        batch.setColor(c.r, c.g, c.b, 1.0f);
     }
 
     public void drawEffective(SpriteBatch batch, Vector2 effectivePosition) {

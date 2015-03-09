@@ -15,6 +15,7 @@ public class EntityStats {
     boolean alive = true;
     private Map<StatType, Float> stats = new EnumMap<StatType, Float>(StatType.class);
     private Map<StatType, Float> maxStats;
+    private boolean visible = true;
 
     public EntityStats(Class type) {
         this(initStats.get(type));
@@ -72,5 +73,13 @@ public class EntityStats {
 
     public boolean isAlive() {
         return alive;
+    }
+
+    public boolean isVisible() {
+        return visible;
+    }
+
+    public void setIsVisible(boolean isVisible) {
+        this.visible = isVisible;
     }
 }

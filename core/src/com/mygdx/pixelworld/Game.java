@@ -8,10 +8,11 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.mygdx.pixelworld.GUI.Map;
 import com.mygdx.pixelworld.data.assets.Assets;
-import com.mygdx.pixelworld.data.assets.WeaponNames;
 import com.mygdx.pixelworld.data.classes.Player;
 import com.mygdx.pixelworld.data.classes.Wizard;
 import com.mygdx.pixelworld.data.utilities.Constants;
+
+//TODO generalize Armor
 
 /**
  * Main game class.
@@ -39,7 +40,7 @@ public class Game extends ApplicationAdapter implements InputProcessor {
         Constants.init();
         map = new Map();
         map.generateEnemies(25);
-        player = new Wizard(WeaponNames.glassSword);
+        player = new Wizard();
         Gdx.input.setInputProcessor(this);
         shapeRenderer = new ShapeRenderer();
     }

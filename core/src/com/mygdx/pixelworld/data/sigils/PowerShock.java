@@ -1,4 +1,4 @@
-package com.mygdx.pixelworld.data.mana;
+package com.mygdx.pixelworld.data.sigils;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.mygdx.pixelworld.GUI.Logger;
 import com.mygdx.pixelworld.GUI.Map;
+import com.mygdx.pixelworld.data.classes.Player;
 import com.mygdx.pixelworld.data.classes.Wizard;
 import com.mygdx.pixelworld.data.draw.BoundingCircle;
 import com.mygdx.pixelworld.data.enemies.Enemy;
@@ -20,8 +21,8 @@ public class PowerShock extends ManaSigil {
     private List<PowerShockBlast> blasts = new ArrayList<PowerShockBlast>();
     private TextureRegion texture;
 
-
-    public PowerShock() {
+    public PowerShock(Player player) {
+        super(player);
         damage = 100;
         texture = new TextureRegion(new Texture("core/assets/Mana/powerShock.png"));
     }

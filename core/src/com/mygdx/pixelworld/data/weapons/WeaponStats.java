@@ -7,22 +7,15 @@ public class WeaponStats {
     int range;
     int speed;
     Class type;
+    String name;
+    int rank;
 
-    public WeaponStats(Weapon w) {
-        set(w);
-    }
-
-    public WeaponStats() {
-        setDamage(0);
-        setRange(0);
-        setSpeed(0);
-    }
-
-    public WeaponStats(Class type, int damage, int range, int speed) {
+    public WeaponStats(Class type, int damage, int range, int speed, String name) {
         this.type = type;
         this.damage = damage;
         this.range = range;
         this.speed = speed;
+        this.name = name;
     }
 
     public WeaponStats(Class type) {
@@ -31,6 +24,15 @@ public class WeaponStats {
         this.damage = ws.getDamage();
         this.range = ws.getRange();
         this.speed = ws.getSpeed();
+    }
+
+    public WeaponStats(Class playerClass, String name, int rank, int damage, int range, int speed) {
+        this.type = playerClass;
+        this.damage = damage;
+        this.range = range;
+        this.speed = speed;
+        this.name = name;
+        this.rank = rank;
     }
 
     public int getDamage() {
@@ -70,5 +72,9 @@ public class WeaponStats {
         damage = w.getStats().getDamage();
         speed = w.getStats().getSpeed();
         range = w.getStats().getRange();
+    }
+
+    public String getName() {
+        return name;
     }
 }

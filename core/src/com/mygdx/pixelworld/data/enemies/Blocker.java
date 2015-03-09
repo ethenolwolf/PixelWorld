@@ -1,8 +1,8 @@
 package com.mygdx.pixelworld.data.enemies;
 
-import com.badlogic.gdx.math.Vector2;
 import com.mygdx.pixelworld.GUI.Map;
 import com.mygdx.pixelworld.Game;
+import com.mygdx.pixelworld.data.classes.Player;
 import com.mygdx.pixelworld.data.utilities.Algorithms;
 import com.mygdx.pixelworld.data.utilities.Constants;
 import com.mygdx.pixelworld.data.utilities.FireManager;
@@ -20,16 +20,20 @@ public class Blocker extends Enemy {
     }
 
     @Override
-    protected void activeAIUpdate(Vector2 playerPos, Map map) {
+    protected void activeAIUpdate(Player player, Map map) {
+        if (!player.getStats().isVisible()) {
+            passiveAIUpdate(player, map);
+            return;
+        }
         if (!fireManager.isFiring()) fireManager.setIsFiring(true);
-        Algorithms.moveTowards(pos, playerPos, stats.get(StatType.SPD) * Game.deltaTime);
+        Algorithms.moveTowards(pos, player.getPos(), stats.get(StatType.SPD) * Game.deltaTime);
         pos = img.boundMap(pos);
-        fireManager.setTarget(playerPos);
+        fireManager.setTarget(player.getPos());
         fireManager.updateFire(pos, stats, map, Constants.enemyStats.get(Blocker.class));
     }
 
     @Override
-    protected void passiveAIUpdate(Vector2 playerPos, Map map) {
+    protected void passiveAIUpdate(Player player, Map map) {
         if (fireManager.isFiring()) fireManager.setIsFiring(false);
         Random rand = new Random();
         float x = rand.nextFloat();
@@ -39,7 +43,7 @@ public class Blocker extends Enemy {
         if (rand.nextInt(10) >= 5) y = -y;
         pos.add(x * 5, y * 5);
         pos = img.boundMap(pos);
-        fireManager.setTarget(playerPos);
+        fireManager.setTarget(player.getPos());
         fireManager.updateFire(pos, stats, map, Constants.enemyStats.get(Blocker.class));
     }
 

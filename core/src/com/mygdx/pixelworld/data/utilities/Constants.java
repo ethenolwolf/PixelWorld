@@ -16,8 +16,6 @@ public class Constants {
 
     public static final String FONT_CHARACTERS = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789=-";
     public static final float MANA_PRICE = 50;
-    public static final int MANA_DAMAGE = 100;
-    public static final float MANA_ANIMATION_SPEED = 0.1f;
     public static final float ATTACK_RANGE = 400.0f;
     public static final float X_LIMIT_MIN = 0.25f;
     public static final float X_LIMIT_MAX = 0.75f;
@@ -33,7 +31,8 @@ public class Constants {
         enemyStats.put(Blocker.class, new WeaponStats(Blocker.class,
                 20, //dmg
                 400,//range
-                400//spd
+                400,//spd
+                "blocker" //name
         ));
 
         initStats.put(Wizard.class, new EntityStats(

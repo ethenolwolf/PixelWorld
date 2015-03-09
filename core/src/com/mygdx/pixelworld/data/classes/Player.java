@@ -9,12 +9,11 @@ import com.mygdx.pixelworld.GUI.Map;
 import com.mygdx.pixelworld.Game;
 import com.mygdx.pixelworld.data.Entity;
 import com.mygdx.pixelworld.data.assets.AssetType;
-import com.mygdx.pixelworld.data.assets.WeaponNames;
+import com.mygdx.pixelworld.data.assets.SigilName;
 import com.mygdx.pixelworld.data.draw.Bullet;
 import com.mygdx.pixelworld.data.draw.DrawData;
 import com.mygdx.pixelworld.data.enemies.Enemy;
-import com.mygdx.pixelworld.data.mana.ManaSigil;
-import com.mygdx.pixelworld.data.mana.PowerShock;
+import com.mygdx.pixelworld.data.sigils.ManaSigil;
 import com.mygdx.pixelworld.data.utilities.*;
 import com.mygdx.pixelworld.data.weapons.Weapon;
 
@@ -35,21 +34,18 @@ public abstract class Player extends Entity {
         img = new DrawData(AssetType.CHARACTER, this.getClass(), new Vector2(1, 1), 0);
         stats = new EntityStats(this.getClass());
         fireManager = new FireManager();
-        weapon = new Weapon();
-        manaSigil = new PowerShock();
+        weapon = new Weapon(this.getClass(), 1);
+        manaSigil = ManaSigil.getFromName(SigilName.invisibleCloack, this);
     }
 
-    public Player(WeaponNames weaponName) {
+    public Player(int weaponRank) {
         this();
-        equipWeapon(weaponName);
+        if (weaponRank > 0 && weaponRank < 11)
+            equipWeapon(weaponRank);
     }
 
-    public boolean equipWeapon(WeaponNames weaponName) {
-        Weapon w = new Weapon(weaponName);
-        if (w.getStats().getType() == this.getClass()) {
-            weapon = w;
-            return true;
-        } else return false;
+    public void equipWeapon(int rank) {
+        weapon = new Weapon(this.getClass(), rank);
     }
 
     public void update(Map map) {
@@ -95,7 +91,7 @@ public abstract class Player extends Entity {
 
     @Override
     public void draw(SpriteBatch batch) {
-        img.draw(batch, pos);
+        img.draw(batch, pos, stats.isVisible() ? 1f : 0.5f);
         if (weapon != null) weapon.draw(batch);
         manaSigil.draw(batch);
     }
