@@ -36,21 +36,21 @@ public class Constants {
         ));
 
         initStats.put(Wizard.class, new EntityStats(
-                300, //health
+                100, //health
                 100, //mana
                 50, //spd
                 60, //dex
                 15, //wis
-                40, //vit
+                3, //vit
                 7, //atk
-                10  //def
+                0  //def
         ));
 
         initStats.put(Blocker.class, new EntityStats(
                 100, //health
                 0, //mana
                 50, //spd
-                60, //dex
+                15, //dex
                 0, //wis
                 0, //vit
                 0, //atk

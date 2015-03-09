@@ -22,6 +22,10 @@ public abstract class Entity {
         return stats;
     }
 
+    public void getHit(int damage) {
+        stats.getHit(this, damage);
+    }
+
     public void getHit(Damaging d) {
         stats.getHit(this, d.getDamage());
     }

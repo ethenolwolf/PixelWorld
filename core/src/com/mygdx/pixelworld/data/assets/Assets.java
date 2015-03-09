@@ -41,6 +41,8 @@ public class Assets {
                 return new Texture("core/assets/Bullets/" + name + ".png");
             case WEAPON:
                 return new Texture("core/assets/Weapons/" + name + ".png");
+            case ARMOR:
+                return new Texture("core/assets/Armors/" + name + ".png");
         }
         Logger.log("[Assets.getTexture()] Texture not found. AssetType:" + type.toString() + " Name:" + name);
         return new Texture("core/assets/badlogic.jpg");

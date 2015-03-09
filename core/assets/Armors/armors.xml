@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Armors>
+    <Armor>
+        <Name>leatherArmor</Name>
+        <Rank>1</Rank>
+        <Defense>5</Defense>
+        <Class>Wizard</Class>
+    </Armor>
+</Armors>

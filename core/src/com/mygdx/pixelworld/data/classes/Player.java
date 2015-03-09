@@ -8,6 +8,7 @@ import com.mygdx.pixelworld.GUI.Logger;
 import com.mygdx.pixelworld.GUI.Map;
 import com.mygdx.pixelworld.Game;
 import com.mygdx.pixelworld.data.Entity;
+import com.mygdx.pixelworld.data.armors.Armor;
 import com.mygdx.pixelworld.data.assets.AssetType;
 import com.mygdx.pixelworld.data.assets.SigilName;
 import com.mygdx.pixelworld.data.draw.Bullet;
@@ -26,6 +27,7 @@ public abstract class Player extends Entity {
     protected String name;
     private FireManager fireManager;
     private Weapon weapon;
+    private Armor armor;
     private ManaSigil manaSigil;
 
     public Player() {
@@ -35,17 +37,8 @@ public abstract class Player extends Entity {
         stats = new EntityStats(this.getClass());
         fireManager = new FireManager();
         weapon = new Weapon(this.getClass(), 1);
+        armor = new Armor(this.getClass(), 1);
         manaSigil = ManaSigil.getFromName(SigilName.invisibleCloack, this);
-    }
-
-    public Player(int weaponRank) {
-        this();
-        if (weaponRank > 0 && weaponRank < 11)
-            equipWeapon(weaponRank);
-    }
-
-    public void equipWeapon(int rank) {
-        weapon = new Weapon(this.getClass(), rank);
     }
 
     public void update(Map map) {
@@ -93,6 +86,7 @@ public abstract class Player extends Entity {
     public void draw(SpriteBatch batch) {
         img.draw(batch, pos, stats.isVisible() ? 1f : 0.5f);
         if (weapon != null) weapon.draw(batch);
+        if (armor != null) armor.draw(batch);
         manaSigil.draw(batch);
     }
 
@@ -112,7 +106,8 @@ public abstract class Player extends Entity {
 
     @Override
     public void getHit(Damaging d) {
-        super.getHit(d);
+        if (armor.getDefense() + stats.get(StatType.DEF) >= d.getDamage()) return;
+        super.getHit(d.getDamage() - armor.getDefense() - (int) stats.get(StatType.DEF));
         if (!stats.isAlive()) {
             Logger.log("[Player.getHit()] Player died :(");
             Gdx.app.exit();

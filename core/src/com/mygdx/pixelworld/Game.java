@@ -12,8 +12,6 @@ import com.mygdx.pixelworld.data.classes.Player;
 import com.mygdx.pixelworld.data.classes.Wizard;
 import com.mygdx.pixelworld.data.utilities.Constants;
 
-//TODO generalize Armor
-
 /**
  * Main game class.
  *

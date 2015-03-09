@@ -1,6 +1,7 @@
 package com.mygdx.pixelworld.data.utilities;
 
 import com.mygdx.pixelworld.GUI.Logger;
+import com.mygdx.pixelworld.data.armors.ArmorStats;
 import com.mygdx.pixelworld.data.weapons.WeaponStats;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -62,6 +63,42 @@ public class XMLLoader {
             e.printStackTrace();
         }
         Logger.log("[XMLLoader.retrieve()] Weapon not found. Class:" + playerClass.toString() + " and rank " + requiredRank);
+        return null;
+    }
+
+
+    public static ArmorStats retrieveArmor(Class playerClass, int requiredRank) {
+        Document dom;
+        DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+        try {
+            DocumentBuilder db = dbf.newDocumentBuilder();
+            dom = db.parse("core/assets/Armors/armors.xml");
+            Element docEle = dom.getDocumentElement();
+            NodeList nl = docEle.getElementsByTagName("Armor");
+
+            if (nl != null && nl.getLength() > 0) {
+                for (int i = 0; i < nl.getLength(); i++) {
+                    Element el = (Element) nl.item(i);
+
+                    String name = getTextValue(el, "Name");
+                    int rank = getIntValue(el, "Rank");
+                    int defense = getIntValue(el, "Defense");
+                    String type = getTextValue(el, "Class");
+                    if (playerClass.toString().contains(type) && rank == requiredRank)
+                        return new ArmorStats(playerClass, name, rank, defense);
+                }
+            }
+        } catch (ParserConfigurationException pce) {
+            Logger.log("[XMLLoader.retrieve()] Parser Error");
+            pce.printStackTrace();
+        } catch (IOException ioe) {
+            Logger.log("[XMLLoader.retrieve()] IOExc");
+            ioe.printStackTrace();
+        } catch (org.xml.sax.SAXException e) {
+            Logger.log("[XMLLoader.retrieve()] SAX Error");
+            e.printStackTrace();
+        }
+        Logger.log("[XMLLoader.retrieve()] Armor not found. Class:" + playerClass.toString() + " and rank " + requiredRank);
         return null;
     }
 }

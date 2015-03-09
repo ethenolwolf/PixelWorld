@@ -7,20 +7,12 @@ import com.badlogic.gdx.math.Vector2;
 import com.mygdx.pixelworld.GUI.Map;
 import com.mygdx.pixelworld.data.assets.AssetType;
 import com.mygdx.pixelworld.data.assets.Assets;
-import com.mygdx.pixelworld.data.weapons.WeaponStats;
 
 public class DrawData {
     protected TextureRegion texture;
     protected Vector2 scaleFactor;
     protected float rotationAngle;
     protected Class type;
-
-    public DrawData(AssetType assetType, WeaponStats weaponStats, Vector2 scaleFactor, float rotationAngle) {
-        this.type = weaponStats.getType();
-        setScaleFactor(scaleFactor);
-        setRotationAngle(rotationAngle);
-        texture = new TextureRegion(Assets.getTexture(assetType, weaponStats.getName()));
-    }
 
     public DrawData(AssetType assetType, Class classType, Vector2 scaleFactor, float rotationAngle) {
         this.type = classType;
@@ -29,11 +21,11 @@ public class DrawData {
         texture = new TextureRegion(Assets.getTexture(assetType, classType));
     }
 
-    public DrawData(String name) { //Weapon
+    public DrawData(AssetType assetType, String name) { //Weapon / Armor
         this.type = null;
         setScaleFactor(new Vector2(1, 1));
         setRotationAngle(0);
-        texture = new TextureRegion(Assets.getTexture(AssetType.WEAPON, name));
+        texture = new TextureRegion(Assets.getTexture(assetType, name));
     }
 
     public DrawData(String name, float rotationAngle) {
