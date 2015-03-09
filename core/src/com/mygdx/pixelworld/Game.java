@@ -38,7 +38,7 @@ public class Game extends ApplicationAdapter implements InputProcessor {
         Assets.init();
         Constants.init();
         map = new Map();
-        map.generateEnemies(25);
+        map.generateEnemies(1);
         player = new Wizard();
         Gdx.input.setInputProcessor(this);
         shapeRenderer = new ShapeRenderer();

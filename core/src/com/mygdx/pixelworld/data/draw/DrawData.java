@@ -53,7 +53,9 @@ public class DrawData {
     }
 
     public void draw(SpriteBatch batch, Vector2 absolutePosition) {
-        //TODO draw only if inScreen
+        if (absolutePosition.x + getWidth() < 0 || absolutePosition.x > Map.getWidth() ||
+                absolutePosition.y + getHeight() < 0 || absolutePosition.y > Map.getHeight()) return;
+
         batch.draw(texture, getEffectivePosition(absolutePosition).x, getEffectivePosition(absolutePosition).y, getOriginCenter().x,
                 getOriginCenter().y, getWidth(), getHeight(), scaleFactor.x, scaleFactor.y, rotationAngle);
     }

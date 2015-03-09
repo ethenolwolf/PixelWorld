@@ -31,7 +31,7 @@ public class Assets {
         font = TrueTypeFontFactory.createBitmapFont(Gdx.files.internal("core/assets/Ubuntu-MI.ttf"), Constants.FONT_CHARACTERS, 20f, 20f, 1.0f, Constants.gameWidth, Constants.gameHeight);
         font.setColor(1f, 1f, 1f, 1f);
 
-        BACKGROUND_TEX = new Texture("core/assets/background.jpg");
+        BACKGROUND_TEX = new Texture("core/assets/background.png");
         PANEL_TEX = new Texture("core/assets/panel.png");
         Logger.log("[Assets.init()] Init complete.");
     }
