@@ -1,5 +1,6 @@
 package com.mygdx.pixelworld.data.utilities;
 
+import com.mygdx.pixelworld.data.classes.Ninja;
 import com.mygdx.pixelworld.data.classes.Wizard;
 import com.mygdx.pixelworld.data.enemies.Blocker;
 import com.mygdx.pixelworld.data.weapons.WeaponStats;
@@ -44,6 +45,17 @@ public class Constants {
                 15, //wis
                 3, //vit
                 7, //atk
+                0  //def
+        ));
+
+        initStats.put(Ninja.class, new EntityStats(
+                100, //health
+                100, //mana
+                50, //spd
+                95, //dex
+                80, //wis
+                3, //vit
+                2, //atk
                 0  //def
         ));
 

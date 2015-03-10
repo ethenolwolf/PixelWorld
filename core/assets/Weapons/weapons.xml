@@ -17,4 +17,12 @@
         <Speed>420</Speed>
         <Class>Wizard</Class>
     </Weapon>
+    <Weapon>
+        <Name>glassShuricken</Name>
+        <Rank>1</Rank>
+        <Damage>25</Damage>
+        <Range>300</Range>
+        <Speed>600</Speed>
+        <Class>Ninja</Class>
+    </Weapon>
 </Weapons>

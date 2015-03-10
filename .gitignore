@@ -1,6 +1,5 @@
 ## Java
 
-*.class
 *.war
 *.ear
 hs_err_pid*
@@ -28,6 +27,7 @@ android/gen/
 *.iml
 out/
 com_crashlytics_export_strings.xml
+*.jar
 
 ## Eclipse
 .classpath
@@ -58,7 +58,6 @@ nb-configuration.xml
 
 .gradle
 gradle-app.setting
-build/
 
 ## OS Specific
 .DS_Store

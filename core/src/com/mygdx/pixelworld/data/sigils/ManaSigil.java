@@ -23,6 +23,12 @@ public abstract class ManaSigil implements Damaging {
         }
     }
 
+    public static ManaSigil getInitial(Player player) {
+        if (player.getClass().toString().contains("Wizard")) return new PowerShock();
+        if (player.getClass().toString().contains("Ninja")) return new InvisibleCloak(player);
+        return null;
+    }
+
     public abstract void update();
 
     public abstract boolean checkIfInside(Enemy e);

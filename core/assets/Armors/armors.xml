@@ -6,4 +6,11 @@
         <Defense>5</Defense>
         <Class>Wizard</Class>
     </Armor>
+
+    <Armor>
+        <Name>leatherArmor</Name>
+        <Rank>1</Rank>
+        <Defense>5</Defense>
+        <Class>Ninja</Class>
+    </Armor>
 </Armors>

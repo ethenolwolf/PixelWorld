@@ -7,7 +7,6 @@ import com.mygdx.pixelworld.Game;
 import com.mygdx.pixelworld.data.assets.AssetType;
 import com.mygdx.pixelworld.data.assets.Assets;
 import com.mygdx.pixelworld.data.classes.Player;
-import com.mygdx.pixelworld.data.classes.Wizard;
 import com.mygdx.pixelworld.data.draw.Bullet;
 import com.mygdx.pixelworld.data.draw.DrawHitValue;
 import com.mygdx.pixelworld.data.enemies.Blocker;
@@ -59,7 +58,7 @@ public class Map {
         while (bulletIterator.hasNext()) {
             Bullet b = bulletIterator.next();
             b.update();
-            if (b.getType() == Wizard.class) {
+            if (b.isPlayer()) {
                 enemyIterator = enemies.listIterator();
                 while (enemyIterator.hasNext()) {
                     Enemy e = enemyIterator.next();

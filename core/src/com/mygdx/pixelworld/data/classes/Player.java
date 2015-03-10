@@ -10,7 +10,6 @@ import com.mygdx.pixelworld.Game;
 import com.mygdx.pixelworld.data.Entity;
 import com.mygdx.pixelworld.data.armors.Armor;
 import com.mygdx.pixelworld.data.assets.AssetType;
-import com.mygdx.pixelworld.data.assets.SigilName;
 import com.mygdx.pixelworld.data.draw.Bullet;
 import com.mygdx.pixelworld.data.draw.DrawData;
 import com.mygdx.pixelworld.data.enemies.Enemy;
@@ -40,7 +39,18 @@ public abstract class Player extends Entity {
         fireManager = new FireManager();
         weapon = new Weapon(this.getClass(), 1);
         armor = new Armor(this.getClass(), 1);
-        manaSigil = ManaSigil.getFromName(SigilName.invisibleCloack, this);
+
+        manaSigil = ManaSigil.getInitial(this);
+    }
+
+    public static Player getPlayer(GameClasses name) {
+        switch (name) {
+            case WIZARD:
+                return new Wizard();
+            case NINJA:
+                return new Ninja();
+        }
+        return null;
     }
 
     public void update(Map map) {

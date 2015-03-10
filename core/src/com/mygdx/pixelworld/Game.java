@@ -9,8 +9,8 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.mygdx.pixelworld.GUI.GUI;
 import com.mygdx.pixelworld.GUI.Map;
 import com.mygdx.pixelworld.data.assets.Assets;
+import com.mygdx.pixelworld.data.classes.GameClasses;
 import com.mygdx.pixelworld.data.classes.Player;
-import com.mygdx.pixelworld.data.classes.Wizard;
 import com.mygdx.pixelworld.data.utilities.Constants;
 
 /**
@@ -39,7 +39,7 @@ public class Game extends ApplicationAdapter implements InputProcessor {
         Constants.init();
         map = new Map();
         map.generateEnemies(25);
-        player = new Wizard();
+        player = Player.getPlayer(GameClasses.NINJA);
         Gdx.input.setInputProcessor(this);
         shapeRenderer = new ShapeRenderer();
     }

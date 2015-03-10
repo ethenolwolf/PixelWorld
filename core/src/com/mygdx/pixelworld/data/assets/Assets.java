@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.stbtt.TrueTypeFontFactory;
 import com.mygdx.pixelworld.GUI.Logger;
+import com.mygdx.pixelworld.data.classes.Ninja;
 import com.mygdx.pixelworld.data.classes.Wizard;
 import com.mygdx.pixelworld.data.enemies.Blocker;
 import com.mygdx.pixelworld.data.utilities.Constants;
@@ -23,7 +24,8 @@ public class Assets {
 
     public static void init() {
         Logger.log("[Assets.init()] Initializing...");
-        CHARACTER_TEX.put(Wizard.class, new Texture("core/assets/Characters/ninja.png"));
+        CHARACTER_TEX.put(Wizard.class, new Texture("core/assets/Characters/wizard.png"));
+        CHARACTER_TEX.put(Ninja.class, new Texture("core/assets/Characters/ninja.png"));
         CHARACTER_TEX.put(Blocker.class, new Texture("core/assets/Enemies/blocker.png"));
 
         MANA_TEX.put(Wizard.class, new Texture("core/assets/Mana/wizard.gif"));

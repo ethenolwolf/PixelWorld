@@ -12,7 +12,7 @@ public class Bullet implements Damaging {
     private final Vector2 startPoint;
     private final Vector2 direction;
     private final int range;
-    private final Class type;
+    private final boolean isPlayer;
     private final int speed;
     private final int damage;
     private final Vector2 pos;
@@ -20,9 +20,11 @@ public class Bullet implements Damaging {
     private boolean alive = true;
 
     public Bullet(Vector2 startingPos, Vector2 endingPos, EntityStats es, WeaponStats ws) {
+        //TODO autoSpin if enabled
         this.startPoint = new Vector2(startingPos);
         this.direction = new Vector2(endingPos.x - startingPos.x, endingPos.y - startingPos.y).nor();
-        this.type = ws.getType();
+        System.out.println(ws.getType().toString());
+        isPlayer = ws.getType().toString().contains("classes"); //If it's a player it's in package classes
         this.pos = new Vector2(startingPos);
         img = new DrawData(ws.getName(), direction.angle());
         this.damage = (int) (ws.getDamage() + es.get(StatType.ATK));
@@ -59,8 +61,8 @@ public class Bullet implements Damaging {
         return damage;
     }
 
-    public Class getType() {
-        return type;
+    public boolean isPlayer() {
+        return isPlayer;
     }
 
     public BoundingCircle getBoundingCircle() {
