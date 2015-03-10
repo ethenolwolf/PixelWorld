@@ -7,6 +7,7 @@
         <Range>400</Range>
         <Speed>400</Speed>
         <Class>Wizard</Class>
+        <Rotation>0</Rotation>
     </Weapon>
 
     <Weapon>
@@ -16,13 +17,15 @@
         <Range>420</Range>
         <Speed>420</Speed>
         <Class>Wizard</Class>
+        <Rotation>0</Rotation>
     </Weapon>
     <Weapon>
         <Name>glassShuricken</Name>
         <Rank>1</Rank>
         <Damage>25</Damage>
         <Range>300</Range>
-        <Speed>600</Speed>
+        <Speed>300</Speed>
         <Class>Ninja</Class>
+        <Rotation>1000</Rotation>
     </Weapon>
 </Weapons>

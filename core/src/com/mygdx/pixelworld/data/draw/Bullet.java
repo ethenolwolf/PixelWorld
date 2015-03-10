@@ -14,6 +14,7 @@ public class Bullet implements Damaging {
     private final int range;
     private final boolean isPlayer;
     private final int speed;
+    private final float rotationSpeed;
     private final int damage;
     private final Vector2 pos;
     private final DrawData img;
@@ -30,6 +31,7 @@ public class Bullet implements Damaging {
         this.damage = (int) (ws.getDamage() + es.get(StatType.ATK));
         this.range = ws.getRange();
         this.speed = ws.getSpeed();
+        this.rotationSpeed = ws.getRotationSpeed();
     }
 
     public void update() {
@@ -46,6 +48,7 @@ public class Bullet implements Damaging {
     private void move() {
         float movement = Game.deltaTime * speed;
         pos.add(direction.x * movement, direction.y * movement);
+        img.addRotationAngle(rotationSpeed * Game.deltaTime);
     }
 
     public void draw(SpriteBatch batch) {

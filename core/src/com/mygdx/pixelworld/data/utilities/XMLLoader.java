@@ -47,9 +47,10 @@ public class XMLLoader {
                     int damage = getIntValue(el, "Damage");
                     int range = getIntValue(el, "Range");
                     int speed = getIntValue(el, "Speed");
+                    float rotationAngle = getFloatValue(el, "Rotation");
                     String type = getTextValue(el, "Class");
                     if (playerClass.toString().contains(type) && rank == requiredRank)
-                        return new WeaponStats(playerClass, name, damage, range, speed);
+                        return new WeaponStats(playerClass, name, damage, range, speed, rotationAngle);
                 }
             }
         } catch (ParserConfigurationException pce) {
@@ -64,6 +65,10 @@ public class XMLLoader {
         }
         Logger.log("[XMLLoader.retrieve()] Weapon not found. Class:" + playerClass.toString() + " and rank " + requiredRank);
         return null;
+    }
+
+    private static float getFloatValue(Element el, String tagName) {
+        return Float.parseFloat(getTextValue(el, tagName));
     }
 
 

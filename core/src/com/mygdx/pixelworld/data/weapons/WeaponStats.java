@@ -6,23 +6,16 @@ public class WeaponStats {
     private final int speed;
     private final Class type;
     private final String name;
-
-    //Enemies stats constructor
-    public WeaponStats(Class type, int damage, int range, int speed, String name) {
-        this.type = type;
-        this.damage = damage;
-        this.range = range;
-        this.speed = speed;
-        this.name = name;
-    }
+    private final float rotationSpeed;
 
     //Player constructor
-    public WeaponStats(Class playerClass, String name, int damage, int range, int speed) {
+    public WeaponStats(Class playerClass, String name, int damage, int range, int speed, float rotationSpeed) {
         this.type = playerClass;
         this.damage = damage;
         this.range = range;
         this.speed = speed;
         this.name = name;
+        this.rotationSpeed = rotationSpeed;
     }
 
     public int getDamage() {
@@ -43,5 +36,9 @@ public class WeaponStats {
 
     public String getName() {
         return name;
+    }
+
+    public float getRotationSpeed() {
+        return rotationSpeed;
     }
 }

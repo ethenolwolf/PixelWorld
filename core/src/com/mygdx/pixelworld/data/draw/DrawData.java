@@ -97,4 +97,8 @@ public class DrawData {
     void setScaleFactor(Vector2 scaleFactor) {
         this.scaleFactor = scaleFactor;
     }
+
+    public void addRotationAngle(float v) {
+        rotationAngle += v;
+    }
 }

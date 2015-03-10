@@ -31,10 +31,11 @@ public class Constants {
 
     public static void init() {
         enemyStats.put(Blocker.class, new WeaponStats(Blocker.class,
+                "blocker", //name
                 10, //dmg
                 400,//range
                 400,//spd
-                "blocker" //name
+                0
         ));
 
         initStats.put(Wizard.class, new EntityStats(
