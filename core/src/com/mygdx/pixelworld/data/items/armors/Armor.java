@@ -1,23 +1,15 @@
-package com.mygdx.pixelworld.data.armors;
-
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.math.Vector2;
+package com.mygdx.pixelworld.data.items.armors;
 import com.mygdx.pixelworld.data.assets.AssetType;
 import com.mygdx.pixelworld.data.draw.DrawData;
-import com.mygdx.pixelworld.data.utilities.Constants;
+import com.mygdx.pixelworld.data.items.Item;
 import com.mygdx.pixelworld.data.utilities.XMLLoader;
 
-public class Armor {
+public class Armor extends Item {
     private final ArmorStats armorStats;
-    private final DrawData img;
 
     public Armor(Class playerClass, int rank) {
         armorStats = XMLLoader.retrieveArmor(playerClass, rank);
         img = new DrawData(AssetType.ARMOR, armorStats.getName());
-    }
-
-    public void draw(SpriteBatch batch) {
-        img.drawEffective(batch, new Vector2(Constants.gameWidth + 50, 300));
     }
 
     public int getDefense() {

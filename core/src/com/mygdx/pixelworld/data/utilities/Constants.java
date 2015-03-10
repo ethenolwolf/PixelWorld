@@ -3,7 +3,7 @@ package com.mygdx.pixelworld.data.utilities;
 import com.mygdx.pixelworld.data.classes.Ninja;
 import com.mygdx.pixelworld.data.classes.Wizard;
 import com.mygdx.pixelworld.data.enemies.Blocker;
-import com.mygdx.pixelworld.data.weapons.WeaponStats;
+import com.mygdx.pixelworld.data.items.weapons.WeaponStats;
 
 import java.util.ArrayList;
 import java.util.HashMap;

@@ -8,15 +8,18 @@ import com.mygdx.pixelworld.GUI.Logger;
 import com.mygdx.pixelworld.GUI.Map;
 import com.mygdx.pixelworld.Game;
 import com.mygdx.pixelworld.data.Entity;
-import com.mygdx.pixelworld.data.armors.Armor;
 import com.mygdx.pixelworld.data.assets.AssetType;
 import com.mygdx.pixelworld.data.draw.Bullet;
 import com.mygdx.pixelworld.data.draw.DrawData;
 import com.mygdx.pixelworld.data.enemies.Enemy;
+import com.mygdx.pixelworld.data.items.Item;
+import com.mygdx.pixelworld.data.items.ItemType;
+import com.mygdx.pixelworld.data.items.armors.Armor;
+import com.mygdx.pixelworld.data.items.weapons.Weapon;
 import com.mygdx.pixelworld.data.sigils.ManaSigil;
 import com.mygdx.pixelworld.data.utilities.*;
-import com.mygdx.pixelworld.data.weapons.Weapon;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static com.mygdx.pixelworld.data.utilities.Directions.*;
@@ -25,22 +28,25 @@ public abstract class Player extends Entity {
 
     private final String name;
     private final FireManager fireManager;
-    private final Weapon weapon;
     private final Armor armor;
     private final ManaSigil manaSigil;
+    private final List<Item> inventory = new ArrayList<Item>();
+    private Weapon weapon;
     private int experience = 0;
     private int level = 1;
-
     Player() {
         this.name = NameExtractor.extract();
-        this.pos = new Vector2(580, 0);
+        this.pos = new Vector2(280, 0);
         img = new DrawData(AssetType.CHARACTER, this.getClass(), new Vector2(1, 1), 0);
         stats = new EntityStats(this.getClass());
         fireManager = new FireManager();
-        weapon = new Weapon(this.getClass(), 1);
-        armor = new Armor(this.getClass(), 1);
-
+        weapon = (Weapon) equipItem(ItemType.WEAPON, 1);
+        armor = (Armor) equipItem(ItemType.ARMOR, 1);
         manaSigil = ManaSigil.getInitial(this);
+
+        inventory.add(new Weapon(Wizard.class, 2));
+        inventory.add(new Weapon(Wizard.class, 1));
+        inventory.add(new Armor(Wizard.class, 1));
     }
 
     public static Player getPlayer(GameClasses name) {
@@ -49,6 +55,24 @@ public abstract class Player extends Entity {
                 return new Wizard();
             case NINJA:
                 return new Ninja();
+        }
+        return null;
+    }
+
+    public List<Item> getInventory() {
+        return inventory;
+    }
+
+    private Item equipItem(ItemType itemType, int rank) {
+        switch (itemType) {
+            case WEAPON:
+                Weapon w = new Weapon(this.getClass(), rank);
+                w.setSlotPosition(1);
+                return w;
+            case ARMOR:
+                Armor a = new Armor(this.getClass(), 1);
+                a.setSlotPosition(2);
+                return a;
         }
         return null;
     }
@@ -95,8 +119,6 @@ public abstract class Player extends Entity {
     @Override
     public void draw(SpriteBatch batch) {
         img.draw(batch, pos, stats.isVisible() ? 1f : 0.5f);
-        if (weapon != null) weapon.draw(batch);
-        if (armor != null) armor.draw(batch);
         manaSigil.draw(batch);
         img.write(batch, name, Constants.gameWidth + 10, Constants.gameHeight - 50);
     }
@@ -151,7 +173,6 @@ public abstract class Player extends Entity {
     }
 
     public void addExperience(int experience) {
-        Logger.log("[Player.addExp()] Gained " + experience + " experience!");
         this.experience += experience;
         int level = 1;
         for (Integer threshold : Constants.levelUpValues) {

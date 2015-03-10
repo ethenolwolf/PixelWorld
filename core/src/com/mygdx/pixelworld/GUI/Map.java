@@ -11,10 +11,10 @@ import com.mygdx.pixelworld.data.draw.Bullet;
 import com.mygdx.pixelworld.data.draw.DrawHitValue;
 import com.mygdx.pixelworld.data.enemies.Blocker;
 import com.mygdx.pixelworld.data.enemies.Enemy;
+import com.mygdx.pixelworld.data.items.weapons.WeaponStats;
 import com.mygdx.pixelworld.data.utilities.Constants;
 import com.mygdx.pixelworld.data.utilities.EntityStats;
 import com.mygdx.pixelworld.data.utilities.StatType;
-import com.mygdx.pixelworld.data.weapons.WeaponStats;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -3,7 +3,7 @@ package com.mygdx.pixelworld.data.utilities;
 import com.badlogic.gdx.math.Vector2;
 import com.mygdx.pixelworld.GUI.Map;
 import com.mygdx.pixelworld.Game;
-import com.mygdx.pixelworld.data.weapons.WeaponStats;
+import com.mygdx.pixelworld.data.items.weapons.WeaponStats;
 
 public class FireManager {
 

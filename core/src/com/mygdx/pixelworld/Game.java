@@ -42,6 +42,7 @@ public class Game extends ApplicationAdapter implements InputProcessor {
         player = Player.getPlayer(GameClasses.NINJA);
         Gdx.input.setInputProcessor(this);
         shapeRenderer = new ShapeRenderer();
+        GUI.init(batch, player);
     }
 
     /**
@@ -58,7 +59,7 @@ public class Game extends ApplicationAdapter implements InputProcessor {
         batch.begin();
         map.draw(batch);
         player.draw(batch);
-        GUI.draw(batch, player);
+        GUI.draw();
         batch.end();
 
         map.shapeDraw(shapeRenderer, player);

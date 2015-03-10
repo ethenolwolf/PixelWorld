@@ -1,16 +1,13 @@
-package com.mygdx.pixelworld.data.weapons;
+package com.mygdx.pixelworld.data.items.weapons;
 
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.math.Vector2;
 import com.mygdx.pixelworld.data.assets.AssetType;
 import com.mygdx.pixelworld.data.draw.DrawData;
 import com.mygdx.pixelworld.data.enemies.Enemy;
-import com.mygdx.pixelworld.data.utilities.Constants;
+import com.mygdx.pixelworld.data.items.Item;
 import com.mygdx.pixelworld.data.utilities.XMLLoader;
 
-public class Weapon {
+public class Weapon extends Item {
     private final WeaponStats weaponStats;
-    private final DrawData img;
 
     public Weapon(Class playerClass, int rank) {
         weaponStats = XMLLoader.retrieveWeapon(playerClass, rank);
@@ -21,10 +18,5 @@ public class Weapon {
 
     public WeaponStats getStats() {
         return weaponStats;
-    }
-
-    public void draw(SpriteBatch batch) {
-        if (img == null) return;
-        img.drawEffective(batch, new Vector2(Constants.gameWidth + 20, 300));
     }
 }

@@ -1,8 +1,8 @@
 package com.mygdx.pixelworld.data.utilities;
 
 import com.mygdx.pixelworld.GUI.Logger;
-import com.mygdx.pixelworld.data.armors.ArmorStats;
-import com.mygdx.pixelworld.data.weapons.WeaponStats;
+import com.mygdx.pixelworld.data.items.armors.ArmorStats;
+import com.mygdx.pixelworld.data.items.weapons.WeaponStats;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;

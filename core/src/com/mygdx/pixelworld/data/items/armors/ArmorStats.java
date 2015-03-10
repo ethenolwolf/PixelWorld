@@ -1,4 +1,4 @@
-package com.mygdx.pixelworld.data.armors;
+package com.mygdx.pixelworld.data.items.armors;
 
 public class ArmorStats {
     private final String name;

@@ -1,4 +1,4 @@
-package com.mygdx.pixelworld.data.weapons;
+package com.mygdx.pixelworld.data.items.weapons;
 
 public class WeaponStats {
     private final int damage;
