@@ -4,7 +4,9 @@ import com.mygdx.pixelworld.data.classes.Wizard;
 import com.mygdx.pixelworld.data.enemies.Blocker;
 import com.mygdx.pixelworld.data.weapons.WeaponStats;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -21,6 +23,7 @@ public class Constants {
     public static final float Y_LIMIT_MAX = 0.30f;
     public static final Map<Class, EntityStats> initStats = new HashMap<Class, EntityStats>();
     public static final Map<Class, WeaponStats> enemyStats = new HashMap<Class, WeaponStats>();
+    public static final List<Integer> levelUpValues = new ArrayList<Integer>();
     public static final float gameWidth = 640;
     public static final float gameHeight = 480;
     public static final float panelWidth = 160;
@@ -54,5 +57,11 @@ public class Constants {
                 0, //atk
                 5  //def
         ));
+
+        levelUpValues.add(50);
+        levelUpValues.add(200);
+        levelUpValues.add(500);
+        levelUpValues.add(1500);
+        levelUpValues.add(5000);
     }
 }

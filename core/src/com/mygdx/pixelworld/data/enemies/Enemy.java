@@ -13,11 +13,12 @@ import com.mygdx.pixelworld.data.utilities.EntityStats;
 
 public abstract class Enemy extends Entity {
 
-    int ATTACK_RANGE;
+    protected int ATTACK_RANGE;
+    protected int EXPERIENCE;
 
     public Enemy(float x, float y, Class type) {
         pos = new Vector2(x, y);
-        img = new DrawData(AssetType.CHARACTER, type, new Vector2(1,1), 0);
+        img = new DrawData(AssetType.CHARACTER, type, new Vector2(1, 1), 0);
         stats = new EntityStats(this.getClass());
     }
 
@@ -48,5 +49,9 @@ public abstract class Enemy extends Entity {
 
     public BoundingCircle getBoundingCircle() {
         return img.getBoundingCircle(pos);
+    }
+
+    public int getExperience() {
+        return EXPERIENCE;
     }
 }

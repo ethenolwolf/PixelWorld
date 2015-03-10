@@ -29,6 +29,8 @@ public abstract class Player extends Entity {
     private final Weapon weapon;
     private final Armor armor;
     private final ManaSigil manaSigil;
+    private int experience = 0;
+    private int level = 1;
 
     Player() {
         this.name = NameExtractor.extract();
@@ -47,7 +49,6 @@ public abstract class Player extends Entity {
         else if (Gdx.input.isKeyPressed(Keys.D)) move(RIGHT);
         if (Gdx.input.isKeyPressed(Keys.S)) move(DOWN);
         else if (Gdx.input.isKeyPressed(Keys.W)) move(UP);
-
 
 
         fireManager.updateFire(pos, stats, map, weapon.getStats());
@@ -137,5 +138,16 @@ public abstract class Player extends Entity {
 
     public Armor getArmor() {
         return armor;
+    }
+
+    public void addExperience(int experience) {
+        Logger.log("[Player.addExp()] Gained " + experience + " experience!");
+        this.experience += experience;
+        int level = 1;
+        for (Integer threshold : Constants.levelUpValues) {
+            if (this.experience > threshold) level++;
+        }
+        if (level != this.level) Logger.log("[Player.addExp()] Level UP! Level=" + level);
+        this.level = level;
     }
 }

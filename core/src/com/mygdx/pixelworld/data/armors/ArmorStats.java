@@ -1,4 +1,3 @@
-
 package com.mygdx.pixelworld.data.armors;
 
 public class ArmorStats {

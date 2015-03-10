@@ -49,7 +49,10 @@ public class Map {
         while (enemyIterator.hasNext()) {
             Enemy e = enemyIterator.next();
             e.update(player, this);
-            if (!e.isAlive()) enemyIterator.remove();
+            if (!e.isAlive()) {
+                player.addExperience(e.getExperience());
+                enemyIterator.remove();
+            }
         }
 
         ListIterator<Bullet> bulletIterator = bullets.listIterator();

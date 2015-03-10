@@ -18,6 +18,7 @@ public class Blocker extends Enemy {
         super(x, y, Blocker.class);
         fireManager = new FireManager();
         ATTACK_RANGE = 400;
+        EXPERIENCE = 3;
     }
 
     @Override
