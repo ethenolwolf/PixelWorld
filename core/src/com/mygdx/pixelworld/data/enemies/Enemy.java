@@ -5,21 +5,40 @@ import com.badlogic.gdx.math.Vector2;
 import com.mygdx.pixelworld.GUI.Map;
 import com.mygdx.pixelworld.data.Entity;
 import com.mygdx.pixelworld.data.assets.AssetType;
+import com.mygdx.pixelworld.data.classes.Ninja;
 import com.mygdx.pixelworld.data.classes.Player;
+import com.mygdx.pixelworld.data.classes.Wizard;
 import com.mygdx.pixelworld.data.draw.BoundingCircle;
 import com.mygdx.pixelworld.data.draw.Bullet;
 import com.mygdx.pixelworld.data.draw.DrawData;
+import com.mygdx.pixelworld.data.items.Item;
+import com.mygdx.pixelworld.data.items.weapons.Weapon;
 import com.mygdx.pixelworld.data.utilities.EntityStats;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 
 public abstract class Enemy extends Entity {
 
     protected int ATTACK_RANGE;
     protected int EXPERIENCE;
+    protected List<Item> dropItems = new ArrayList<Item>();
 
     public Enemy(float x, float y, Class type) {
         pos = new Vector2(x, y);
         img = new DrawData(AssetType.CHARACTER, type, new Vector2(1, 1), 0);
         stats = new EntityStats(this.getClass());
+        calculateDropItems();
+    }
+
+    private void calculateDropItems() {
+        Random rand = new Random();
+        int k = rand.nextInt(10);
+        if (k > 3) dropItems.add(new Weapon(Ninja.class, 1));
+        if (k > 5) dropItems.add(new Weapon(Wizard.class, 1));
+        if (k > 8) dropItems.add(new Weapon(Wizard.class, 2));
+
     }
 
     public void update(Player player, Map map) {
@@ -53,5 +72,9 @@ public abstract class Enemy extends Entity {
 
     public int getExperience() {
         return EXPERIENCE;
+    }
+
+    public List<Item> getDropItems() {
+        return dropItems;
     }
 }

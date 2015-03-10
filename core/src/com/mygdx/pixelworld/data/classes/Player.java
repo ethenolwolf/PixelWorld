@@ -34,6 +34,7 @@ public abstract class Player extends Entity {
     private Weapon weapon;
     private int experience = 0;
     private int level = 1;
+
     Player() {
         this.name = NameExtractor.extract();
         this.pos = new Vector2(280, 0);
@@ -46,6 +47,9 @@ public abstract class Player extends Entity {
 
         inventory.add(new Weapon(Wizard.class, 2));
         inventory.add(new Weapon(Wizard.class, 1));
+        inventory.add(new Armor(Wizard.class, 1));
+        inventory.add(new Armor(Wizard.class, 1));
+        inventory.add(new Armor(Wizard.class, 1));
         inventory.add(new Armor(Wizard.class, 1));
     }
 

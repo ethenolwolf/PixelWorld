@@ -11,6 +11,7 @@ import com.mygdx.pixelworld.data.draw.Bullet;
 import com.mygdx.pixelworld.data.draw.DrawHitValue;
 import com.mygdx.pixelworld.data.enemies.Blocker;
 import com.mygdx.pixelworld.data.enemies.Enemy;
+import com.mygdx.pixelworld.data.items.Chest;
 import com.mygdx.pixelworld.data.items.weapons.WeaponStats;
 import com.mygdx.pixelworld.data.utilities.Constants;
 import com.mygdx.pixelworld.data.utilities.EntityStats;
@@ -26,6 +27,7 @@ public class Map {
     private final static Vector2 offset = new Vector2();
     private final List<Enemy> enemies = new ArrayList<Enemy>();
     private final List<Bullet> bullets = new ArrayList<Bullet>();
+    private final List<Chest> chests = new ArrayList<Chest>();
 
     public static Vector2 getOffset() {
         return offset;
@@ -50,6 +52,7 @@ public class Map {
             e.update(player, this);
             if (!e.isAlive()) {
                 player.addExperience(e.getExperience());
+                chests.add(new Chest(e.getDropItems(), e.getPos()));
                 enemyIterator.remove();
             }
         }
@@ -104,6 +107,7 @@ public class Map {
         batch.draw(Assets.getTexture(AssetType.BACKGROUND, Map.class), offset.x, offset.y);
         for (Enemy e : enemies) e.draw(batch);
         for (Bullet b : bullets) b.draw(batch);
+        for (Chest c : chests) c.draw(batch);
         DrawHitValue.draw(batch);
     }
 

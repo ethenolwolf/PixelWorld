@@ -21,6 +21,7 @@ public class Assets {
     private static BitmapFont font;
     private static Texture BACKGROUND_TEX;
     private static Texture PANEL_TEX;
+    private static Texture chest_texture;
 
     public static void init() {
         Logger.log("[Assets.init()] Initializing...");
@@ -35,6 +36,7 @@ public class Assets {
 
         BACKGROUND_TEX = new Texture("core/assets/background.png");
         PANEL_TEX = new Texture("core/assets/panel.png");
+        chest_texture = new Texture("core/assets/chest.png");
         Logger.log("[Assets.init()] Init complete.");
     }
 
@@ -56,6 +58,9 @@ public class Assets {
             case BACKGROUND:
                 if (BACKGROUND_TEX != null) return BACKGROUND_TEX;
                 break;
+            case CHEST:
+                if (chest_texture != null) return chest_texture;
+                break;
             case PANEL:
                 if (PANEL_TEX != null) return PANEL_TEX;
             case CHARACTER:
@@ -71,5 +76,9 @@ public class Assets {
 
     public static void write(SpriteBatch batch, String name, float x, float y) {
         font.draw(batch, name, x, y);
+    }
+
+    public static Texture getChestTexture() {
+        return chest_texture;
     }
 }

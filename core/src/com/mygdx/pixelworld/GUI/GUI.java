@@ -29,7 +29,7 @@ public class GUI {
     private static void drawInventory() {
         List<Item> inv = player.getInventory();
         for (int i = 0; i < inv.size(); i++) {
-            inv.get(i).getImg().drawEffective(batch, new Vector2(Constants.gameWidth + 20 + i * 30, 100));
+            inv.get(i).getImg().drawEffective(batch, new Vector2(Constants.gameWidth + 20 + (i % 4) * 30, 100 - 30 * (i / 4)));
         }
     }
 
