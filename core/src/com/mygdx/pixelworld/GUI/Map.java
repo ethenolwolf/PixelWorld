@@ -24,6 +24,7 @@ import java.util.Random;
 
 public class Map {
 
+
     private final static Vector2 offset = new Vector2();
     private final List<Enemy> enemies = new ArrayList<Enemy>();
     private final List<Bullet> bullets = new ArrayList<Bullet>();
