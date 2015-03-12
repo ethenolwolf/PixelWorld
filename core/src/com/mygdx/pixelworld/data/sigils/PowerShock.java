@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.mygdx.pixelworld.GUI.Logger;
 import com.mygdx.pixelworld.GUI.Map;
+import com.mygdx.pixelworld.data.assets.SigilName;
 import com.mygdx.pixelworld.data.draw.BoundingCircle;
 import com.mygdx.pixelworld.data.enemies.Enemy;
 
@@ -22,6 +23,8 @@ public class PowerShock extends ManaSigil {
         damage = 100;
         price = 40;
         texture = new TextureRegion(new Texture("core/assets/Mana/powerShock.png"));
+        name = SigilName.powerShock;
+        empty = false;
     }
 
     @Override

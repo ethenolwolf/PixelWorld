@@ -18,6 +18,7 @@ public class Assets {
 
     private static final Map<Class, Texture> CHARACTER_TEX = new HashMap<Class, Texture>();
     private static final Map<Class, Texture> MANA_TEX = new HashMap<Class, Texture>();
+    private static final Map<Class, Texture> SIGIL_TEX = new HashMap<Class, Texture>();
     private static BitmapFont font;
     private static Texture BACKGROUND_TEX;
     private static Texture PANEL_TEX;
@@ -30,6 +31,8 @@ public class Assets {
         CHARACTER_TEX.put(Blocker.class, new Texture("core/assets/Enemies/blocker.png"));
 
         MANA_TEX.put(Wizard.class, new Texture("core/assets/Mana/wizard.gif"));
+
+        SIGIL_TEX.put(Ninja.class, new Texture("core/assets/Sigils/invisibleCloak.png"));
 
         font = TrueTypeFontFactory.createBitmapFont(Gdx.files.internal("core/assets/Ubuntu-MI.ttf"), Constants.FONT_CHARACTERS, 20f, 20f, 1.0f, Constants.gameWidth, Constants.gameHeight);
         font.setColor(1f, 1f, 1f, 1f);
@@ -68,6 +71,9 @@ public class Assets {
                 break;
             case MANA:
                 if (MANA_TEX.get(type) != null) return MANA_TEX.get(type);
+                break;
+            case SIGIL:
+                if (SIGIL_TEX.get(type) != null) return SIGIL_TEX.get(type);
                 break;
         }
         Logger.log("[Assets.getTexture()] Texture not found. AssetType:" + assetType.toString() + " Class:" + type.toString());

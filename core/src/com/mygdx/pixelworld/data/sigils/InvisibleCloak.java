@@ -3,7 +3,10 @@ package com.mygdx.pixelworld.data.sigils;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.mygdx.pixelworld.Game;
+import com.mygdx.pixelworld.data.assets.AssetType;
+import com.mygdx.pixelworld.data.assets.SigilName;
 import com.mygdx.pixelworld.data.classes.Player;
+import com.mygdx.pixelworld.data.draw.DrawData;
 import com.mygdx.pixelworld.data.enemies.Enemy;
 import com.mygdx.pixelworld.data.utilities.EntityStats;
 
@@ -17,6 +20,9 @@ public class InvisibleCloak extends ManaSigil {
         damage = 0;
         price = 70;
         playerStats = player.getStats();
+        name = SigilName.invisibleCloack;
+        img = new DrawData(AssetType.SIGIL, player.getClass(), new Vector2(1, 1), 0);
+        empty = false;
     }
 
     @Override

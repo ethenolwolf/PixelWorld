@@ -12,6 +12,8 @@ import com.mygdx.pixelworld.data.assets.AssetType;
 import com.mygdx.pixelworld.data.draw.Bullet;
 import com.mygdx.pixelworld.data.draw.DrawData;
 import com.mygdx.pixelworld.data.enemies.Enemy;
+import com.mygdx.pixelworld.data.items.Chest;
+import com.mygdx.pixelworld.data.items.EmptyItem;
 import com.mygdx.pixelworld.data.items.Item;
 import com.mygdx.pixelworld.data.items.ItemType;
 import com.mygdx.pixelworld.data.items.armors.Armor;
@@ -19,7 +21,6 @@ import com.mygdx.pixelworld.data.items.weapons.Weapon;
 import com.mygdx.pixelworld.data.sigils.ManaSigil;
 import com.mygdx.pixelworld.data.utilities.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static com.mygdx.pixelworld.data.utilities.Directions.*;
@@ -28,9 +29,9 @@ public abstract class Player extends Entity {
 
     private final String name;
     private final FireManager fireManager;
-    private final Armor armor;
-    private final ManaSigil manaSigil;
-    private final List<Item> inventory = new ArrayList<Item>();
+    private final Item[] inventory = new Item[8];
+    private Armor armor;
+    private ManaSigil manaSigil;
     private Weapon weapon;
     private int experience = 0;
     private int level = 1;
@@ -44,13 +45,10 @@ public abstract class Player extends Entity {
         weapon = (Weapon) equipItem(ItemType.WEAPON, 1);
         armor = (Armor) equipItem(ItemType.ARMOR, 1);
         manaSigil = ManaSigil.getInitial(this);
+        for (int i = 0; i < inventory.length; i++) {
+            inventory[i] = new EmptyItem();
+        }
 
-        inventory.add(new Weapon(Wizard.class, 2));
-        inventory.add(new Weapon(Wizard.class, 1));
-        inventory.add(new Armor(Wizard.class, 1));
-        inventory.add(new Armor(Wizard.class, 1));
-        inventory.add(new Armor(Wizard.class, 1));
-        inventory.add(new Armor(Wizard.class, 1));
     }
 
     public static Player getPlayer(GameClasses name) {
@@ -63,20 +61,16 @@ public abstract class Player extends Entity {
         return null;
     }
 
-    public List<Item> getInventory() {
+    public Item[] getInventory() {
         return inventory;
     }
 
     private Item equipItem(ItemType itemType, int rank) {
         switch (itemType) {
             case WEAPON:
-                Weapon w = new Weapon(this.getClass(), rank);
-                w.setSlotPosition(1);
-                return w;
+                return new Weapon(this.getClass(), rank);
             case ARMOR:
-                Armor a = new Armor(this.getClass(), 1);
-                a.setSlotPosition(2);
-                return a;
+                return new Armor(this.getClass(), rank);
         }
         return null;
     }
@@ -89,12 +83,13 @@ public abstract class Player extends Entity {
         else if (Gdx.input.isKeyPressed(Keys.W)) move(UP);
 
 
-        fireManager.updateFire(pos, stats, map, weapon.getStats());
+        fireManager.updateFire(pos, stats, map, weapon.getStats(), weapon.isEmpty());
         regen();
-        manaSigil.update();
+        if (!manaSigil.isEmpty()) manaSigil.update();
     }
 
     public void manaTrigger() {
+        if (manaSigil.isEmpty()) Logger.log("You must equip a sigil first.");
         if (stats.get(StatType.MANA) >= manaSigil.getPrice()) {
             stats.addStat(StatType.MANA, -manaSigil.getPrice());
             manaSigil.activate(new Vector2(pos));
@@ -184,5 +179,115 @@ public abstract class Player extends Entity {
         }
         if (level != this.level) Logger.log("[Player.addExp()] Level UP! Level=" + level);
         this.level = level;
+    }
+
+    public boolean tryToEquip(Item item) {
+        if (item instanceof Weapon && weapon.isEmpty()) {
+            weapon = (Weapon) item;
+            return true;
+        }
+        if (item instanceof ManaSigil && manaSigil.isEmpty()) {
+            manaSigil = (ManaSigil) item;
+            return true;
+        }
+
+        if (item instanceof Armor && armor.isEmpty()) {
+            armor = (Armor) item;
+            return true;
+        }
+        return false;
+    }
+
+    public void tryToEquip(int inventorySlot) {
+        //equip from inventory to player
+        Logger.log("Trying to equip from inventory. invSlot = " + inventorySlot);
+        if (inventory.length <= inventorySlot) return;
+        Item item = inventory[inventorySlot];
+        if (tryToEquip(item)) inventory[inventorySlot] = new EmptyItem();
+    }
+
+    public void tryToEquip(Chest currentChest, int chestSlot, int equipSlot) {
+        //Equip from chest to player
+        if (inventory.length <= equipSlot) return;
+        Logger.log("Trying to equip from chest. equipSlot = " + equipSlot + " and cheSlot = " + chestSlot);
+        Item item = currentChest.get(chestSlot);
+        if (tryToEquip(item)) currentChest.remove(chestSlot);
+    }
+
+    public void placeInInventory(int equipSlot, int inventorySlot) {
+        if (equipSlot >= 4 || inventorySlot >= inventory.length) return;
+        Logger.log("Trying to place in inventory. equipSlot = " + equipSlot + " and invSlot = " + inventorySlot);
+        if (tryToPlace(getEquipped(equipSlot), inventorySlot)) clearEquipped(equipSlot);
+    }
+
+    private boolean tryToPlace(Item item, int inventorySlot) {
+        if (!isInventoryFree(inventorySlot)) return false;
+        Logger.log("Inventory place is free! Placing.");
+        inventory[inventorySlot] = item;
+        return true;
+    }
+
+    private boolean isInventoryFree(int inventorySlot) {
+        System.out.println("Checking slot number " + inventorySlot + ". This is of type " + inventory[inventorySlot].toString());
+        return inventory[inventorySlot] instanceof EmptyItem;
+    }
+
+    private void clearInventory(int inventorySlot) {
+        Logger.log("Clearing inventory.");
+        inventory[inventorySlot] = new EmptyItem();
+    }
+
+    private Item getEquipped(int equipSlot) {
+        switch (equipSlot) {
+            case 0:
+                return weapon;
+            case 1:
+                return manaSigil;
+            case 2:
+                return armor;
+            default:
+                return null;
+        }
+    }
+
+    private void clearEquipped(int equipSlot) {
+        switch (equipSlot) {
+            case 0:
+                weapon = new Weapon();
+                break;
+            case 1:
+                manaSigil = new ManaSigil();
+                break;
+            case 2:
+                armor = new Armor();
+                break;
+        }
+    }
+
+    public void placeInInventory(Chest chest, int chestSlot, int inventorySlot) {
+        if (chest == null) return;
+        if (chestSlot >= chest.getInventory().length || inventorySlot >= inventory.length) return;
+        if (tryToPlace(chest.get(chestSlot), inventorySlot)) chest.remove(chestSlot);
+    }
+
+    public void swapInventory(int startSlot, int endSlot) {
+        if (startSlot >= inventory.length || endSlot >= inventory.length || startSlot == endSlot) return;
+        if (tryToPlace(inventory[startSlot], endSlot)) clearInventory(startSlot);
+    }
+
+    public void placeInvInChest(Chest chest, int inventorySlot, int chestSlot) {
+        if (chest == null) return;
+        if (chestSlot >= chest.getInventory().length || inventorySlot >= inventory.length) return;
+        if (chest.tryToPlace(inventory[inventorySlot], chestSlot)) clearInventory(inventorySlot);
+    }
+
+    public void placeInChest(Chest chest, int equipSlot, int chestSlot) {
+        if (chest == null) return;
+        if (chestSlot >= chest.getInventory().length || equipSlot >= 4) return;
+        if (chest.tryToPlace(getEquipped(equipSlot), chestSlot)) clearEquipped(equipSlot);
+    }
+
+    public ManaSigil getManaSigil() {
+        return manaSigil;
     }
 }

@@ -58,6 +58,17 @@ public class Map {
             }
         }
 
+        GUI.updateChest(null);
+        ListIterator<Chest> chestIterator = chests.listIterator();
+        while (chestIterator.hasNext()) {
+            Chest c = chestIterator.next();
+            if (c.checkIfInside(player)) GUI.updateChest(c);
+            if (c.isEmpty()) {
+                Logger.log("Removing chest");
+                chestIterator.remove();
+            }
+        }
+
         ListIterator<Bullet> bulletIterator = bullets.listIterator();
         while (bulletIterator.hasNext()) {
             Bullet b = bulletIterator.next();
@@ -80,6 +91,7 @@ public class Map {
 
             if (!b.isAlive()) bulletIterator.remove();
         }
+
 
         player.checkMana(enemies);
         DrawHitValue.update();
@@ -120,16 +132,16 @@ public class Map {
         shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
         //Health bar background
         shapeRenderer.setColor(0.678f, 0.074f, 0.074f, 1.0f);
-        shapeRenderer.rect(Constants.gameWidth + 10, Constants.gameHeight / 2, 140, 20);
+        shapeRenderer.rect(Constants.gameWidth + 10, 300, 140, 20);
         //Health bar
         shapeRenderer.setColor(0.95f, 0.05f, 0.05f, 1.0f);
-        shapeRenderer.rect(Constants.gameWidth + 10, Constants.gameHeight / 2, 140 * player.getHealthPercentage(), 20);
+        shapeRenderer.rect(Constants.gameWidth + 10, 300, 140 * player.getHealthPercentage(), 20);
         //Mana bar background
         shapeRenderer.setColor(0.0f, 0.0f, 0.392f, 1.0f);
-        shapeRenderer.rect(Constants.gameWidth + 10, Constants.gameHeight / 2 - 30, 140, 20);
+        shapeRenderer.rect(Constants.gameWidth + 10, 270, 140, 20);
         //Mana bar
         shapeRenderer.setColor(0.0f, 0.05f, 0.95f, 1.0f);
-        shapeRenderer.rect(Constants.gameWidth + 10, Constants.gameHeight / 2 - 30, 140 * player.getManaPercentage(), 20);
+        shapeRenderer.rect(Constants.gameWidth + 10, 270, 140 * player.getManaPercentage(), 20);
         shapeRenderer.end();
     }
 

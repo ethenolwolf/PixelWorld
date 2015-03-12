@@ -38,7 +38,7 @@ public class Game extends ApplicationAdapter implements InputProcessor {
         Assets.init();
         Constants.init();
         map = new Map();
-        map.generateEnemies(25);
+        map.generateEnemies(5);
         player = Player.getPlayer(GameClasses.NINJA);
         Gdx.input.setInputProcessor(this);
         shapeRenderer = new ShapeRenderer();
@@ -84,8 +84,12 @@ public class Game extends ApplicationAdapter implements InputProcessor {
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
         if (button == Input.Buttons.LEFT) {
-            player.getFireManager().setIsFiring(true);
-            player.getFireManager().setTarget(screenX - Map.getOffset().x, Gdx.graphics.getHeight() - screenY - Map.getOffset().y);
+            if (screenX < Constants.gameWidth) {
+                player.getFireManager().setIsFiring(true);
+                player.getFireManager().setTarget(screenX - Map.getOffset().x, Gdx.graphics.getHeight() - screenY - Map.getOffset().y);
+            } else {
+                GUI.clickDown(screenX, (int) Constants.gameHeight - screenY);
+            }
         }
         return true;
     }
@@ -93,12 +97,14 @@ public class Game extends ApplicationAdapter implements InputProcessor {
     @Override
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
         player.getFireManager().setIsFiring(false);
+        GUI.clickUp(screenX, (int) Constants.gameHeight - screenY);
         return true;
     }
 
     @Override
     public boolean touchDragged(int screenX, int screenY, int pointer) {
         player.getFireManager().setTarget(screenX - Map.getOffset().x, Gdx.graphics.getHeight() - screenY - Map.getOffset().y);
+        GUI.updateMousePosition(screenX, (int) Constants.gameHeight - screenY);
         return true;
     }
 

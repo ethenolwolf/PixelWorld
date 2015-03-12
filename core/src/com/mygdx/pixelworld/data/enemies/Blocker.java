@@ -31,7 +31,7 @@ public class Blocker extends Enemy {
         Algorithms.moveTowards(pos, player.getPos(), stats.get(StatType.SPD) * Game.deltaTime);
         pos = img.boundMap(pos);
         fireManager.setTarget(player.getPos());
-        fireManager.updateFire(pos, stats, map, Constants.enemyStats.get(Blocker.class));
+        fireManager.updateFire(pos, stats, map, Constants.enemyStats.get(Blocker.class), false);
     }
 
     @Override
@@ -46,7 +46,7 @@ public class Blocker extends Enemy {
         pos.add(x * 5, y * 5);
         pos = img.boundMap(pos);
         fireManager.setTarget(player.getPos());
-        fireManager.updateFire(pos, stats, map, Constants.enemyStats.get(Blocker.class));
+        fireManager.updateFire(pos, stats, map, Constants.enemyStats.get(Blocker.class), false);
     }
 
 }

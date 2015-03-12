@@ -18,6 +18,15 @@ public class WeaponStats {
         this.rotationSpeed = rotationSpeed;
     }
 
+    public WeaponStats(WeaponStats stats) {
+        this.type = stats.getType();
+        this.damage = stats.getDamage();
+        this.range = stats.getRange();
+        this.speed = stats.getSpeed();
+        this.name = stats.getName();
+        this.rotationSpeed = stats.getRotationSpeed();
+    }
+
     public int getDamage() {
         return damage;
     }

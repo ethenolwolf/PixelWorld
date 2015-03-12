@@ -1,6 +1,7 @@
 package com.mygdx.pixelworld.data.draw;
 
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
@@ -29,6 +30,12 @@ public class DrawData {
         setScaleFactor(new Vector2(1, 1));
         setRotationAngle(rotationAngle);
         texture = new TextureRegion(Assets.getTexture(AssetType.BULLET, name));
+    }
+
+    public DrawData() {
+        setScaleFactor(new Vector2(1, 1));
+        setRotationAngle(0);
+        texture = new TextureRegion(new Texture("core/assets/placeholder.png"));
     }
 
     float getWidth() {

@@ -4,13 +4,22 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.mygdx.pixelworld.data.assets.SigilName;
 import com.mygdx.pixelworld.data.classes.Player;
+import com.mygdx.pixelworld.data.draw.DrawData;
 import com.mygdx.pixelworld.data.enemies.Enemy;
+import com.mygdx.pixelworld.data.items.Item;
 import com.mygdx.pixelworld.data.utilities.Damaging;
 
-public abstract class ManaSigil implements Damaging {
+public class ManaSigil extends Item implements Damaging {
 
+    protected boolean empty;
     int damage;
     float price;
+    SigilName name;
+
+    public ManaSigil() {
+        img = new DrawData();
+        empty = true;
+    }
 
     public static ManaSigil getFromName(SigilName name, Player player) {
         switch (name) {
@@ -29,13 +38,18 @@ public abstract class ManaSigil implements Damaging {
         return null;
     }
 
-    public abstract void update();
+    public void update() {
+    }
 
-    public abstract boolean checkIfInside(Enemy e);
+    public boolean checkIfInside(Enemy e) {
+        return false;
+    }
 
-    public abstract void activate(Vector2 abs);
+    public void activate(Vector2 abs) {
+    }
 
-    public abstract void draw(SpriteBatch batch);
+    public void draw(SpriteBatch batch) {
+    }
 
     @Override
     public int getDamage() {
@@ -44,5 +58,17 @@ public abstract class ManaSigil implements Damaging {
 
     public float getPrice() {
         return price;
+    }
+
+    public SigilName getName() {
+        return name;
+    }
+
+    public boolean isEmpty() {
+        return empty;
+    }
+
+    public void setEmpty(boolean empty) {
+        this.empty = empty;
     }
 }
