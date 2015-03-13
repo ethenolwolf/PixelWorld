@@ -1,4 +1,4 @@
-package com.mygdx.pixelworld.data;
+package com.mygdx.pixelworld.data.entities;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;

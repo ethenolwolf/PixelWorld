@@ -23,7 +23,7 @@ public class Bullet implements Damaging {
     public Bullet(Vector2 startingPos, Vector2 endingPos, EntityStats es, WeaponStats ws) {
         this.startPoint = new Vector2(startingPos);
         this.direction = new Vector2(endingPos.x - startingPos.x, endingPos.y - startingPos.y).nor();
-        isPlayer = ws.getType().toString().contains("classes"); //If it's a player it's in package classes
+        isPlayer = (ws.getType().getPackage() == Package.getPackage("com.mygdx.pixelworld.data.entities.characters"));
         this.pos = new Vector2(startingPos);
         img = new DrawData(ws.getName(), direction.angle());
         this.damage = (int) (ws.getDamage() + es.get(StatType.ATK));

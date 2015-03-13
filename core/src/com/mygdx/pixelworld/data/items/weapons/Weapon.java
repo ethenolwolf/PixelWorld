@@ -2,11 +2,12 @@ package com.mygdx.pixelworld.data.items.weapons;
 
 import com.mygdx.pixelworld.data.assets.AssetType;
 import com.mygdx.pixelworld.data.draw.DrawData;
-import com.mygdx.pixelworld.data.enemies.Enemy;
+import com.mygdx.pixelworld.data.entities.enemies.Enemy;
+import com.mygdx.pixelworld.data.items.EquipItem;
 import com.mygdx.pixelworld.data.items.Item;
 import com.mygdx.pixelworld.data.utilities.XMLLoader;
 
-public class Weapon extends Item {
+public class Weapon extends Item implements EquipItem {
     private final WeaponStats weaponStats;
     private final boolean isEmpty;
 
@@ -18,15 +19,14 @@ public class Weapon extends Item {
         isEmpty = false;
     }
 
-    public Weapon(Weapon weapon) {
-        weaponStats = new WeaponStats(weapon.getStats());
-        isEmpty = false;
-    }
-
     public Weapon() {
         img = new DrawData();
         weaponStats = null;
         isEmpty = true;
+    }
+
+    public Weapon(Class playerClass) {
+        this(playerClass, 1);
     }
 
     public WeaponStats getStats() {

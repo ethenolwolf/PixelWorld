@@ -1,15 +1,16 @@
-package com.mygdx.pixelworld.data.sigils;
+package com.mygdx.pixelworld.data.items.sigils;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.mygdx.pixelworld.data.assets.SigilName;
-import com.mygdx.pixelworld.data.classes.Player;
 import com.mygdx.pixelworld.data.draw.DrawData;
-import com.mygdx.pixelworld.data.enemies.Enemy;
+import com.mygdx.pixelworld.data.entities.characters.Player;
+import com.mygdx.pixelworld.data.entities.enemies.Enemy;
+import com.mygdx.pixelworld.data.items.EquipItem;
 import com.mygdx.pixelworld.data.items.Item;
 import com.mygdx.pixelworld.data.utilities.Damaging;
 
-public class ManaSigil extends Item implements Damaging {
+public class ManaSigil extends Item implements Damaging, EquipItem {
 
     protected boolean empty;
     int damage;
@@ -19,17 +20,6 @@ public class ManaSigil extends Item implements Damaging {
     public ManaSigil() {
         img = new DrawData();
         empty = true;
-    }
-
-    public static ManaSigil getFromName(SigilName name, Player player) {
-        switch (name) {
-            case powerShock:
-                return new PowerShock();
-            case invisibleCloack:
-                return new InvisibleCloak(player);
-            default:
-                return new PowerShock();
-        }
     }
 
     public static ManaSigil getInitial(Player player) {
@@ -66,9 +56,5 @@ public class ManaSigil extends Item implements Damaging {
 
     public boolean isEmpty() {
         return empty;
-    }
-
-    public void setEmpty(boolean empty) {
-        this.empty = empty;
     }
 }

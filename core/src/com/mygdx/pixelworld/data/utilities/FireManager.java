@@ -1,7 +1,6 @@
 package com.mygdx.pixelworld.data.utilities;
 
 import com.badlogic.gdx.math.Vector2;
-import com.mygdx.pixelworld.GUI.Logger;
 import com.mygdx.pixelworld.GUI.Map;
 import com.mygdx.pixelworld.Game;
 import com.mygdx.pixelworld.data.items.weapons.WeaponStats;
@@ -29,12 +28,8 @@ public class FireManager {
     }
 
 
-    public void updateFire(Vector2 pos, EntityStats entityStats, Map map, WeaponStats stats, boolean isWeaponEmpty) {
+    public void updateFire(Vector2 pos, EntityStats entityStats, Map map, WeaponStats stats) {
         if (!isFiring) return;
-        if (isWeaponEmpty) {
-            Logger.log("You must equip a weapon first.");
-            return;
-        }
         fireDelay -= Game.deltaTime;
         if (fireDelay <= 0) {
             map.fire(pos, target, entityStats, stats);

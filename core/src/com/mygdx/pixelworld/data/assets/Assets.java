@@ -6,9 +6,9 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.stbtt.TrueTypeFontFactory;
 import com.mygdx.pixelworld.GUI.Logger;
-import com.mygdx.pixelworld.data.classes.Ninja;
-import com.mygdx.pixelworld.data.classes.Wizard;
-import com.mygdx.pixelworld.data.enemies.Blocker;
+import com.mygdx.pixelworld.data.entities.characters.Ninja;
+import com.mygdx.pixelworld.data.entities.characters.Wizard;
+import com.mygdx.pixelworld.data.entities.enemies.Blocker;
 import com.mygdx.pixelworld.data.utilities.Constants;
 
 import java.util.HashMap;
@@ -82,9 +82,5 @@ public class Assets {
 
     public static void write(SpriteBatch batch, String name, float x, float y) {
         font.draw(batch, name, x, y);
-    }
-
-    public static Texture getChestTexture() {
-        return chest_texture;
     }
 }

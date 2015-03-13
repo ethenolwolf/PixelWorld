@@ -1,4 +1,4 @@
-package com.mygdx.pixelworld.data.sigils;
+package com.mygdx.pixelworld.data.items.sigils;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -8,7 +8,7 @@ import com.mygdx.pixelworld.GUI.Logger;
 import com.mygdx.pixelworld.GUI.Map;
 import com.mygdx.pixelworld.data.assets.SigilName;
 import com.mygdx.pixelworld.data.draw.BoundingCircle;
-import com.mygdx.pixelworld.data.enemies.Enemy;
+import com.mygdx.pixelworld.data.entities.enemies.Enemy;
 
 import java.util.ArrayList;
 import java.util.List;

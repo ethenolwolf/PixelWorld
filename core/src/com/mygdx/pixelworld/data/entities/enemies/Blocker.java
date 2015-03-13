@@ -1,8 +1,8 @@
-package com.mygdx.pixelworld.data.enemies;
+package com.mygdx.pixelworld.data.entities.enemies;
 
 import com.mygdx.pixelworld.GUI.Map;
 import com.mygdx.pixelworld.Game;
-import com.mygdx.pixelworld.data.classes.Player;
+import com.mygdx.pixelworld.data.entities.characters.Player;
 import com.mygdx.pixelworld.data.utilities.Algorithms;
 import com.mygdx.pixelworld.data.utilities.Constants;
 import com.mygdx.pixelworld.data.utilities.FireManager;
@@ -31,7 +31,7 @@ public class Blocker extends Enemy {
         Algorithms.moveTowards(pos, player.getPos(), stats.get(StatType.SPD) * Game.deltaTime);
         pos = img.boundMap(pos);
         fireManager.setTarget(player.getPos());
-        fireManager.updateFire(pos, stats, map, Constants.enemyStats.get(Blocker.class), false);
+        fireManager.updateFire(pos, stats, map, Constants.enemyStats.get(Blocker.class));
     }
 
     @Override
@@ -46,7 +46,7 @@ public class Blocker extends Enemy {
         pos.add(x * 5, y * 5);
         pos = img.boundMap(pos);
         fireManager.setTarget(player.getPos());
-        fireManager.updateFire(pos, stats, map, Constants.enemyStats.get(Blocker.class), false);
+        fireManager.updateFire(pos, stats, map, Constants.enemyStats.get(Blocker.class));
     }
 
 }

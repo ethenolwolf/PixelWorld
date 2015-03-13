@@ -9,8 +9,8 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.mygdx.pixelworld.GUI.GUI;
 import com.mygdx.pixelworld.GUI.Map;
 import com.mygdx.pixelworld.data.assets.Assets;
-import com.mygdx.pixelworld.data.classes.GameClasses;
-import com.mygdx.pixelworld.data.classes.Player;
+import com.mygdx.pixelworld.data.entities.characters.GameClasses;
+import com.mygdx.pixelworld.data.entities.characters.Player;
 import com.mygdx.pixelworld.data.utilities.Constants;
 
 /**
@@ -29,7 +29,7 @@ public class Game extends ApplicationAdapter implements InputProcessor {
     /**
      * Inits various parts of the program, including batch, map and player.
      *
-     * @see com.mygdx.pixelworld.data.classes.Player
+     * @see com.mygdx.pixelworld.data.entities.characters.Player
      * @see com.mygdx.pixelworld.GUI.Map
      */
     @Override

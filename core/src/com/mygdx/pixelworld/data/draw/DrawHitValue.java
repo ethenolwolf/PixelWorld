@@ -6,7 +6,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.stbtt.TrueTypeFontFactory;
 import com.mygdx.pixelworld.GUI.Logger;
-import com.mygdx.pixelworld.data.Entity;
+import com.mygdx.pixelworld.data.entities.Entity;
 import com.mygdx.pixelworld.data.utilities.Constants;
 
 import java.util.ArrayList;

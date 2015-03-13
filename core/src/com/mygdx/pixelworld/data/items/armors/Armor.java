@@ -1,10 +1,11 @@
 package com.mygdx.pixelworld.data.items.armors;
 import com.mygdx.pixelworld.data.assets.AssetType;
 import com.mygdx.pixelworld.data.draw.DrawData;
+import com.mygdx.pixelworld.data.items.EquipItem;
 import com.mygdx.pixelworld.data.items.Item;
 import com.mygdx.pixelworld.data.utilities.XMLLoader;
 
-public class Armor extends Item {
+public class Armor extends Item implements EquipItem {
     private final boolean empty;
     private ArmorStats armorStats;
 
@@ -14,16 +15,14 @@ public class Armor extends Item {
         empty = false;
     }
 
-    public Armor(Armor armor) {
-        armorStats = new ArmorStats(armor.getName(), armor.getDefense());
-        img = new DrawData(AssetType.ARMOR, armorStats.getName());
-        empty = false;
-    }
-
     public Armor() {
         armorStats = null;
         img = new DrawData();
         empty = true;
+    }
+
+    public Armor(Class playerClass) {
+        this(playerClass, 1);
     }
 
     public int getDefense() {

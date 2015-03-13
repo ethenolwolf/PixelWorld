@@ -1,8 +1,8 @@
 package com.mygdx.pixelworld.data.utilities;
 
 
-import com.mygdx.pixelworld.data.Entity;
 import com.mygdx.pixelworld.data.draw.DrawHitValue;
+import com.mygdx.pixelworld.data.entities.Entity;
 
 import java.util.EnumMap;
 import java.util.Map;

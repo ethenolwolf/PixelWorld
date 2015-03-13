@@ -1,16 +1,16 @@
-package com.mygdx.pixelworld.data.enemies;
+package com.mygdx.pixelworld.data.entities.enemies;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.mygdx.pixelworld.GUI.Map;
-import com.mygdx.pixelworld.data.Entity;
 import com.mygdx.pixelworld.data.assets.AssetType;
-import com.mygdx.pixelworld.data.classes.Ninja;
-import com.mygdx.pixelworld.data.classes.Player;
-import com.mygdx.pixelworld.data.classes.Wizard;
 import com.mygdx.pixelworld.data.draw.BoundingCircle;
 import com.mygdx.pixelworld.data.draw.Bullet;
 import com.mygdx.pixelworld.data.draw.DrawData;
+import com.mygdx.pixelworld.data.entities.Entity;
+import com.mygdx.pixelworld.data.entities.characters.Ninja;
+import com.mygdx.pixelworld.data.entities.characters.Player;
+import com.mygdx.pixelworld.data.entities.characters.Wizard;
 import com.mygdx.pixelworld.data.items.Item;
 import com.mygdx.pixelworld.data.items.weapons.Weapon;
 import com.mygdx.pixelworld.data.utilities.EntityStats;
