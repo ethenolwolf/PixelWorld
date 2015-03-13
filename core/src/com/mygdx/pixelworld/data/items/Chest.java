@@ -2,7 +2,6 @@ package com.mygdx.pixelworld.data.items;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
-import com.mygdx.pixelworld.GUI.Logger;
 import com.mygdx.pixelworld.data.assets.AssetType;
 import com.mygdx.pixelworld.data.draw.DrawData;
 import com.mygdx.pixelworld.data.entities.characters.Player;
@@ -15,7 +14,6 @@ public class Chest extends Item {
 
     public Chest(List<Item> items, Vector2 pos) {
         inventory.fill(items);
-        Logger.log("Chest created with " + items.size() + " items.");
         this.pos = pos;
         img = new DrawData(AssetType.CHEST, null, new Vector2(1, 1), 0);
     }

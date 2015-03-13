@@ -7,11 +7,14 @@ import com.mygdx.pixelworld.data.items.weapons.Weapon;
 
 public class LockedInventory extends Inventory {
 
+    private Class playerClass;
+
     public LockedInventory(Player player) {
         super(4);
         set(new Weapon(player.getClass()), 0);
         set(ManaSigil.getInitial(player), 1);
         set(new Armor(player.getClass()), 2);
+        playerClass = player.getClass();
     }
 
     public Weapon getWeapon() {
@@ -26,7 +29,7 @@ public class LockedInventory extends Inventory {
         return (Armor) get(2);
     }
 
-    protected Item tryReplace(Item item, int slot) {
+    public Item tryReplace(Item item, int slot) {
         if (item instanceof EmptyItem) {
             Item out = get(slot);
             empty(slot);
@@ -48,6 +51,9 @@ public class LockedInventory extends Inventory {
 
             return out;
         }
+
+
+        if (item instanceof EquipItem) if (!(((EquipItem) item).getType() == playerClass)) return null;
         if (item instanceof Weapon) return replace(item, 0);
         if (item instanceof ManaSigil) return replace(item, 1);
         if (item instanceof Armor) return replace(item, 2);

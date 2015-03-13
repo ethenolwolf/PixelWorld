@@ -8,6 +8,7 @@ import com.mygdx.pixelworld.GUI.Logger;
 import com.mygdx.pixelworld.GUI.Map;
 import com.mygdx.pixelworld.data.assets.SigilName;
 import com.mygdx.pixelworld.data.draw.BoundingCircle;
+import com.mygdx.pixelworld.data.entities.characters.Player;
 import com.mygdx.pixelworld.data.entities.enemies.Enemy;
 
 import java.util.ArrayList;
@@ -19,12 +20,13 @@ public class PowerShock extends ManaSigil {
     private final List<PowerShockBlast> blasts = new ArrayList<PowerShockBlast>();
     private final TextureRegion texture;
 
-    public PowerShock() {
+    public PowerShock(Player player) {
         damage = 100;
         price = 40;
         texture = new TextureRegion(new Texture("core/assets/Mana/powerShock.png"));
         name = SigilName.powerShock;
         empty = false;
+        type = player.getClass();
     }
 
     @Override

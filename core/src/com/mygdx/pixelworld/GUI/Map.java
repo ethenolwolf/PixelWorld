@@ -12,6 +12,7 @@ import com.mygdx.pixelworld.data.entities.characters.Player;
 import com.mygdx.pixelworld.data.entities.enemies.Blocker;
 import com.mygdx.pixelworld.data.entities.enemies.Enemy;
 import com.mygdx.pixelworld.data.items.Chest;
+import com.mygdx.pixelworld.data.items.Item;
 import com.mygdx.pixelworld.data.items.weapons.WeaponStats;
 import com.mygdx.pixelworld.data.utilities.Constants;
 import com.mygdx.pixelworld.data.utilities.EntityStats;
@@ -46,6 +47,10 @@ public class Map {
         if (type == Blocker.class) enemies.add(new Blocker(x, y));
     }
 
+    void addChest(List<Item> items, Vector2 pos) {
+        chests.add(new Chest(items, pos));
+    }
+
     public void update(Player player) {
         ListIterator<Enemy> enemyIterator = enemies.listIterator();
         while (enemyIterator.hasNext()) {
@@ -53,7 +58,7 @@ public class Map {
             e.update(player, this);
             if (!e.isAlive()) {
                 player.addExperience(e.getExperience());
-                chests.add(new Chest(e.getDropItems(), e.getPos()));
+                addChest(e.getDropItems(), e.getPos());
                 enemyIterator.remove();
             }
         }
@@ -64,7 +69,6 @@ public class Map {
             Chest c = chestIterator.next();
             if (c.checkIfInside(player)) GUI.updateChest(c);
             if (c.isEmpty()) {
-                Logger.log("Removing chest");
                 chestIterator.remove();
             }
         }

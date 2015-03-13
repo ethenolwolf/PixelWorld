@@ -13,6 +13,7 @@ import com.mygdx.pixelworld.data.utilities.Damaging;
 public class ManaSigil extends Item implements Damaging, EquipItem {
 
     protected boolean empty;
+    protected Class type;
     int damage;
     float price;
     SigilName name;
@@ -23,7 +24,7 @@ public class ManaSigil extends Item implements Damaging, EquipItem {
     }
 
     public static ManaSigil getInitial(Player player) {
-        if (player.getClass().toString().contains("Wizard")) return new PowerShock();
+        if (player.getClass().toString().contains("Wizard")) return new PowerShock(player);
         if (player.getClass().toString().contains("Ninja")) return new InvisibleCloak(player);
         return null;
     }
@@ -56,5 +57,10 @@ public class ManaSigil extends Item implements Damaging, EquipItem {
 
     public boolean isEmpty() {
         return empty;
+    }
+
+    @Override
+    public Class getType() {
+        return type;
     }
 }

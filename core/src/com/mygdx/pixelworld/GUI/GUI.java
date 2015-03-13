@@ -7,9 +7,13 @@ import com.mygdx.pixelworld.data.assets.Assets;
 import com.mygdx.pixelworld.data.draw.BoundingCircle;
 import com.mygdx.pixelworld.data.entities.characters.Player;
 import com.mygdx.pixelworld.data.items.Chest;
+import com.mygdx.pixelworld.data.items.EmptyItem;
 import com.mygdx.pixelworld.data.items.Inventory;
 import com.mygdx.pixelworld.data.items.Item;
 import com.mygdx.pixelworld.data.utilities.Constants;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class GUI {
 
@@ -20,15 +24,17 @@ public class GUI {
     private static final Vector2 mousePosition = new Vector2(0, 0);
     private static SpriteBatch batch;
     private static Player player;
+    private static Map map;
     private static boolean[] isSelected = new boolean[20];
     private static Chest chest = null;
     private static Vector2 mouseCatchOffset = new Vector2(0, 0);
     private static int startSlot;
 
 
-    public static void init(SpriteBatch batch, Player player) {
+    public static void init(SpriteBatch batch, Player player, Map map) {
         GUI.batch = batch;
         GUI.player = player;
+        GUI.map = map;
         for (int i = 0; i < 20; i++) {
             if (i < 4)//Equipped
                 itemPositions[i] = new Vector2(Constants.gameWidth + LEFT_BORDER + SLOT_SIZE * i, 220);
@@ -99,29 +105,44 @@ public class GUI {
     }
 
     public static void clickUp(int screenX, int screenY) {
-        for (int endSlot = 0; endSlot < 20; endSlot++) {
-            Vector2 center = new Vector2(itemPositions[endSlot].x + ITEMS_SIZE / 2, itemPositions[endSlot].y + ITEMS_SIZE / 2);
-            if (!new BoundingCircle(center, ITEMS_SIZE / 2).intersect(new BoundingCircle(new Vector2(screenX, screenY), 1)))
-                continue;
-            // System.out.format("[clickUp] slot %d -> slot %d\n", startSlot, endSlot);
-            if (endSlot < 4) {//Equipped
-                if (startSlot < 4) continue;
-                else if (startSlot < 12) player.equip(player.getInventory(), startSlot - 4);
-                else player.equip(chest.getInventory(), startSlot - 12);
-            } else if (endSlot < 12) //Inventory
-            {
-                if (startSlot < 4) player.unequip(startSlot, player.getInventory(), endSlot - 4);
-                else if (startSlot < 12) player.getInventory().swap(startSlot - 4, endSlot - 4);
-                else Inventory.swap(chest.getInventory(), startSlot - 12, player.getInventory(), endSlot - 4);
-            } else //eventual chest
-            {
-                if (startSlot < 4) player.unequip(startSlot, chest.getInventory(), endSlot - 12);
-                else if (startSlot < 12)
-                    Inventory.swap(player.getInventory(), startSlot - 4, chest.getInventory(), endSlot - 12);
-                else chest.getInventory().swap(startSlot - 12, endSlot - 12);
-            }
 
-            clearSelected();
+        if (screenX >= Constants.gameWidth) {
+            for (int endSlot = 0; endSlot < 20; endSlot++) {
+                Vector2 center = new Vector2(itemPositions[endSlot].x + ITEMS_SIZE / 2, itemPositions[endSlot].y + ITEMS_SIZE / 2);
+                if (!new BoundingCircle(center, ITEMS_SIZE / 2).intersect(new BoundingCircle(new Vector2(screenX, screenY), 1)))
+                    continue;
+
+                if (endSlot < 4) {//Equipped
+                    if (startSlot < 4) continue;
+                    else if (startSlot < 12) player.equip(player.getInventory(), startSlot - 4);
+                    else player.equip(chest.getInventory(), startSlot - 12);
+                } else if (endSlot < 12) //Inventory
+                {
+                    if (startSlot < 4) player.unequip(startSlot, player.getInventory(), endSlot - 4);
+                    else if (startSlot < 12) player.getInventory().swap(startSlot - 4, endSlot - 4);
+                    else Inventory.swap(chest.getInventory(), startSlot - 12, player.getInventory(), endSlot - 4);
+                } else //eventual chest
+                {
+                    if (startSlot < 4) player.unequip(startSlot, chest.getInventory(), endSlot - 12);
+                    else if (startSlot < 12)
+                        Inventory.swap(player.getInventory(), startSlot - 4, chest.getInventory(), endSlot - 12);
+                    else chest.getInventory().swap(startSlot - 12, endSlot - 12);
+                }
+
+                clearSelected();
+            }
+        } else {
+            //Drop down
+            if (!isSelected[startSlot]) return;
+            Item dropItem;
+            if (startSlot < 4) dropItem = player.getEquipped().tryReplace(new EmptyItem(), startSlot);
+            else if (startSlot < 12) dropItem = player.getInventory().replace(new EmptyItem(), startSlot - 4);
+            else dropItem = chest.getInventory().replace(new EmptyItem(), startSlot - 12);
+
+            List<Item> dropList = new ArrayList<Item>();
+            dropList.add(dropItem);
+
+            map.addChest(dropList, player.getPos());
         }
         clearSelected();
     }

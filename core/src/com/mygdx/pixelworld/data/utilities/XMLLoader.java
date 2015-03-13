@@ -90,7 +90,7 @@ public class XMLLoader {
                     int defense = getIntValue(el, "Defense");
                     String type = getTextValue(el, "Class");
                     if (playerClass.toString().contains(type) && rank == requiredRank)
-                        return new ArmorStats(name, defense);
+                        return new ArmorStats(name, defense, playerClass);
                 }
             }
         } catch (ParserConfigurationException pce) {

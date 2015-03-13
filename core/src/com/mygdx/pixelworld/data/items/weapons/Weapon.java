@@ -36,4 +36,9 @@ public class Weapon extends Item implements EquipItem {
     public boolean isEmpty() {
         return isEmpty;
     }
+
+    @Override
+    public Class getType() {
+        return weaponStats.getType();
+    }
 }

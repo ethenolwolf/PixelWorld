@@ -16,7 +16,7 @@ public class Armor extends Item implements EquipItem {
     }
 
     public Armor() {
-        armorStats = null;
+        armorStats = new ArmorStats("", 0, null);
         img = new DrawData();
         empty = true;
     }
@@ -35,5 +35,10 @@ public class Armor extends Item implements EquipItem {
 
     public boolean isEmpty() {
         return empty;
+    }
+
+    @Override
+    public Class getType() {
+        return armorStats.getType();
     }
 }

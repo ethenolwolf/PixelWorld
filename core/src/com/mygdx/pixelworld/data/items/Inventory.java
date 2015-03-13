@@ -20,18 +20,12 @@ public class Inventory {
     }
 
     public static void swap(LockedInventory lockedInv, int lockedSlot, Inventory freeInv, int freeSlot) {
-        System.out.println("\n-----------------SWAP-------------------");
-        System.out.format("[Before]\nInvItem : %s \nEqItem  : %s\n\n", freeInv.get(freeSlot).toString(), lockedInv.get(lockedSlot).toString());
-
         Item invItem = freeInv.get(freeSlot);
         Item eqItem = lockedInv.tryReplace(invItem, lockedSlot);
         if (eqItem == null) return;//Can't equip
         //Equipped! Now swap in inventory
         if (eqItem instanceof EquipItem) if (((EquipItem) eqItem).isEmpty()) freeInv.set(new EmptyItem(), freeSlot);
         else freeInv.set(eqItem, freeSlot);
-
-        System.out.format("[After] \nInvItem : %s \nEqItem  : %s\n", freeInv.get(freeSlot).toString(), lockedInv.get(lockedSlot).toString());
-        System.out.println("-----------------SWAP END-------------------\n");
     }
 
     public static void swap(LockedInventory lockedInv, Inventory freeInv, int freeSlot) {

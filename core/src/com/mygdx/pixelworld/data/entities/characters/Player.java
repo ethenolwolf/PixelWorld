@@ -175,4 +175,8 @@ public abstract class Player extends Entity {
             Inventory.swap(equipped, equipSlot, inv, inventorySlot);
         }
     }
+
+    public LockedInventory getEquipped() {
+        return equipped;
+    }
 }
