@@ -8,38 +8,35 @@ import com.badlogic.gdx.math.Vector2;
 import com.mygdx.pixelworld.data.Map;
 import com.mygdx.pixelworld.data.assets.AssetType;
 import com.mygdx.pixelworld.data.assets.Assets;
-import com.mygdx.pixelworld.data.entities.characters.GameClasses;
 
 public class DrawData {
     private final TextureRegion texture;
-    private Vector2 scaleFactor;
-    private float rotationAngle;
-
-    public DrawData(GameClasses classType, Vector2 scaleFactor, float rotationAngle) {
-        setScaleFactor(scaleFactor);
-        setRotationAngle(rotationAngle);
-        texture = new TextureRegion(Assets.getTexture(classType));
-    }
+    protected Vector2 scaleFactor;
+    protected float rotationAngle;
 
     public DrawData(AssetType assetType, Class classType, Vector2 scaleFactor, float rotationAngle) {
+        //Enemy //Chest
         setScaleFactor(scaleFactor);
         setRotationAngle(rotationAngle);
         texture = new TextureRegion(Assets.getTexture(assetType, classType));
     }
 
-    public DrawData(AssetType assetType, String name) { //Weapon // Armor //Sigil
+    public DrawData(AssetType assetType, String name) {
+        //Weapon // Armor //Sigil
         setScaleFactor(new Vector2(1, 1));
         setRotationAngle(0);
         texture = new TextureRegion(Assets.getTexture(assetType, name));
     }
 
     public DrawData(String name, float rotationAngle) {
+        //Bullet
         setScaleFactor(new Vector2(1, 1));
         setRotationAngle(rotationAngle);
         texture = new TextureRegion(Assets.getTexture(AssetType.BULLET, name));
     }
 
     public DrawData() {
+        //EmptyItem
         setScaleFactor(new Vector2(1, 1));
         setRotationAngle(0);
         texture = new TextureRegion(new Texture("core/assets/placeholder.png"));
@@ -88,7 +85,6 @@ public class DrawData {
 
     public BoundingCircle getBoundingCircle(Vector2 pos) {
         Vector2 absolutePosition = new Vector2(pos);
-        //System.out.println("[getBounding] center = "+absolutePosition.add(getOriginCenter()).toString()+" scaleFactors = "+scaleFactor.toString());
         BoundingCircle out = new BoundingCircle(new Vector2(absolutePosition.x + getOriginCenter().x, absolutePosition.y + getOriginCenter().y), Math.max(getWidth() / 2, getHeight() / 2));
         if (out.isValid()) return out;
         System.out.println("NOT VALID!");

@@ -8,7 +8,7 @@ import com.mygdx.pixelworld.GUI.Logger;
 import com.mygdx.pixelworld.Game;
 import com.mygdx.pixelworld.data.Map;
 import com.mygdx.pixelworld.data.draw.Bullet;
-import com.mygdx.pixelworld.data.draw.DrawData;
+import com.mygdx.pixelworld.data.draw.MultiDrawData;
 import com.mygdx.pixelworld.data.entities.Entity;
 import com.mygdx.pixelworld.data.entities.enemies.Enemy;
 import com.mygdx.pixelworld.data.items.Inventory;
@@ -36,7 +36,7 @@ public class Player extends Entity {
         this.name = NameExtractor.extract();
         this.pos = new Vector2(280, 0);
         this.gameClass = gameClass;
-        img = new DrawData(gameClass, new Vector2(1, 1), 0);
+        img = new MultiDrawData(gameClass);
         stats = new EntityStats(gameClass);
         fireManager = new FireManager();
         equipped = new LockedInventory(this);
@@ -49,11 +49,11 @@ public class Player extends Entity {
 
     public void update(Map map) {
         //Keyboard events
+        if (Gdx.input.isKeyPressed(Keys.ANY_KEY)) ((MultiDrawData) img).update();
         if (Gdx.input.isKeyPressed(Keys.A)) move(LEFT);
         else if (Gdx.input.isKeyPressed(Keys.D)) move(RIGHT);
         if (Gdx.input.isKeyPressed(Keys.S)) move(DOWN);
         else if (Gdx.input.isKeyPressed(Keys.W)) move(UP);
-
 
         if (!equipped.getWeapon().isEmpty()) fireManager.updateFire(pos, stats, map, equipped.getWeapon().getStats());
         regen();
@@ -69,6 +69,7 @@ public class Player extends Entity {
     }
 
     private void move(Directions dir) {
+        ((MultiDrawData) img).setDirection(dir);
         float movement = Game.deltaTime * stats.get(StatType.SPD) * 5;
         switch (dir) {
             case UP:

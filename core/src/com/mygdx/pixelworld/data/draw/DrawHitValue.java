@@ -5,7 +5,6 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.stbtt.TrueTypeFontFactory;
-import com.mygdx.pixelworld.GUI.Logger;
 import com.mygdx.pixelworld.data.entities.Entity;
 import com.mygdx.pixelworld.data.utilities.Constants;
 
@@ -33,7 +32,6 @@ public class DrawHitValue {
         if (font == null) {
             font = TrueTypeFontFactory.createBitmapFont(Gdx.files.internal("core/assets/Ubuntu-MI.ttf"), "-0123456789", 30f, 30f, 1.0f, Constants.gameWidth, Constants.gameHeight);
             font.setColor(Color.RED);
-            Logger.log("[DrawHitValue] Font initialized.");
         }
         for (Hit hit : hits) {
             font.setColor(new Color(1.0f, 0f, 0f, hit.shade));

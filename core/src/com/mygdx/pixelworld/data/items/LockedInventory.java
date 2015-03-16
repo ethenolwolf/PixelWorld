@@ -1,6 +1,5 @@
 package com.mygdx.pixelworld.data.items;
 
-import com.mygdx.pixelworld.GUI.Logger;
 import com.mygdx.pixelworld.data.entities.characters.GameClasses;
 import com.mygdx.pixelworld.data.entities.characters.Player;
 import com.mygdx.pixelworld.data.items.armors.Armor;
@@ -17,7 +16,6 @@ public class LockedInventory extends Inventory {
         set(new Weapon(playerClass), 0);
         set(ManaSigil.getInitial(player), 1);
         set(new Armor(playerClass), 2);
-        Logger.log("[LockedInventory()] Created. Current equipment:\n" + get(0) + "\n" + get(1) + "\n" + get(2));
     }
 
     public Weapon getWeapon() {
