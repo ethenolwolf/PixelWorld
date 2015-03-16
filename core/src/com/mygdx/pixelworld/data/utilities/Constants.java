@@ -1,14 +1,11 @@
 package com.mygdx.pixelworld.data.utilities;
 
-import com.mygdx.pixelworld.data.entities.characters.Ninja;
-import com.mygdx.pixelworld.data.entities.characters.Wizard;
+import com.mygdx.pixelworld.data.entities.characters.GameClasses;
 import com.mygdx.pixelworld.data.entities.enemies.Blocker;
+import com.mygdx.pixelworld.data.items.weapons.EnemyWeaponStats;
 import com.mygdx.pixelworld.data.items.weapons.WeaponStats;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Class defined to contain all game Constants.
@@ -22,7 +19,8 @@ public class Constants {
     public static final float X_LIMIT_MAX = 0.75f;
     public static final float Y_LIMIT_MIN = 0.15f;
     public static final float Y_LIMIT_MAX = 0.30f;
-    public static final Map<Class, EntityStats> initStats = new HashMap<Class, EntityStats>();
+    public static final Map<GameClasses, EntityStats> playerInitStats = new EnumMap<GameClasses, EntityStats>(GameClasses.class);
+    public static final Map<Class, EntityStats> enemyInitStats = new HashMap<Class, EntityStats>();
     public static final Map<Class, WeaponStats> enemyStats = new HashMap<Class, WeaponStats>();
     public static final List<Integer> levelUpValues = new ArrayList<Integer>();
     public static final float gameWidth = 640;
@@ -30,15 +28,15 @@ public class Constants {
     public static final float panelWidth = 160;
 
     public static void init() {
-        enemyStats.put(Blocker.class, new WeaponStats(Blocker.class,
-                "blocker", //name
+        enemyStats.put(Blocker.class, new EnemyWeaponStats(Blocker.class,
                 10, //dmg
                 400,//range
                 400,//spd
-                0
+                "blocker", //name
+                0 //rotationSpeed
         ));
 
-        initStats.put(Wizard.class, new EntityStats(
+        playerInitStats.put(GameClasses.WIZARD, new EntityStats(
                 100, //health
                 100, //mana
                 50, //spd
@@ -49,7 +47,7 @@ public class Constants {
                 0  //def
         ));
 
-        initStats.put(Ninja.class, new EntityStats(
+        playerInitStats.put(GameClasses.NINJA, new EntityStats(
                 100, //health
                 100, //mana
                 50, //spd
@@ -60,7 +58,7 @@ public class Constants {
                 0  //def
         ));
 
-        initStats.put(Blocker.class, new EntityStats(
+        enemyInitStats.put(Blocker.class, new EntityStats(
                 100, //health
                 0, //mana
                 50, //spd

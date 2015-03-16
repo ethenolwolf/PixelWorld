@@ -5,9 +5,11 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.mygdx.pixelworld.GUI.Logger;
-import com.mygdx.pixelworld.GUI.Map;
+import com.mygdx.pixelworld.data.Map;
+import com.mygdx.pixelworld.data.assets.AssetType;
 import com.mygdx.pixelworld.data.assets.SigilName;
 import com.mygdx.pixelworld.data.draw.BoundingCircle;
+import com.mygdx.pixelworld.data.draw.DrawData;
 import com.mygdx.pixelworld.data.entities.characters.Player;
 import com.mygdx.pixelworld.data.entities.enemies.Enemy;
 
@@ -24,9 +26,10 @@ public class PowerShock extends ManaSigil {
         damage = 100;
         price = 40;
         texture = new TextureRegion(new Texture("core/assets/Mana/powerShock.png"));
+        img = new DrawData(AssetType.SIGIL, "powerShock");
         name = SigilName.powerShock;
         empty = false;
-        type = player.getClass();
+        gameClass = player.getGameClass();
     }
 
     @Override

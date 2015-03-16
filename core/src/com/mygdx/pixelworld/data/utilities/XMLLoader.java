@@ -1,8 +1,9 @@
 package com.mygdx.pixelworld.data.utilities;
 
 import com.mygdx.pixelworld.GUI.Logger;
+import com.mygdx.pixelworld.data.entities.characters.GameClasses;
 import com.mygdx.pixelworld.data.items.armors.ArmorStats;
-import com.mygdx.pixelworld.data.items.weapons.WeaponStats;
+import com.mygdx.pixelworld.data.items.weapons.PlayerWeaponStats;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
@@ -29,7 +30,7 @@ public class XMLLoader {
         return Integer.parseInt(getTextValue(ele, tagName));
     }
 
-    public static WeaponStats retrieveWeapon(Class playerClass, int requiredRank) {
+    public static PlayerWeaponStats retrieveWeapon(GameClasses playerClass, int requiredRank) {
         Document dom;
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
         try {
@@ -49,8 +50,8 @@ public class XMLLoader {
                     int speed = getIntValue(el, "Speed");
                     float rotationAngle = getFloatValue(el, "Rotation");
                     String type = getTextValue(el, "Class");
-                    if (playerClass.toString().contains(type) && rank == requiredRank)
-                        return new WeaponStats(playerClass, name, damage, range, speed, rotationAngle);
+                    if (playerClass.toString().equalsIgnoreCase(type) && rank == requiredRank)
+                        return new PlayerWeaponStats(playerClass, name, damage, range, speed, rotationAngle);
                 }
             }
         } catch (ParserConfigurationException pce) {
@@ -72,7 +73,7 @@ public class XMLLoader {
     }
 
 
-    public static ArmorStats retrieveArmor(Class playerClass, int requiredRank) {
+    public static ArmorStats retrieveArmor(GameClasses playerClass, int requiredRank) {
         Document dom;
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
         try {
@@ -89,7 +90,7 @@ public class XMLLoader {
                     int rank = getIntValue(el, "Rank");
                     int defense = getIntValue(el, "Defense");
                     String type = getTextValue(el, "Class");
-                    if (playerClass.toString().contains(type) && rank == requiredRank)
+                    if (playerClass.toString().equalsIgnoreCase(type) && rank == requiredRank)
                         return new ArmorStats(name, defense, playerClass);
                 }
             }

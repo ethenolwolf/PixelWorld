@@ -1,8 +1,9 @@
-package com.mygdx.pixelworld.GUI;
+package com.mygdx.pixelworld.data;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
+import com.mygdx.pixelworld.GUI.GUI;
 import com.mygdx.pixelworld.Game;
 import com.mygdx.pixelworld.data.assets.AssetType;
 import com.mygdx.pixelworld.data.assets.Assets;
@@ -47,7 +48,7 @@ public class Map {
         if (type == Blocker.class) enemies.add(new Blocker(x, y));
     }
 
-    void addChest(List<Item> items, Vector2 pos) {
+    public void addChest(List<Item> items, Vector2 pos) {
         chests.add(new Chest(items, pos));
     }
 

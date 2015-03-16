@@ -2,20 +2,18 @@ package com.mygdx.pixelworld.data.items.weapons;
 
 import com.mygdx.pixelworld.data.assets.AssetType;
 import com.mygdx.pixelworld.data.draw.DrawData;
-import com.mygdx.pixelworld.data.entities.enemies.Enemy;
+import com.mygdx.pixelworld.data.entities.characters.GameClasses;
 import com.mygdx.pixelworld.data.items.EquipItem;
 import com.mygdx.pixelworld.data.items.Item;
 import com.mygdx.pixelworld.data.utilities.XMLLoader;
 
 public class Weapon extends Item implements EquipItem {
-    private final WeaponStats weaponStats;
+    private final PlayerWeaponStats weaponStats;
     private final boolean isEmpty;
 
-    public Weapon(Class playerClass, int rank) {
+    public Weapon(GameClasses playerClass, int rank) {
         weaponStats = XMLLoader.retrieveWeapon(playerClass, rank);
-        if (!weaponStats.getType().isInstance(Enemy.class))
-            img = new DrawData(AssetType.WEAPON, weaponStats.getName());
-        else img = null;
+        img = new DrawData(AssetType.WEAPON, weaponStats.getName());
         isEmpty = false;
     }
 
@@ -25,7 +23,7 @@ public class Weapon extends Item implements EquipItem {
         isEmpty = true;
     }
 
-    public Weapon(Class playerClass) {
+    public Weapon(GameClasses playerClass) {
         this(playerClass, 1);
     }
 
@@ -38,7 +36,7 @@ public class Weapon extends Item implements EquipItem {
     }
 
     @Override
-    public Class getType() {
+    public GameClasses getGameClass() {
         return weaponStats.getType();
     }
 }

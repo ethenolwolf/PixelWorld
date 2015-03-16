@@ -1,7 +1,7 @@
 package com.mygdx.pixelworld.data.entities.enemies;
 
-import com.mygdx.pixelworld.GUI.Map;
 import com.mygdx.pixelworld.Game;
+import com.mygdx.pixelworld.data.Map;
 import com.mygdx.pixelworld.data.entities.characters.Player;
 import com.mygdx.pixelworld.data.utilities.Algorithms;
 import com.mygdx.pixelworld.data.utilities.Constants;

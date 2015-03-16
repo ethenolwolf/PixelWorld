@@ -1,6 +1,5 @@
 package com.mygdx.pixelworld.data.items.sigils;
 
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.mygdx.pixelworld.Game;
 import com.mygdx.pixelworld.data.assets.AssetType;
@@ -21,8 +20,8 @@ public class InvisibleCloak extends ManaSigil {
         price = 70;
         playerStats = player.getStats();
         name = SigilName.invisibleCloack;
-        img = new DrawData(AssetType.SIGIL, player.getClass(), new Vector2(1, 1), 0);
-        type = player.getClass();
+        img = new DrawData(AssetType.SIGIL, "invisibleCloak");
+        gameClass = player.getGameClass();
         empty = false;
     }
 
@@ -42,9 +41,5 @@ public class InvisibleCloak extends ManaSigil {
     @Override
     public boolean checkIfInside(Enemy e) {
         return false;
-    }
-
-    @Override
-    public void draw(SpriteBatch batch) {
     }
 }

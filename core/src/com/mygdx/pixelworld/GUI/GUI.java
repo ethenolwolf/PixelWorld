@@ -2,6 +2,7 @@ package com.mygdx.pixelworld.GUI;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
+import com.mygdx.pixelworld.data.Map;
 import com.mygdx.pixelworld.data.assets.AssetType;
 import com.mygdx.pixelworld.data.assets.Assets;
 import com.mygdx.pixelworld.data.draw.BoundingCircle;

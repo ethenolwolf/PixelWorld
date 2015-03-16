@@ -3,6 +3,7 @@ package com.mygdx.pixelworld.data.draw;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.mygdx.pixelworld.Game;
+import com.mygdx.pixelworld.data.items.weapons.PlayerWeaponStats;
 import com.mygdx.pixelworld.data.items.weapons.WeaponStats;
 import com.mygdx.pixelworld.data.utilities.Damaging;
 import com.mygdx.pixelworld.data.utilities.EntityStats;
@@ -23,7 +24,7 @@ public class Bullet implements Damaging {
     public Bullet(Vector2 startingPos, Vector2 endingPos, EntityStats es, WeaponStats ws) {
         this.startPoint = new Vector2(startingPos);
         this.direction = new Vector2(endingPos.x - startingPos.x, endingPos.y - startingPos.y).nor();
-        isPlayer = (ws.getType().getPackage() == Package.getPackage("com.mygdx.pixelworld.data.entities.characters"));
+        isPlayer = ws instanceof PlayerWeaponStats;
         this.pos = new Vector2(startingPos);
         img = new DrawData(ws.getName(), direction.angle());
         this.damage = (int) (ws.getDamage() + es.get(StatType.ATK));

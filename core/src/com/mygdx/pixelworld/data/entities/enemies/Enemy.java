@@ -2,15 +2,14 @@ package com.mygdx.pixelworld.data.entities.enemies;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
-import com.mygdx.pixelworld.GUI.Map;
+import com.mygdx.pixelworld.data.Map;
 import com.mygdx.pixelworld.data.assets.AssetType;
 import com.mygdx.pixelworld.data.draw.BoundingCircle;
 import com.mygdx.pixelworld.data.draw.Bullet;
 import com.mygdx.pixelworld.data.draw.DrawData;
 import com.mygdx.pixelworld.data.entities.Entity;
-import com.mygdx.pixelworld.data.entities.characters.Ninja;
+import com.mygdx.pixelworld.data.entities.characters.GameClasses;
 import com.mygdx.pixelworld.data.entities.characters.Player;
-import com.mygdx.pixelworld.data.entities.characters.Wizard;
 import com.mygdx.pixelworld.data.items.Item;
 import com.mygdx.pixelworld.data.items.weapons.Weapon;
 import com.mygdx.pixelworld.data.utilities.EntityStats;
@@ -27,17 +26,18 @@ public abstract class Enemy extends Entity {
 
     public Enemy(float x, float y, Class type) {
         pos = new Vector2(x, y);
-        img = new DrawData(AssetType.CHARACTER, type, new Vector2(1, 1), 0);
+        img = new DrawData(AssetType.ENEMY, type, new Vector2(1, 1), 0);
         stats = new EntityStats(this.getClass());
         calculateDropItems();
     }
 
     private void calculateDropItems() {
+        //TODO Flavio
         Random rand = new Random();
         int k = rand.nextInt(10);
-        if (k > 3) dropItems.add(new Weapon(Ninja.class, 1));
-        if (k > 5) dropItems.add(new Weapon(Wizard.class, 1));
-        if (k > 8) dropItems.add(new Weapon(Wizard.class, 2));
+        if (k > 3) dropItems.add(new Weapon(GameClasses.NINJA, 1));
+        if (k > 5) dropItems.add(new Weapon(GameClasses.WIZARD, 1));
+        if (k > 8) dropItems.add(new Weapon(GameClasses.WIZARD, 2));
 
     }
 

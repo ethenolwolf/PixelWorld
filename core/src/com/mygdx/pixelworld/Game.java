@@ -7,7 +7,7 @@ import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.mygdx.pixelworld.GUI.GUI;
-import com.mygdx.pixelworld.GUI.Map;
+import com.mygdx.pixelworld.data.Map;
 import com.mygdx.pixelworld.data.assets.Assets;
 import com.mygdx.pixelworld.data.entities.characters.GameClasses;
 import com.mygdx.pixelworld.data.entities.characters.Player;
@@ -30,7 +30,7 @@ public class Game extends ApplicationAdapter implements InputProcessor {
      * Inits various parts of the program, including batch, map and player.
      *
      * @see com.mygdx.pixelworld.data.entities.characters.Player
-     * @see com.mygdx.pixelworld.GUI.Map
+     * @see com.mygdx.pixelworld.data.Map
      */
     @Override
     public void create() {
@@ -39,7 +39,7 @@ public class Game extends ApplicationAdapter implements InputProcessor {
         Constants.init();
         map = new Map();
         map.generateEnemies(25);
-        player = Player.getPlayer(GameClasses.NINJA);
+        player = new Player(GameClasses.WIZARD);
         Gdx.input.setInputProcessor(this);
         shapeRenderer = new ShapeRenderer();
         GUI.init(batch, player, map);

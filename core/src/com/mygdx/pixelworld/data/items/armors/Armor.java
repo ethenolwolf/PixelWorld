@@ -1,6 +1,7 @@
 package com.mygdx.pixelworld.data.items.armors;
 import com.mygdx.pixelworld.data.assets.AssetType;
 import com.mygdx.pixelworld.data.draw.DrawData;
+import com.mygdx.pixelworld.data.entities.characters.GameClasses;
 import com.mygdx.pixelworld.data.items.EquipItem;
 import com.mygdx.pixelworld.data.items.Item;
 import com.mygdx.pixelworld.data.utilities.XMLLoader;
@@ -9,7 +10,7 @@ public class Armor extends Item implements EquipItem {
     private final boolean empty;
     private ArmorStats armorStats;
 
-    public Armor(Class playerClass, int rank) {
+    public Armor(GameClasses playerClass, int rank) {
         armorStats = XMLLoader.retrieveArmor(playerClass, rank);
         img = new DrawData(AssetType.ARMOR, armorStats.getName());
         empty = false;
@@ -21,7 +22,7 @@ public class Armor extends Item implements EquipItem {
         empty = true;
     }
 
-    public Armor(Class playerClass) {
+    public Armor(GameClasses playerClass) {
         this(playerClass, 1);
     }
 
@@ -29,16 +30,12 @@ public class Armor extends Item implements EquipItem {
         return armorStats.getDefense();
     }
 
-    public String getName() {
-        return armorStats.getName();
-    }
-
     public boolean isEmpty() {
         return empty;
     }
 
     @Override
-    public Class getType() {
-        return armorStats.getType();
+    public GameClasses getGameClass() {
+        return armorStats.getGameClass();
     }
 }

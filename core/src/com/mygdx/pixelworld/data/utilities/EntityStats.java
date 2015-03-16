@@ -3,24 +3,26 @@ package com.mygdx.pixelworld.data.utilities;
 
 import com.mygdx.pixelworld.data.draw.DrawHitValue;
 import com.mygdx.pixelworld.data.entities.Entity;
+import com.mygdx.pixelworld.data.entities.characters.GameClasses;
+import com.mygdx.pixelworld.data.entities.enemies.Enemy;
 
 import java.util.EnumMap;
 import java.util.Map;
-
-import static com.mygdx.pixelworld.data.utilities.Constants.initStats;
 
 public class EntityStats {
 
     private final Map<StatType, Float> stats = new EnumMap<StatType, Float>(StatType.class);
     private Class type;
+    private GameClasses gameClass;
     private boolean alive = true;
     private Map<StatType, Float> maxStats;
     private boolean visible = true;
 
-    public EntityStats(Class type) {
-        this(initStats.get(type));
+    public EntityStats(GameClasses type) {
+        this(Constants.playerInitStats.get(type));
         maxStats = new EnumMap<StatType, Float>(stats);
-        this.type = type;
+        this.gameClass = type;
+        this.type = null;
     }
 
     public EntityStats(float health, float mana, int speed, int dexterity, int wisdom, int vitality, int attack, int defense) {
@@ -35,10 +37,21 @@ public class EntityStats {
         maxStats = new EnumMap<StatType, Float>(stats);
         stats.get(StatType.HEALTH);
         maxStats.get(StatType.HEALTH);
+        gameClass = null;
+        type = null;
     }
 
     private EntityStats(EntityStats ps) {
         for (StatType st : StatType.values()) stats.put(st, ps.get(st));
+        gameClass = null;
+        type = null;
+    }
+
+    public EntityStats(Class<? extends Enemy> enemyClass) {
+        this(Constants.enemyInitStats.get(enemyClass));
+        maxStats = new EnumMap<StatType, Float>(stats);
+        this.type = enemyClass;
+        this.gameClass = null;
     }
 
     void setStat(StatType statType, float value) {
@@ -54,7 +67,8 @@ public class EntityStats {
     }
 
     public float getInit(StatType statType) {
-        return initStats.get(type).get(statType);
+        if (gameClass == null) return Constants.enemyInitStats.get(type).get(statType);
+        else return Constants.playerInitStats.get(gameClass).get(statType);
     }
 
     public float getMax(StatType statType) {

@@ -5,9 +5,8 @@ import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.mygdx.pixelworld.GUI.Logger;
-import com.mygdx.pixelworld.GUI.Map;
 import com.mygdx.pixelworld.Game;
-import com.mygdx.pixelworld.data.assets.AssetType;
+import com.mygdx.pixelworld.data.Map;
 import com.mygdx.pixelworld.data.draw.Bullet;
 import com.mygdx.pixelworld.data.draw.DrawData;
 import com.mygdx.pixelworld.data.entities.Entity;
@@ -23,33 +22,25 @@ import java.util.List;
 
 import static com.mygdx.pixelworld.data.utilities.Directions.*;
 
-public abstract class Player extends Entity {
+public class Player extends Entity {
 
     private final String name;
     private final FireManager fireManager;
     private final LockedInventory equipped;
     private final Inventory inventory;
+    private final GameClasses gameClass;
     private int experience = 0;
     private int level = 1;
 
-    Player() {
+    public Player(GameClasses gameClass) {
         this.name = NameExtractor.extract();
         this.pos = new Vector2(280, 0);
-        img = new DrawData(AssetType.CHARACTER, this.getClass(), new Vector2(1, 1), 0);
-        stats = new EntityStats(this.getClass());
+        this.gameClass = gameClass;
+        img = new DrawData(gameClass, new Vector2(1, 1), 0);
+        stats = new EntityStats(gameClass);
         fireManager = new FireManager();
         equipped = new LockedInventory(this);
         inventory = new Inventory(8);
-    }
-
-    public static Player getPlayer(GameClasses name) {
-        switch (name) {
-            case WIZARD:
-                return new Wizard();
-            case NINJA:
-                return new Ninja();
-        }
-        return null;
     }
 
     public Inventory getInventory() {
@@ -178,5 +169,9 @@ public abstract class Player extends Entity {
 
     public LockedInventory getEquipped() {
         return equipped;
+    }
+
+    public GameClasses getGameClass() {
+        return gameClass;
     }
 }

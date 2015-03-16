@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.mygdx.pixelworld.data.assets.SigilName;
 import com.mygdx.pixelworld.data.draw.DrawData;
+import com.mygdx.pixelworld.data.entities.characters.GameClasses;
 import com.mygdx.pixelworld.data.entities.characters.Player;
 import com.mygdx.pixelworld.data.entities.enemies.Enemy;
 import com.mygdx.pixelworld.data.items.EquipItem;
@@ -13,7 +14,7 @@ import com.mygdx.pixelworld.data.utilities.Damaging;
 public class ManaSigil extends Item implements Damaging, EquipItem {
 
     protected boolean empty;
-    protected Class type;
+    protected GameClasses gameClass;
     int damage;
     float price;
     SigilName name;
@@ -24,8 +25,8 @@ public class ManaSigil extends Item implements Damaging, EquipItem {
     }
 
     public static ManaSigil getInitial(Player player) {
-        if (player.getClass().toString().contains("Wizard")) return new PowerShock(player);
-        if (player.getClass().toString().contains("Ninja")) return new InvisibleCloak(player);
+        if (player.getGameClass() == GameClasses.WIZARD) return new PowerShock(player);
+        if (player.getGameClass() == GameClasses.NINJA) return new InvisibleCloak(player);
         return null;
     }
 
@@ -60,7 +61,7 @@ public class ManaSigil extends Item implements Damaging, EquipItem {
     }
 
     @Override
-    public Class getType() {
-        return type;
+    public GameClasses getGameClass() {
+        return gameClass;
     }
 }
