@@ -1,4 +1,4 @@
-package com.mygdx.pixelworld.data.assets;
+package com.mygdx.pixelworld.data.items.sigils;
 
 public enum SigilName {
     powerShock, invisibleCloack

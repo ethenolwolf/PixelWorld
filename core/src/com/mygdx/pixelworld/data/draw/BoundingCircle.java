@@ -15,11 +15,11 @@ public class BoundingCircle {
         return isValid() && center.dst(boundingCircle2.getCenter()) <= radius + boundingCircle2.getRadius();
     }
 
-    Vector2 getCenter() {
+    public Vector2 getCenter() {
         return center;
     }
 
-    float getRadius() {
+    public float getRadius() {
         return radius;
     }
 
