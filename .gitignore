@@ -5,3 +5,5 @@
 build/
 ## Gradle
 .gradle
+## Linux testing
+*.sh
