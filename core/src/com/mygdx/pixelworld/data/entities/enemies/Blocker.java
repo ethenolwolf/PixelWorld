@@ -1,5 +1,6 @@
 package com.mygdx.pixelworld.data.entities.enemies;
 
+import com.badlogic.gdx.math.Vector2;
 import com.mygdx.pixelworld.Game;
 import com.mygdx.pixelworld.data.Map;
 import com.mygdx.pixelworld.data.entities.characters.Player;
@@ -31,7 +32,7 @@ public class Blocker extends Enemy {
         Algorithms.moveTowards(pos, player.getPos(), stats.get(StatType.SPD) * Game.deltaTime);
         pos = img.boundMap(pos);
         fireManager.setTarget(player.getPos());
-        fireManager.updateFire(pos, stats, map, Constants.enemyStats.get(Blocker.class));
+        fireManager.updateFire(new Vector2(pos).add(img.getWidth() / 2, img.getHeight() / 2), stats, map, Constants.enemyStats.get(Blocker.class));
     }
 
     @Override

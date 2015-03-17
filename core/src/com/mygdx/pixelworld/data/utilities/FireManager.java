@@ -3,6 +3,7 @@ package com.mygdx.pixelworld.data.utilities;
 import com.badlogic.gdx.math.Vector2;
 import com.mygdx.pixelworld.Game;
 import com.mygdx.pixelworld.data.Map;
+import com.mygdx.pixelworld.data.draw.DrawData;
 import com.mygdx.pixelworld.data.items.weapons.WeaponStats;
 
 public class FireManager {
@@ -32,7 +33,13 @@ public class FireManager {
         if (!isFiring) return;
         fireDelay -= Game.deltaTime;
         if (fireDelay <= 0) {
-            map.fire(pos, target, entityStats, stats);
+
+            //centering target
+            Vector2 dir = new Vector2(pos.x - target.x, pos.y - target.y);
+            DrawData dd = new DrawData(stats.getName(), dir.angle());
+            Vector2 drawOffset = new Vector2(dd.getWidth() / 2, dd.getHeight() / 2);
+
+            map.fire(pos, new Vector2(target).sub(drawOffset), entityStats, stats);
             fireDelay += 1 / Algorithms.map(entityStats.get(StatType.DEX), 1, 100, 1, 8);
         }
     }

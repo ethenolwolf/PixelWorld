@@ -42,7 +42,7 @@ public class Assets {
             case SIGIL:
                 return new Texture("core/assets/Sigils/" + name + ".png");
         }
-        Logger.log("[Assets.getTexture()] Texture not found. AssetType:" + type.toString() + " Name:" + name);
+        Logger.log("Assets.getTexture()", "Texture not found. AssetType:" + type.toString() + " Name:" + name);
         return new Texture("core/assets/badlogic.jpg");
     }
 
@@ -60,7 +60,7 @@ public class Assets {
                 if (ENEMY_TEX.get(type) != null) return ENEMY_TEX.get(type);
                 break;
         }
-        Logger.log("[Assets.getTexture()] Texture not found. AssetType:" + assetType.toString() + " Class:" + type.toString());
+        Logger.log("Assets.getTexture()", "Texture not found. AssetType:" + assetType.toString() + " Class:" + type.toString());
         return new Texture("core/assets/badlogic.jpg");
     }
 

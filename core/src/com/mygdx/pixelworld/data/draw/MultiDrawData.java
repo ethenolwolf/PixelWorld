@@ -41,8 +41,8 @@ public class MultiDrawData extends DrawData {
         if (absolutePosition.x + getWidth() < 0 || absolutePosition.x > Map.getWidth() ||
                 absolutePosition.y + getHeight() < 0 || absolutePosition.y > Map.getHeight()) return;
         TextureRegion texture = textureRegions[currentDirection.ordinal() * 2 + currentStep];
-        batch.draw(texture, getEffectivePosition(absolutePosition).x, getEffectivePosition(absolutePosition).y, getOriginCenter().x,
-                getOriginCenter().y, getWidth(), getHeight(), scaleFactor.x, scaleFactor.y, rotationAngle);
+        batch.draw(texture, getEffectivePosition(getOriginalPosition(absolutePosition)).x, getEffectivePosition(getOriginalPosition(absolutePosition)).y, getOriginCenter().x,
+                getOriginCenter().y, getOriginalWidth(), getOriginalHeight(), scaleFactor.x, scaleFactor.y, rotationAngle);
     }
 
     public void update() {

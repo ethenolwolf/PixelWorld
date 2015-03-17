@@ -51,14 +51,14 @@ public class PowerShock extends ManaSigil {
         while (iterator.hasNext()) {
             PowerShockBlast b = iterator.next();
             float maxScale = 1f;
-            float step = 0.1f;
+            float step = 0.01f;
             if (!b.update(maxScale, step)) iterator.remove();
         }
     }
 
-    BoundingCircle[] getBoundingCircle() {
+    public BoundingCircle[] getBoundingCircle() {
         BoundingCircle[] bc = new BoundingCircle[blasts.size()];
-        for (int i = 0; i < bc.length; i++) bc[i] = blasts.get(i).getBoundingCircle(texture.getRegionWidth());
+        for (int i = 0; i < bc.length; i++) bc[i] = blasts.get(i).getBoundingCircle(texture.getRegionWidth() / 2);
         return bc;
     }
 
@@ -89,7 +89,7 @@ public class PowerShock extends ManaSigil {
         public BoundingCircle getBoundingCircle(float originalRadius) {
             BoundingCircle out = new BoundingCircle(new Vector2(center), currentDimension.x * originalRadius);
             if (out.isValid()) return out;
-            Logger.log("[PowerShockBlast.getBoundingCircle()] Circle not valid!");
+            Logger.log("PowerShockBlast.getBoundingCircle()", "Circle not valid!");
             return null;
         }
 

@@ -17,10 +17,10 @@ public class NameExtractor {
             lnr.skip(Long.MAX_VALUE);
             lnr.close();
         } catch (FileNotFoundException e) {
-            Logger.log("[NameExtractor] Name dic not found.");
+            Logger.log("NameExtractor", "Name dic not found.");
             return DEFAULT_NAME;
         } catch (IOException e) {
-            Logger.log("[NameExtractor] IO Error while reading.");
+            Logger.log("NameExtractor", "IO Error while reading.");
             return DEFAULT_NAME;
         }
 
@@ -34,10 +34,10 @@ public class NameExtractor {
             String names[] = line.split(" ");
             return names[0];
         } catch (FileNotFoundException e) {
-            Logger.log("[NameExtractor] Name dic not found.");
+            Logger.log("NameExtractor", "Name dic not found.");
             return DEFAULT_NAME;
         } catch (IOException e) {
-            Logger.log("[NameExtractor] IO Error while reading.");
+            Logger.log("NameExtractor", "IO Error while reading.");
             return DEFAULT_NAME;
         }
     }

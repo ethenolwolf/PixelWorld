@@ -22,7 +22,7 @@ public class XMLLoader {
             Element el = (Element) nl.item(0);
             textVal = el.getFirstChild().getNodeValue();
         }
-        if (textVal == null) Logger.log("[XMLLoader.getTextValue()] Error: XML tag '" + tagName + "' not found.");
+        if (textVal == null) Logger.log("XMLLoader.getTextValue()", "Error: XML tag '" + tagName + "' not found.");
         return textVal;
     }
 
@@ -55,16 +55,13 @@ public class XMLLoader {
                 }
             }
         } catch (ParserConfigurationException pce) {
-            Logger.log("[XMLLoader.retrieve()] Parser Error");
-            pce.printStackTrace();
+            Logger.log("XMLLoader.retrieve()", "Parser Error");
         } catch (IOException ioe) {
-            Logger.log("[XMLLoader.retrieve()] IOExc");
-            ioe.printStackTrace();
+            Logger.log("XMLLoader.retrieve()", "IOExc");
         } catch (org.xml.sax.SAXException e) {
-            Logger.log("[XMLLoader.retrieve()] SAX Error");
-            e.printStackTrace();
+            Logger.log("XMLLoader.retrieve()", "SAX Error");
         }
-        Logger.log("[XMLLoader.retrieve()] Weapon not found. Class:" + playerClass.toString() + " and rank " + requiredRank);
+        Logger.log("XMLLoader.retrieve()", "Weapon not found. Class:" + playerClass.toString() + " and rank " + requiredRank);
         return null;
     }
 
@@ -95,16 +92,13 @@ public class XMLLoader {
                 }
             }
         } catch (ParserConfigurationException pce) {
-            Logger.log("[XMLLoader.retrieve()] Parser Error");
-            pce.printStackTrace();
+            Logger.log("XMLLoader.retrieve()", "Parser Error");
         } catch (IOException ioe) {
-            Logger.log("[XMLLoader.retrieve()] IOExc");
-            ioe.printStackTrace();
+            Logger.log("XMLLoader.retrieve()", "IOExc");
         } catch (org.xml.sax.SAXException e) {
-            Logger.log("[XMLLoader.retrieve()] SAX Error");
-            e.printStackTrace();
+            Logger.log("XMLLoader.retrieve()", "SAX Error");
         }
-        Logger.log("[XMLLoader.retrieve()] Armor not found. Class:" + playerClass.toString() + " and rank " + requiredRank);
+        Logger.log("XMLLoader.retrieve()", "Armor not found. Class:" + playerClass.toString() + " and rank " + requiredRank);
         return null;
     }
 }

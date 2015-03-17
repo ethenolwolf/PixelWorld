@@ -42,21 +42,36 @@ public class DrawData {
         texture = new TextureRegion(new Texture("core/assets/placeholder.png"));
     }
 
-    float getWidth() {
+    public float getWidth() {
+        return getOriginalWidth() * scaleFactor.x;
+    }
+
+    protected float getOriginalWidth() {
         return texture.getRegionWidth();
     }
 
     public float getHeight() {
+        return getOriginalHeight() * scaleFactor.y;
+    }
+
+    protected float getOriginalHeight() {
         return texture.getRegionHeight();
     }
 
-    Vector2 getOriginCenter() {
-        return new Vector2(getWidth() / 2, getHeight() / 2);
+    public Vector2 getOriginCenter() {
+        return new Vector2(getOriginalWidth() / 2, getOriginalHeight() / 2);
     }
 
     public Vector2 getEffectivePosition(Vector2 absolutePosition) {
         Vector2 out = new Vector2(absolutePosition);
         return out.add(Map.getOffset());
+    }
+
+    public Vector2 getOriginalPosition(Vector2 absolutePosition) {
+        return new Vector2(
+                absolutePosition.x + (getWidth() - getOriginalWidth()) / 2,
+                absolutePosition.y + (getHeight() - getOriginalHeight()) / 2
+        );
     }
 
     void setRotationAngle(float angle) {
@@ -67,8 +82,8 @@ public class DrawData {
         if (absolutePosition.x + getWidth() < 0 || absolutePosition.x > Map.getWidth() ||
                 absolutePosition.y + getHeight() < 0 || absolutePosition.y > Map.getHeight()) return;
 
-        batch.draw(texture, getEffectivePosition(absolutePosition).x, getEffectivePosition(absolutePosition).y, getOriginCenter().x,
-                getOriginCenter().y, getWidth(), getHeight(), scaleFactor.x, scaleFactor.y, rotationAngle);
+        batch.draw(texture, getEffectivePosition(getOriginalPosition(absolutePosition)).x, getEffectivePosition(getOriginalPosition(absolutePosition)).y, getOriginCenter().x,
+                getOriginCenter().y, getOriginalWidth(), getOriginalHeight(), scaleFactor.x, scaleFactor.y, rotationAngle);
     }
 
     public void draw(SpriteBatch batch, Vector2 absolutePosition, float alpha) {
@@ -84,7 +99,7 @@ public class DrawData {
     }
 
     public BoundingCircle getBoundingCircle(Vector2 pos) {
-        Vector2 absolutePosition = new Vector2(pos);
+        Vector2 absolutePosition = getOriginalPosition(pos);
         BoundingCircle out = new BoundingCircle(new Vector2(absolutePosition.x + getOriginCenter().x, absolutePosition.y + getOriginCenter().y), Math.max(getWidth() / 2, getHeight() / 2));
         if (out.isValid()) return out;
         System.out.println("NOT VALID!");

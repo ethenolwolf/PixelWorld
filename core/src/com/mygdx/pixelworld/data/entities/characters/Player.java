@@ -55,13 +55,14 @@ public class Player extends Entity {
         if (Gdx.input.isKeyPressed(Keys.S)) move(DOWN);
         else if (Gdx.input.isKeyPressed(Keys.W)) move(UP);
 
-        if (!equipped.getWeapon().isEmpty()) fireManager.updateFire(pos, stats, map, equipped.getWeapon().getStats());
+        if (!equipped.getWeapon().isEmpty())
+            fireManager.updateFire(img.getBoundingCircle(pos).getCenter(), stats, map, equipped.getWeapon().getStats());
         regen();
         if (!equipped.getManaSigil().isEmpty()) equipped.getManaSigil().update();
     }
 
     public void manaTrigger() {
-        if (equipped.getManaSigil().isEmpty()) Logger.log("You must equip a sigil first.");
+        if (equipped.getManaSigil().isEmpty()) Logger.log("Player.manaTrigger()", "You must equip a sigil first.");
         if (stats.get(StatType.MANA) >= equipped.getManaSigil().getPrice()) {
             stats.addStat(StatType.MANA, -equipped.getManaSigil().getPrice());
             equipped.getManaSigil().activate(new Vector2(pos));
@@ -114,7 +115,7 @@ public class Player extends Entity {
         if (equipped.getArmor().getDefense() + stats.get(StatType.DEF) >= d.getDamage()) return;
         super.getHit(d.getDamage() - equipped.getArmor().getDefense() - (int) stats.get(StatType.DEF));
         if (!stats.isAlive()) {
-            Logger.log("[Player.getHit()] Player died :(");
+            Logger.log("Player.getHit()", "Player died :(");
             Gdx.app.exit();
         }
     }
@@ -154,8 +155,15 @@ public class Player extends Entity {
         for (Integer threshold : Constants.levelUpValues) {
             if (this.experience > threshold) level++;
         }
-        if (level != this.level) Logger.log("[Player.addExp()] Level UP! Level=" + level);
+        if (level != this.level) Logger.log("Player.addExperience()", "Level UP! Level=" + level);
         this.level = level;
+    }
+
+    public float getExpPercentage() {
+        for (Integer threshold : Constants.levelUpValues) {
+            if (experience < threshold) return (float) experience / (float) threshold;
+        }
+        return 1.0f;
     }
 
     public void equip(Inventory inv, int slot) {
@@ -175,4 +183,6 @@ public class Player extends Entity {
     public GameClasses getGameClass() {
         return gameClass;
     }
+
+
 }

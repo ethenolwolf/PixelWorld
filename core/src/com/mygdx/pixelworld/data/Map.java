@@ -3,17 +3,21 @@ package com.mygdx.pixelworld.data;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
+import com.mygdx.pixelworld.DebugOptions;
 import com.mygdx.pixelworld.GUI.GUI;
 import com.mygdx.pixelworld.Game;
 import com.mygdx.pixelworld.data.assets.AssetType;
 import com.mygdx.pixelworld.data.assets.Assets;
+import com.mygdx.pixelworld.data.draw.BoundingCircle;
 import com.mygdx.pixelworld.data.draw.Bullet;
+import com.mygdx.pixelworld.data.draw.DrawData;
 import com.mygdx.pixelworld.data.draw.DrawHitValue;
 import com.mygdx.pixelworld.data.entities.characters.Player;
 import com.mygdx.pixelworld.data.entities.enemies.Blocker;
 import com.mygdx.pixelworld.data.entities.enemies.Enemy;
 import com.mygdx.pixelworld.data.items.Chest;
 import com.mygdx.pixelworld.data.items.Item;
+import com.mygdx.pixelworld.data.items.sigils.PowerShock;
 import com.mygdx.pixelworld.data.items.weapons.WeaponStats;
 import com.mygdx.pixelworld.data.utilities.Constants;
 import com.mygdx.pixelworld.data.utilities.EntityStats;
@@ -137,16 +141,52 @@ public class Map {
         shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
         //Health bar background
         shapeRenderer.setColor(0.678f, 0.074f, 0.074f, 1.0f);
-        shapeRenderer.rect(Constants.gameWidth + 10, 300, 140, 20);
+        shapeRenderer.rect(Constants.gameWidth + 10, 330, 140, 20);
         //Health bar
         shapeRenderer.setColor(0.95f, 0.05f, 0.05f, 1.0f);
-        shapeRenderer.rect(Constants.gameWidth + 10, 300, 140 * player.getHealthPercentage(), 20);
+        shapeRenderer.rect(Constants.gameWidth + 10, 330, 140 * player.getHealthPercentage(), 20);
         //Mana bar background
         shapeRenderer.setColor(0.0f, 0.0f, 0.392f, 1.0f);
-        shapeRenderer.rect(Constants.gameWidth + 10, 270, 140, 20);
+        shapeRenderer.rect(Constants.gameWidth + 10, 300, 140, 20);
         //Mana bar
         shapeRenderer.setColor(0.0f, 0.05f, 0.95f, 1.0f);
-        shapeRenderer.rect(Constants.gameWidth + 10, 270, 140 * player.getManaPercentage(), 20);
+        shapeRenderer.rect(Constants.gameWidth + 10, 300, 140 * player.getManaPercentage(), 20);
+        //Exp bar background
+        shapeRenderer.setColor(0.125f, 0.321f, 0.095f, 1.0f);
+        shapeRenderer.rect(Constants.gameWidth + 10, 270, 140, 20);
+        //Exp bar
+        shapeRenderer.setColor(0.313f, 0.800f, 0.214f, 1.0f);
+        shapeRenderer.rect(Constants.gameWidth + 10, 270, 140 * player.getExpPercentage(), 20);
+
+        if (DebugOptions.SHOW_BOUNDING) {
+            DrawData img = player.getImg();
+            Vector2 pos = img.getEffectivePosition(img.getOriginalPosition(player.getPos()));
+            shapeRenderer.circle(pos.x, pos.y, 2);
+            shapeRenderer.end();
+            shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
+            BoundingCircle bc = player.getImg().getBoundingCircle(player.getPos());
+            shapeRenderer.circle(bc.getCenter().x + Map.getOffset().x, bc.getCenter().y + Map.getOffset().y, bc.getRadius());
+
+            shapeRenderer.setColor(1.0f, 0, 0, 1.0f);
+            for (Bullet b : bullets) {
+                Vector2 center = b.getBoundingCircle().getCenter();
+                shapeRenderer.circle(center.x + getOffset().x, center.y + getOffset().y, b.getBoundingCircle().getRadius());
+            }
+
+            shapeRenderer.setColor(0f, 1.0f, 0, 1.0f);
+            for (Enemy e : enemies) {
+                Vector2 center = e.getBoundingCircle().getCenter();
+                shapeRenderer.circle(center.x + getOffset().x, center.y + getOffset().y, e.getBoundingCircle().getRadius());
+            }
+
+            shapeRenderer.setColor(1.0f, 1.0f, 0, 1.0f);
+            if (player.getManaSigil() instanceof PowerShock)
+                for (BoundingCircle bdc : ((PowerShock) player.getManaSigil()).getBoundingCircle()) {
+                    Vector2 center = bdc.getCenter();
+                    shapeRenderer.circle(center.x + getOffset().x, center.y + getOffset().y, bdc.getRadius());
+                }
+        }
+
         shapeRenderer.end();
     }
 
