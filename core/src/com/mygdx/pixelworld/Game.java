@@ -26,19 +26,13 @@ public class Game extends ApplicationAdapter implements InputProcessor {
     private Player player;
     private ShapeRenderer shapeRenderer;
 
-    /**
-     * Inits various parts of the program, including batch, map and player.
-     *
-     * @see com.mygdx.pixelworld.data.entities.characters.Player
-     * @see com.mygdx.pixelworld.data.Map
-     */
     @Override
     public void create() {
         batch = new SpriteBatch();
         Assets.init();
         Constants.init();
         map = new Map();
-        map.generateEnemies(25);
+        map.generateEnemies(15);
         player = new Player(GameClasses.WIZARD);
         Gdx.input.setInputProcessor(this);
         shapeRenderer = new ShapeRenderer();
@@ -46,7 +40,7 @@ public class Game extends ApplicationAdapter implements InputProcessor {
     }
 
     /**
-     * Main loop. Updates player and map, and then draws them.
+     * Main loop.
      */
     @Override
     public void render() {

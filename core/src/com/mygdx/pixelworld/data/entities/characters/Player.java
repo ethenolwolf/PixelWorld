@@ -7,8 +7,8 @@ import com.badlogic.gdx.math.Vector2;
 import com.mygdx.pixelworld.GUI.Logger;
 import com.mygdx.pixelworld.Game;
 import com.mygdx.pixelworld.data.Map;
+import com.mygdx.pixelworld.data.draw.AnimationDrawData;
 import com.mygdx.pixelworld.data.draw.Bullet;
-import com.mygdx.pixelworld.data.draw.MultiDrawData;
 import com.mygdx.pixelworld.data.entities.Entity;
 import com.mygdx.pixelworld.data.entities.enemies.Enemy;
 import com.mygdx.pixelworld.data.items.Inventory;
@@ -36,7 +36,7 @@ public class Player extends Entity {
         this.name = NameExtractor.extract();
         this.pos = new Vector2(280, 0);
         this.gameClass = gameClass;
-        img = new MultiDrawData(gameClass);
+        img = new AnimationDrawData("core/assets/Characters/" + gameClass + "/", States.class, 10, 6);
         stats = new EntityStats(gameClass);
         fireManager = new FireManager();
         equipped = new LockedInventory(this);
@@ -49,7 +49,9 @@ public class Player extends Entity {
 
     public void update(Map map) {
         //Keyboard events
-        if (Gdx.input.isKeyPressed(Keys.ANY_KEY)) ((MultiDrawData) img).update();
+        States currentState;
+        if (Gdx.input.isKeyPressed(Keys.ANY_KEY)) currentState = States.WALK;
+        else currentState = States.IDLE;
         if (Gdx.input.isKeyPressed(Keys.A)) move(LEFT);
         else if (Gdx.input.isKeyPressed(Keys.D)) move(RIGHT);
         if (Gdx.input.isKeyPressed(Keys.S)) move(DOWN);
@@ -59,6 +61,8 @@ public class Player extends Entity {
             fireManager.updateFire(img.getBoundingCircle(pos).getCenter(), stats, map, equipped.getWeapon().getStats());
         regen();
         if (!equipped.getManaSigil().isEmpty()) equipped.getManaSigil().update();
+        ((AnimationDrawData) img).setCurrentAction(currentState.ordinal());
+        img.update();
     }
 
     public void manaTrigger() {
@@ -70,7 +74,6 @@ public class Player extends Entity {
     }
 
     private void move(Directions dir) {
-        ((MultiDrawData) img).setDirection(dir);
         float movement = Game.deltaTime * stats.get(StatType.SPD) * 5;
         switch (dir) {
             case UP:
@@ -182,6 +185,10 @@ public class Player extends Entity {
 
     public GameClasses getGameClass() {
         return gameClass;
+    }
+
+    private enum States {
+        IDLE, WALK
     }
 
 

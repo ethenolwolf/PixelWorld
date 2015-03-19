@@ -1,6 +1,7 @@
 package com.mygdx.pixelworld.data.items.armors;
+
 import com.mygdx.pixelworld.data.assets.AssetType;
-import com.mygdx.pixelworld.data.draw.DrawData;
+import com.mygdx.pixelworld.data.draw.StaticDrawData;
 import com.mygdx.pixelworld.data.entities.characters.GameClasses;
 import com.mygdx.pixelworld.data.items.EquipItem;
 import com.mygdx.pixelworld.data.items.Item;
@@ -12,13 +13,13 @@ public class Armor extends Item implements EquipItem {
 
     public Armor(GameClasses playerClass, int rank) {
         armorStats = XMLLoader.retrieveArmor(playerClass, rank);
-        img = new DrawData(AssetType.ARMOR, armorStats.getName());
+        img = new StaticDrawData(AssetType.ARMOR, armorStats.getName());
         empty = false;
     }
 
     public Armor() {
         armorStats = new ArmorStats("", 0, null);
-        img = new DrawData();
+        img = new StaticDrawData();
         empty = true;
     }
 

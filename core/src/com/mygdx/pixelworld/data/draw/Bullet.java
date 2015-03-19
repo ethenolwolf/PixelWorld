@@ -10,15 +10,16 @@ import com.mygdx.pixelworld.data.utilities.EntityStats;
 import com.mygdx.pixelworld.data.utilities.StatType;
 
 public class Bullet implements Damaging {
+
+    private final boolean isPlayer;
     private final Vector2 startPoint;
     private final Vector2 direction;
+    private final Vector2 pos;
+    private final StaticDrawData img;
+    private final int damage;
     private final int range;
-    private final boolean isPlayer;
     private final int speed;
     private final float rotationSpeed;
-    private final int damage;
-    private final Vector2 pos;
-    private final DrawData img;
     private boolean alive = true;
 
     public Bullet(Vector2 startingPos, Vector2 endingPos, EntityStats es, WeaponStats ws) {
@@ -26,7 +27,7 @@ public class Bullet implements Damaging {
         this.direction = new Vector2(endingPos.x - startingPos.x, endingPos.y - startingPos.y).nor();
         isPlayer = ws instanceof PlayerWeaponStats;
         this.pos = new Vector2(startingPos);
-        img = new DrawData(ws.getName(), direction.angle());
+        img = new StaticDrawData(ws.getName(), direction.angle());
         this.damage = (int) (ws.getDamage() + es.get(StatType.ATK));
         this.range = ws.getRange();
         this.speed = ws.getSpeed();

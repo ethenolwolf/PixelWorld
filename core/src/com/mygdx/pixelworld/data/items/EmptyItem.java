@@ -1,9 +1,9 @@
 package com.mygdx.pixelworld.data.items;
 
-import com.mygdx.pixelworld.data.draw.DrawData;
+import com.mygdx.pixelworld.data.draw.StaticDrawData;
 
 public class EmptyItem extends Item {
     public EmptyItem() {
-        img = new DrawData();
+        img = new StaticDrawData();
     }
 }

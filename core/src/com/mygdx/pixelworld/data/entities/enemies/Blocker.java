@@ -3,6 +3,7 @@ package com.mygdx.pixelworld.data.entities.enemies;
 import com.badlogic.gdx.math.Vector2;
 import com.mygdx.pixelworld.Game;
 import com.mygdx.pixelworld.data.Map;
+import com.mygdx.pixelworld.data.draw.AnimationDrawData;
 import com.mygdx.pixelworld.data.entities.characters.Player;
 import com.mygdx.pixelworld.data.utilities.Algorithms;
 import com.mygdx.pixelworld.data.utilities.Constants;
@@ -16,7 +17,8 @@ public class Blocker extends Enemy {
     private final FireManager fireManager;
 
     public Blocker(float x, float y) {
-        super(x, y, Blocker.class);
+        super(x, y);
+        img = new AnimationDrawData("core/assets/Enemies/", States.class, 10, 6);
         fireManager = new FireManager();
         ATTACK_RANGE = 400;
         EXPERIENCE = 3;
@@ -28,6 +30,7 @@ public class Blocker extends Enemy {
             passiveAIUpdate(player, map);
             return;
         }
+        img.update();
         if (!fireManager.isFiring()) fireManager.setIsFiring(true);
         Algorithms.moveTowards(pos, player.getPos(), stats.get(StatType.SPD) * Game.deltaTime);
         pos = img.boundMap(pos);
@@ -48,6 +51,11 @@ public class Blocker extends Enemy {
         pos = img.boundMap(pos);
         fireManager.setTarget(player.getPos());
         fireManager.updateFire(pos, stats, map, Constants.enemyStats.get(Blocker.class));
+        img.update();
+    }
+
+    private enum States {
+        IDLE
     }
 
 }

@@ -3,10 +3,8 @@ package com.mygdx.pixelworld.data.entities.enemies;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.mygdx.pixelworld.data.Map;
-import com.mygdx.pixelworld.data.assets.AssetType;
 import com.mygdx.pixelworld.data.draw.BoundingCircle;
 import com.mygdx.pixelworld.data.draw.Bullet;
-import com.mygdx.pixelworld.data.draw.DrawData;
 import com.mygdx.pixelworld.data.entities.Entity;
 import com.mygdx.pixelworld.data.entities.characters.GameClasses;
 import com.mygdx.pixelworld.data.entities.characters.Player;
@@ -24,9 +22,8 @@ public abstract class Enemy extends Entity {
     protected int EXPERIENCE;
     protected List<Item> dropItems = new ArrayList<Item>();
 
-    public Enemy(float x, float y, Class type) {
+    public Enemy(float x, float y) {
         pos = new Vector2(x, y);
-        img = new DrawData(AssetType.ENEMY, type, new Vector2(1, 1), 0);
         stats = new EntityStats(this.getClass());
         calculateDropItems();
     }

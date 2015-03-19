@@ -3,7 +3,7 @@ package com.mygdx.pixelworld.data.items;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.mygdx.pixelworld.data.assets.AssetType;
-import com.mygdx.pixelworld.data.draw.DrawData;
+import com.mygdx.pixelworld.data.draw.StaticDrawData;
 import com.mygdx.pixelworld.data.entities.characters.Player;
 
 import java.util.List;
@@ -15,7 +15,7 @@ public class Chest extends Item {
     public Chest(List<Item> items, Vector2 pos) {
         inventory.fill(items);
         this.pos = pos;
-        img = new DrawData(AssetType.CHEST, null, new Vector2(1, 1), 0);
+        img = new StaticDrawData(AssetType.CHEST, "chest");
     }
 
     public Inventory getInventory() {

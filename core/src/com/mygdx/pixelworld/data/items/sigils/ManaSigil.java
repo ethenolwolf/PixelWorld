@@ -2,7 +2,7 @@ package com.mygdx.pixelworld.data.items.sigils;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
-import com.mygdx.pixelworld.data.draw.DrawData;
+import com.mygdx.pixelworld.data.draw.StaticDrawData;
 import com.mygdx.pixelworld.data.entities.characters.GameClasses;
 import com.mygdx.pixelworld.data.entities.characters.Player;
 import com.mygdx.pixelworld.data.entities.enemies.Enemy;
@@ -19,7 +19,7 @@ public class ManaSigil extends Item implements Damaging, EquipItem {
     SigilName name;
 
     public ManaSigil() {
-        img = new DrawData();
+        img = new StaticDrawData();
         empty = true;
     }
 

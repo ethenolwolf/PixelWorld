@@ -1,7 +1,7 @@
 package com.mygdx.pixelworld.data.items.weapons;
 
 import com.mygdx.pixelworld.data.assets.AssetType;
-import com.mygdx.pixelworld.data.draw.DrawData;
+import com.mygdx.pixelworld.data.draw.StaticDrawData;
 import com.mygdx.pixelworld.data.entities.characters.GameClasses;
 import com.mygdx.pixelworld.data.items.EquipItem;
 import com.mygdx.pixelworld.data.items.Item;
@@ -13,12 +13,12 @@ public class Weapon extends Item implements EquipItem {
 
     public Weapon(GameClasses playerClass, int rank) {
         weaponStats = XMLLoader.retrieveWeapon(playerClass, rank);
-        img = new DrawData(AssetType.WEAPON, weaponStats.getName());
+        img = new StaticDrawData(AssetType.WEAPON, weaponStats.getName());
         isEmpty = false;
     }
 
     public Weapon() {
-        img = new DrawData();
+        img = new StaticDrawData();
         weaponStats = null;
         isEmpty = true;
     }

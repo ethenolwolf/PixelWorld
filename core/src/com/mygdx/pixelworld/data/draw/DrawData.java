@@ -1,45 +1,18 @@
 package com.mygdx.pixelworld.data.draw;
 
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.mygdx.pixelworld.data.Map;
-import com.mygdx.pixelworld.data.assets.AssetType;
 import com.mygdx.pixelworld.data.assets.Assets;
 
-public class DrawData {
-    private final TextureRegion texture;
+public abstract class DrawData {
+    protected TextureRegion texture;
     protected Vector2 scaleFactor;
     protected float rotationAngle;
 
-    public DrawData(AssetType assetType, Class classType, Vector2 scaleFactor, float rotationAngle) {
-        //Enemy //Chest
-        setScaleFactor(scaleFactor);
-        setRotationAngle(rotationAngle);
-        texture = new TextureRegion(Assets.getTexture(assetType, classType));
-    }
-
-    public DrawData(AssetType assetType, String name) {
-        //Weapon // Armor //Sigil
-        setScaleFactor(new Vector2(1, 1));
-        setRotationAngle(0);
-        texture = new TextureRegion(Assets.getTexture(assetType, name));
-    }
-
-    public DrawData(String name, float rotationAngle) {
-        //Bullet
-        setScaleFactor(new Vector2(1, 1));
-        setRotationAngle(rotationAngle);
-        texture = new TextureRegion(Assets.getTexture(AssetType.BULLET, name));
-    }
-
     public DrawData() {
-        //EmptyItem
-        setScaleFactor(new Vector2(1, 1));
-        setRotationAngle(0);
-        texture = new TextureRegion(new Texture("core/assets/placeholder.png"));
     }
 
     public float getWidth() {
@@ -78,19 +51,18 @@ public class DrawData {
         rotationAngle = angle;
     }
 
-    public void draw(SpriteBatch batch, Vector2 absolutePosition) {
-        if (absolutePosition.x + getWidth() < 0 || absolutePosition.x > Map.getWidth() ||
-                absolutePosition.y + getHeight() < 0 || absolutePosition.y > Map.getHeight()) return;
-
-        batch.draw(texture, getEffectivePosition(getOriginalPosition(absolutePosition)).x, getEffectivePosition(getOriginalPosition(absolutePosition)).y, getOriginCenter().x,
-                getOriginCenter().y, getOriginalWidth(), getOriginalHeight(), scaleFactor.x, scaleFactor.y, rotationAngle);
-    }
+    public abstract void draw(SpriteBatch batch, Vector2 absolutePosition);
 
     public void draw(SpriteBatch batch, Vector2 absolutePosition, float alpha) {
         Color c = batch.getColor();
         batch.setColor(c.r, c.g, c.b, alpha);
         draw(batch, absolutePosition);
         batch.setColor(c.r, c.g, c.b, 1.0f);
+    }
+
+    protected boolean isVisible(Vector2 absolutePosition) {
+        return !(absolutePosition.x + getWidth() < 0 || absolutePosition.x > Map.getWidth() ||
+                absolutePosition.y + getHeight() < 0 || absolutePosition.y > Map.getHeight());
     }
 
     public void drawEffective(SpriteBatch batch, Vector2 effectivePosition) {
@@ -126,4 +98,6 @@ public class DrawData {
     public void addRotationAngle(float v) {
         rotationAngle += v;
     }
+
+    public abstract void update();
 }
