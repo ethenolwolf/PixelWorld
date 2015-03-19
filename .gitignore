@@ -7,3 +7,5 @@ build/
 .gradle
 ## Linux testing
 *.sh
+## Windows
+*.db
