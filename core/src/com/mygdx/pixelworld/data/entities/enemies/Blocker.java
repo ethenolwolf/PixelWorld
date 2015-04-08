@@ -1,8 +1,8 @@
 package com.mygdx.pixelworld.data.entities.enemies;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
-import com.mygdx.pixelworld.Game;
-import com.mygdx.pixelworld.data.Map;
+import com.mygdx.pixelworld.data.World;
 import com.mygdx.pixelworld.data.draw.AnimationDrawData;
 import com.mygdx.pixelworld.data.entities.characters.Player;
 import com.mygdx.pixelworld.data.utilities.Algorithms;
@@ -25,21 +25,21 @@ public class Blocker extends Enemy {
     }
 
     @Override
-    protected void activeAIUpdate(Player player, Map map) {
+    protected void activeAIUpdate(Player player, World world) {
         if (!player.getStats().isVisible()) {
-            passiveAIUpdate(player, map);
+            passiveAIUpdate(player, world);
             return;
         }
         img.update();
         if (!fireManager.isFiring()) fireManager.setIsFiring(true);
-        Algorithms.moveTowards(pos, player.getPos(), stats.get(StatType.SPD) * Game.deltaTime);
+        Algorithms.moveTowards(pos, player.getPos(), stats.get(StatType.SPD) * Gdx.graphics.getDeltaTime());
         pos = img.boundMap(pos);
         fireManager.setTarget(player.getPos());
-        fireManager.updateFire(new Vector2(pos).add(img.getWidth() / 2, img.getHeight() / 2), stats, map, Constants.enemyStats.get(Blocker.class));
+        fireManager.updateFire(new Vector2(pos).add(img.getWidth() / 2, img.getHeight() / 2), stats, world, Constants.enemyStats.get(Blocker.class));
     }
 
     @Override
-    void passiveAIUpdate(Player player, Map map) {
+    void passiveAIUpdate(Player player, World world) {
         if (fireManager.isFiring()) fireManager.setIsFiring(false);
         Random rand = new Random();
         float x = rand.nextFloat();
@@ -50,8 +50,13 @@ public class Blocker extends Enemy {
         pos.add(x * 5, y * 5);
         pos = img.boundMap(pos);
         fireManager.setTarget(player.getPos());
-        fireManager.updateFire(pos, stats, map, Constants.enemyStats.get(Blocker.class));
+        fireManager.updateFire(pos, stats, world, Constants.enemyStats.get(Blocker.class));
         img.update();
+    }
+
+    @Override
+    public String getWatch() {
+        return "";//String.format("Blocker@%x -> X = %.2f\t Y = %.2f", this.hashCode(), pos.x, pos.y);
     }
 
     private enum States {

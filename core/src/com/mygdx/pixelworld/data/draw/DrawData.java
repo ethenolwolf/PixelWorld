@@ -4,22 +4,21 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
-import com.mygdx.pixelworld.data.Map;
-import com.mygdx.pixelworld.data.assets.Assets;
+import com.mygdx.pixelworld.data.World;
 
 public abstract class DrawData {
-    protected TextureRegion texture;
-    protected Vector2 scaleFactor;
-    protected float rotationAngle;
+    TextureRegion texture;
+    Vector2 scaleFactor;
+    float rotationAngle;
 
-    public DrawData() {
+    DrawData() {
     }
 
     public float getWidth() {
         return getOriginalWidth() * scaleFactor.x;
     }
 
-    protected float getOriginalWidth() {
+    float getOriginalWidth() {
         return texture.getRegionWidth();
     }
 
@@ -27,20 +26,15 @@ public abstract class DrawData {
         return getOriginalHeight() * scaleFactor.y;
     }
 
-    protected float getOriginalHeight() {
+    float getOriginalHeight() {
         return texture.getRegionHeight();
     }
 
-    public Vector2 getOriginCenter() {
+    Vector2 getOriginCenter() {
         return new Vector2(getOriginalWidth() / 2, getOriginalHeight() / 2);
     }
 
-    public Vector2 getEffectivePosition(Vector2 absolutePosition) {
-        Vector2 out = new Vector2(absolutePosition);
-        return out.add(Map.getOffset());
-    }
-
-    public Vector2 getOriginalPosition(Vector2 absolutePosition) {
+    Vector2 getOriginalPosition(Vector2 absolutePosition) {
         return new Vector2(
                 absolutePosition.x + (getWidth() - getOriginalWidth()) / 2,
                 absolutePosition.y + (getHeight() - getOriginalHeight()) / 2
@@ -60,13 +54,13 @@ public abstract class DrawData {
         batch.setColor(c.r, c.g, c.b, 1.0f);
     }
 
-    protected boolean isVisible(Vector2 absolutePosition) {
-        return !(absolutePosition.x + getWidth() < 0 || absolutePosition.x > Map.getWidth() ||
-                absolutePosition.y + getHeight() < 0 || absolutePosition.y > Map.getHeight());
+    boolean isVisible(Vector2 absolutePosition) {
+        return !(absolutePosition.x + getWidth() < 0 || absolutePosition.x > World.getWidth() ||
+                absolutePosition.y + getHeight() < 0 || absolutePosition.y > World.getHeight());
     }
 
-    public void drawEffective(SpriteBatch batch, Vector2 effectivePosition) {
-        batch.draw(texture, effectivePosition.x, effectivePosition.y, getOriginCenter().x,
+    public void drawOnScreen(SpriteBatch batch, Vector2 screenPosition) {
+        batch.draw(texture, screenPosition.x + World.getCameraOffset().x, screenPosition.y + World.getCameraOffset().y, getOriginCenter().x,
                 getOriginCenter().y, getWidth(), getHeight(), scaleFactor.x, scaleFactor.y, rotationAngle);
     }
 
@@ -82,13 +76,9 @@ public abstract class DrawData {
         Vector2 out = new Vector2(absolutePosition);
         if (out.x < 0) out.x = 0;
         if (out.y < 0) out.y = 0;
-        if (out.x + getWidth() > Map.getWidth()) out.x = Map.getWidth() - getWidth();
-        if (out.y + getHeight() > Map.getHeight()) out.y = Map.getHeight() - getHeight();
+        if (out.x + getWidth() > World.getWidth()) out.x = World.getWidth() - getWidth();
+        if (out.y + getHeight() > World.getHeight()) out.y = World.getHeight() - getHeight();
         return out;
-    }
-
-    public void write(SpriteBatch batch, String name, float x, float y) {
-        Assets.write(batch, name, x, y);
     }
 
     void setScaleFactor(Vector2 scaleFactor) {

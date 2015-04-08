@@ -12,8 +12,8 @@ import com.mygdx.pixelworld.data.utilities.Damaging;
 
 public class ManaSigil extends Item implements Damaging, EquipItem {
 
-    protected boolean empty;
-    protected GameClasses gameClass;
+    boolean empty;
+    GameClasses gameClass;
     int damage;
     float price;
     SigilName name;
@@ -49,10 +49,6 @@ public class ManaSigil extends Item implements Damaging, EquipItem {
 
     public float getPrice() {
         return price;
-    }
-
-    public SigilName getName() {
-        return name;
     }
 
     public boolean isEmpty() {

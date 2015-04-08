@@ -2,10 +2,7 @@ package com.mygdx.pixelworld.data.items.weapons;
 
 public class EnemyWeaponStats extends WeaponStats {
 
-    Class enemyType;
-
-    public EnemyWeaponStats(Class enemyType, int damage, int range, int speed, String name, float rotationSpeed) {
-        this.enemyType = enemyType;
+    public EnemyWeaponStats(int damage, int range, int speed, String name, float rotationSpeed) {
         this.damage = damage;
         this.range = range;
         this.speed = speed;

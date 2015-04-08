@@ -1,11 +1,11 @@
 package com.mygdx.pixelworld.data.items.weapons;
 
 public abstract class WeaponStats {
-    protected int damage;
-    protected int range;
-    protected int speed;
-    protected String name;
-    protected float rotationSpeed;
+    int damage;
+    int range;
+    int speed;
+    String name;
+    float rotationSpeed;
 
     public int getDamage() {
         return damage;
@@ -20,7 +20,7 @@ public abstract class WeaponStats {
     }
 
     public String getName() {
-        return name;
+        return name != null ? name : "";
     }
 
     public float getRotationSpeed() {

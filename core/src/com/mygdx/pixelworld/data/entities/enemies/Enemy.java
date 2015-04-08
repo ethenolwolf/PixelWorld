@@ -2,7 +2,7 @@ package com.mygdx.pixelworld.data.entities.enemies;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
-import com.mygdx.pixelworld.data.Map;
+import com.mygdx.pixelworld.data.World;
 import com.mygdx.pixelworld.data.draw.BoundingCircle;
 import com.mygdx.pixelworld.data.draw.Bullet;
 import com.mygdx.pixelworld.data.entities.Entity;
@@ -11,18 +11,19 @@ import com.mygdx.pixelworld.data.entities.characters.Player;
 import com.mygdx.pixelworld.data.items.Item;
 import com.mygdx.pixelworld.data.items.weapons.Weapon;
 import com.mygdx.pixelworld.data.utilities.EntityStats;
+import com.mygdx.pixelworld.debug.Debuggable;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-public abstract class Enemy extends Entity {
+public abstract class Enemy extends Entity implements Debuggable {
 
-    protected int ATTACK_RANGE;
-    protected int EXPERIENCE;
-    protected List<Item> dropItems = new ArrayList<Item>();
+    int ATTACK_RANGE;
+    int EXPERIENCE;
+    private final List<Item> dropItems = new ArrayList<Item>();
 
-    public Enemy(float x, float y) {
+    Enemy(float x, float y) {
         pos = new Vector2(x, y);
         stats = new EntityStats(this.getClass());
         calculateDropItems();
@@ -38,19 +39,18 @@ public abstract class Enemy extends Entity {
 
     }
 
-    public void update(Player player, Map map) {
+    public void update(Player player, World world) {
         if (!stats.isAlive()) return;
-        if (player.getPos().dst(pos) < ATTACK_RANGE) activeAIUpdate(player, map);
-        else passiveAIUpdate(player, map);
+        if (player.getPos().dst(pos) < ATTACK_RANGE) activeAIUpdate(player, world);
+        else passiveAIUpdate(player, world);
     }
 
-    void activeAIUpdate(Player player, Map map) {
+    void activeAIUpdate(Player player, World world) {
     }
 
-    void passiveAIUpdate(Player player, Map map) {
+    void passiveAIUpdate(Player player, World world) {
     }
 
-    @Override
     public void draw(SpriteBatch batch) {
         img.draw(batch, pos);
     }

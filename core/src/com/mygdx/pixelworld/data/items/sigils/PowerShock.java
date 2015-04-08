@@ -5,7 +5,6 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.mygdx.pixelworld.GUI.Logger;
-import com.mygdx.pixelworld.data.Map;
 import com.mygdx.pixelworld.data.assets.AssetType;
 import com.mygdx.pixelworld.data.draw.BoundingCircle;
 import com.mygdx.pixelworld.data.draw.StaticDrawData;
@@ -40,7 +39,7 @@ public class PowerShock extends ManaSigil {
     @Override
     public void draw(SpriteBatch batch) {
         for (PowerShockBlast blast : blasts) {
-            batch.draw(texture, (blast.getCenter().x + Map.getOffset().x) - (texture.getRegionWidth() / 2), blast.getCenter().y + Map.getOffset().y - texture.getRegionHeight() / 2, texture.getRegionWidth() / 2,
+            batch.draw(texture, blast.getCenter().x - (texture.getRegionWidth() / 2), blast.getCenter().y - texture.getRegionHeight() / 2, texture.getRegionWidth() / 2,
                     texture.getRegionHeight() / 2, texture.getRegionWidth(), texture.getRegionHeight(), blast.getCurrentDimension().x, blast.getCurrentDimension().y, 0);
         }
     }

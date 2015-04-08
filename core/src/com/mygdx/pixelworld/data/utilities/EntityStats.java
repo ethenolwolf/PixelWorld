@@ -54,7 +54,7 @@ public class EntityStats {
         this.gameClass = null;
     }
 
-    void setStat(StatType statType, float value) {
+    private void setStat(StatType statType, float value) {
         stats.put(statType, value);
     }
 

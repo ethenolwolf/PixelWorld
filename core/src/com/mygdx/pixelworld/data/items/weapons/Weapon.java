@@ -13,7 +13,7 @@ public class Weapon extends Item implements EquipItem {
 
     public Weapon(GameClasses playerClass, int rank) {
         weaponStats = XMLLoader.retrieveWeapon(playerClass, rank);
-        img = new StaticDrawData(AssetType.WEAPON, weaponStats.getName());
+        img = new StaticDrawData(AssetType.WEAPON, weaponStats != null ? weaponStats.getName() : null);
         isEmpty = false;
     }
 

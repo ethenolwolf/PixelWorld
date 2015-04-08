@@ -4,9 +4,9 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
+import com.mygdx.pixelworld.debug.Debug;
 import com.mygdx.pixelworld.GUI.Logger;
-import com.mygdx.pixelworld.Game;
-import com.mygdx.pixelworld.data.Map;
+import com.mygdx.pixelworld.data.World;
 import com.mygdx.pixelworld.data.draw.AnimationDrawData;
 import com.mygdx.pixelworld.data.draw.Bullet;
 import com.mygdx.pixelworld.data.entities.Entity;
@@ -17,14 +17,14 @@ import com.mygdx.pixelworld.data.items.armors.Armor;
 import com.mygdx.pixelworld.data.items.sigils.ManaSigil;
 import com.mygdx.pixelworld.data.items.weapons.Weapon;
 import com.mygdx.pixelworld.data.utilities.*;
+import com.mygdx.pixelworld.debug.Debuggable;
 
 import java.util.List;
 
 import static com.mygdx.pixelworld.data.utilities.Directions.*;
 
-public class Player extends Entity {
+public class Player extends Entity implements Debuggable{
 
-    private final String name;
     private final FireManager fireManager;
     private final LockedInventory equipped;
     private final Inventory inventory;
@@ -33,7 +33,7 @@ public class Player extends Entity {
     private int level = 1;
 
     public Player(GameClasses gameClass) {
-        this.name = NameExtractor.extract();
+        String name = NameExtractor.extract();
         this.pos = new Vector2(280, 0);
         this.gameClass = gameClass;
         img = new AnimationDrawData("core/assets/Characters/" + gameClass + "/", States.class, 10, 6);
@@ -41,13 +41,16 @@ public class Player extends Entity {
         fireManager = new FireManager();
         equipped = new LockedInventory(this);
         inventory = new Inventory(8);
+
+        //Debug
+        Debug.addDebuggable(this);
     }
 
     public Inventory getInventory() {
         return inventory;
     }
 
-    public void update(Map map) {
+    public void update(World world) {
         //Keyboard events
         States currentState;
         if (Gdx.input.isKeyPressed(Keys.ANY_KEY)) currentState = States.WALK;
@@ -58,7 +61,7 @@ public class Player extends Entity {
         else if (Gdx.input.isKeyPressed(Keys.W)) move(UP);
 
         if (!equipped.getWeapon().isEmpty())
-            fireManager.updateFire(img.getBoundingCircle(pos).getCenter(), stats, map, equipped.getWeapon().getStats());
+            fireManager.updateFire(img.getBoundingCircle(pos).getCenter(), stats, world, equipped.getWeapon().getStats());
         regen();
         if (!equipped.getManaSigil().isEmpty()) equipped.getManaSigil().update();
         ((AnimationDrawData) img).setCurrentAction(currentState.ordinal());
@@ -74,7 +77,7 @@ public class Player extends Entity {
     }
 
     private void move(Directions dir) {
-        float movement = Game.deltaTime * stats.get(StatType.SPD) * 5;
+        float movement = Gdx.graphics.getDeltaTime() * stats.get(StatType.SPD) * 5;
         switch (dir) {
             case UP:
                 pos.add(0, movement);
@@ -92,20 +95,18 @@ public class Player extends Entity {
         pos = img.boundMap(pos);
     }
 
-    @Override
     public void draw(SpriteBatch batch) {
         img.draw(batch, pos, stats.isVisible() ? 1f : 0.5f);
         equipped.getManaSigil().draw(batch);
-        img.write(batch, name, Constants.gameWidth + 10, Constants.gameHeight - 50);
     }
 
     private void regen() {
         if (stats.get(StatType.HEALTH) < stats.getInit(StatType.HEALTH))
-            stats.addStat(StatType.HEALTH, Game.deltaTime * stats.get(StatType.VIT));
+            stats.addStat(StatType.HEALTH, Gdx.graphics.getDeltaTime() * stats.get(StatType.VIT));
         if (stats.get(StatType.HEALTH) > stats.getInit(StatType.HEALTH)) stats.setAsInit(StatType.HEALTH);
 
         if (stats.get(StatType.MANA) < stats.getInit(StatType.MANA))
-            stats.addStat(StatType.MANA, Game.deltaTime * stats.get(StatType.WIS));
+            stats.addStat(StatType.MANA, Gdx.graphics.getDeltaTime() * stats.get(StatType.WIS));
         if (stats.get(StatType.MANA) > stats.getInit(StatType.MANA)) stats.setAsInit(StatType.MANA);
     }
 
@@ -187,9 +188,12 @@ public class Player extends Entity {
         return gameClass;
     }
 
+    @Override
+    public String getWatch() {
+        return String.format("Player -> X = %f\tY = %f", pos.x, pos.y);
+    }
+
     private enum States {
         IDLE, WALK
     }
-
-
 }

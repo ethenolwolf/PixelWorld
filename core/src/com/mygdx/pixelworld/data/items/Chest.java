@@ -10,7 +10,7 @@ import java.util.List;
 
 public class Chest extends Item {
     private final Vector2 pos;
-    private Inventory inventory = new Inventory(8);
+    private final Inventory inventory = new Inventory(8);
 
     public Chest(List<Item> items, Vector2 pos) {
         inventory.fill(items);

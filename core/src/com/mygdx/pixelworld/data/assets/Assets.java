@@ -1,25 +1,23 @@
 package com.mygdx.pixelworld.data.assets;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.stbtt.TrueTypeFontFactory;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.mygdx.pixelworld.GUI.Logger;
-import com.mygdx.pixelworld.data.utilities.Constants;
 
 public class Assets {
 
     private static BitmapFont font;
-    private static Texture BACKGROUND_TEX;
-    private static Texture PANEL_TEX;
 
     public static void init() {
-        font = TrueTypeFontFactory.createBitmapFont(Gdx.files.internal("core/assets/Ubuntu-MI.ttf"), Constants.FONT_CHARACTERS, 20f, 20f, 1.0f, Constants.gameWidth, Constants.gameHeight);
-        font.setColor(1f, 1f, 1f, 1f);
-
-        BACKGROUND_TEX = new Texture("core/assets/background.png");
-        PANEL_TEX = new Texture("core/assets/panel.png");
+        FreeTypeFontGenerator ft = new FreeTypeFontGenerator(Gdx.files.internal("core/assets/Ubuntu.ttf"));
+        FreeTypeFontGenerator.FreeTypeFontParameter p = new FreeTypeFontGenerator.FreeTypeFontParameter();
+        p.size = 16;
+        p.color = Color.RED;
+        font = ft.generateFont(p);
     }
 
     public static Texture getTexture(AssetType type, String name) {
@@ -39,20 +37,8 @@ public class Assets {
         return new Texture("core/assets/badlogic.jpg");
     }
 
-    public static Texture getTexture(AssetType assetType, Class type) {
-        switch (assetType) {
-            case BACKGROUND:
-                if (BACKGROUND_TEX != null) return BACKGROUND_TEX;
-                break;
-            case PANEL:
-                if (PANEL_TEX != null) return PANEL_TEX;
-        }
-        Logger.log("Assets.getTexture()", "Texture not found. AssetType:" + assetType.toString() + " Class:" + type.toString());
-        return new Texture("core/assets/badlogic.jpg");
-    }
-
-    public static void write(SpriteBatch batch, String name, float x, float y) {
-        font.draw(batch, name, x, y);
+    public static void write(SpriteBatch batch, String message, float x, float y) {
+        font.draw(batch, message, x, y);
     }
 
 }

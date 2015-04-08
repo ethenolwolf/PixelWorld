@@ -41,19 +41,19 @@ public class Inventory {
         for (int i = 0; i < inv.length; i++) empty(i);
     }
 
-    public void empty(int slot) {
+    void empty(int slot) {
         set(new EmptyItem(), slot);
     }
 
-    public Item get(int slot) {
+    Item get(int slot) {
         return inv[slot];
     }
 
-    protected void set(Item item, int slot) {
+    void set(Item item, int slot) {
         inv[slot] = item;
     }
 
-    public boolean isEmpty(int slot) {
+    private boolean isEmpty(int slot) {
         return inv[slot] instanceof EmptyItem;
     }
 

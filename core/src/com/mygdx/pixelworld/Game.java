@@ -4,14 +4,17 @@ import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
+import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.mygdx.pixelworld.GUI.GUI;
-import com.mygdx.pixelworld.data.Map;
+import com.mygdx.pixelworld.data.World;
 import com.mygdx.pixelworld.data.assets.Assets;
 import com.mygdx.pixelworld.data.entities.characters.GameClasses;
 import com.mygdx.pixelworld.data.entities.characters.Player;
 import com.mygdx.pixelworld.data.utilities.Constants;
+import com.mygdx.pixelworld.debug.Debug;
 
 /**
  * Main game class.
@@ -20,23 +23,28 @@ import com.mygdx.pixelworld.data.utilities.Constants;
  */
 public class Game extends ApplicationAdapter implements InputProcessor {
 
-    public static float deltaTime = 0;
     private SpriteBatch batch;
-    private Map map;
+    private World world;
     private Player player;
     private ShapeRenderer shapeRenderer;
+    public static OrthographicCamera camera;
 
     @Override
     public void create() {
         batch = new SpriteBatch();
         Assets.init();
         Constants.init();
-        map = new Map();
-        map.generateEnemies(15);
+        world = new World();
+        world.generateEnemies(15);
         player = new Player(GameClasses.WIZARD);
+
+        camera = new OrthographicCamera();
+        camera.setToOrtho(false, Constants.gameWidth+Constants.panelWidth, Constants.gameHeight);
+        camera.update();
+
         Gdx.input.setInputProcessor(this);
         shapeRenderer = new ShapeRenderer();
-        GUI.init(batch, player, map);
+        GUI.init(batch, player, world);
     }
 
     /**
@@ -44,19 +52,23 @@ public class Game extends ApplicationAdapter implements InputProcessor {
      */
     @Override
     public void render() {
-        //Reads the deltaTime once, for all the moving entities, so that it's the same.
-        deltaTime = Gdx.graphics.getDeltaTime();
+        //Logic update
+        player.update(world);
+        world.update(player);
 
-        player.update(map);
-        map.update(player);
+        //Clear screen
+        Gdx.gl.glClearColor(0.5f, 0, 0, 1);
+        Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        batch.begin();
-        map.draw(batch);
+        //Draw
+        world.drawBottom(batch, camera);
         player.draw(batch);
         GUI.draw();
+        Debug.draw(batch);
         batch.end();
-
-        map.shapeDraw(shapeRenderer, player);
+        world.drawTop();
+        world.shapeDraw(shapeRenderer, player);
     }
 
     @Override
@@ -80,7 +92,7 @@ public class Game extends ApplicationAdapter implements InputProcessor {
         if (button == Input.Buttons.LEFT) {
             if (screenX < Constants.gameWidth) {
                 player.getFireManager().setIsFiring(true);
-                player.getFireManager().setTarget(screenX - Map.getOffset().x, Gdx.graphics.getHeight() - screenY - Map.getOffset().y);
+                player.getFireManager().setTarget(screenX + World.getCameraOffset().x, Gdx.graphics.getHeight() - screenY + World.getCameraOffset().y);
             } else {
                 GUI.clickDown(screenX, (int) Constants.gameHeight - screenY);
             }
@@ -97,7 +109,7 @@ public class Game extends ApplicationAdapter implements InputProcessor {
 
     @Override
     public boolean touchDragged(int screenX, int screenY, int pointer) {
-        player.getFireManager().setTarget(screenX - Map.getOffset().x, Gdx.graphics.getHeight() - screenY - Map.getOffset().y);
+        player.getFireManager().setTarget(screenX + World.getCameraOffset().x, Gdx.graphics.getHeight() - screenY + World.getCameraOffset().y);
         GUI.updateMousePosition(screenX, (int) Constants.gameHeight - screenY);
         return true;
     }

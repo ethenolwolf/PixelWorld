@@ -4,7 +4,7 @@ import com.mygdx.pixelworld.data.entities.characters.GameClasses;
 
 public class PlayerWeaponStats extends WeaponStats {
 
-    private GameClasses type;
+    private final GameClasses type;
 
     public PlayerWeaponStats(GameClasses playerClass, String name, int damage, int range, int speed, float rotationSpeed) {
         this.type = playerClass;

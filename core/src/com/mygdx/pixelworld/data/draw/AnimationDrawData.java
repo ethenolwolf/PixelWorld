@@ -6,16 +6,14 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
-import com.mygdx.pixelworld.Game;
-import com.mygdx.pixelworld.data.Map;
 
 import java.util.HashMap;
 
 public class AnimationDrawData extends DrawData {
 
-    java.util.Map<Integer, Animation> animationMap;
-    int currentAction;
-    float stateTime;
+    private final java.util.Map<Integer, Animation> animationMap;
+    private int currentAction;
+    private float stateTime;
 
     public <E extends Enum<E>> AnimationDrawData(String baseFilePath, Class<E> enumClass, int sheetCols, int sheetRows) {
         E[] values = enumClass.getEnumConstants();
@@ -40,7 +38,7 @@ public class AnimationDrawData extends DrawData {
 
     @Override
     public void update() {
-        stateTime += Game.deltaTime;
+        stateTime += Gdx.graphics.getDeltaTime();
         texture = animationMap.get(currentAction).getKeyFrame(stateTime, true);
     }
 
@@ -51,6 +49,6 @@ public class AnimationDrawData extends DrawData {
 
     @Override
     public void draw(SpriteBatch batch, Vector2 absolutePosition) {
-        batch.draw(texture, absolutePosition.x + Map.getOffset().x, absolutePosition.y + Map.getOffset().y);
+        batch.draw(texture, absolutePosition.x, absolutePosition.y);
     }
 }

@@ -9,10 +9,11 @@ import com.mygdx.pixelworld.data.utilities.XMLLoader;
 
 public class Armor extends Item implements EquipItem {
     private final boolean empty;
-    private ArmorStats armorStats;
+    private final ArmorStats armorStats;
 
-    public Armor(GameClasses playerClass, int rank) {
+    private Armor(GameClasses playerClass, int rank) {
         armorStats = XMLLoader.retrieveArmor(playerClass, rank);
+        assert armorStats != null;
         img = new StaticDrawData(AssetType.ARMOR, armorStats.getName());
         empty = false;
     }

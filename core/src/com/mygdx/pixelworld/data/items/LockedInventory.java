@@ -8,7 +8,7 @@ import com.mygdx.pixelworld.data.items.weapons.Weapon;
 
 public class LockedInventory extends Inventory {
 
-    private GameClasses playerClass;
+    private final GameClasses playerClass;
 
     public LockedInventory(Player player) {
         super(4);

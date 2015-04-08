@@ -1,10 +1,9 @@
 package com.mygdx.pixelworld.GUI;
 
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
-import com.mygdx.pixelworld.data.Map;
-import com.mygdx.pixelworld.data.assets.AssetType;
-import com.mygdx.pixelworld.data.assets.Assets;
+import com.mygdx.pixelworld.data.World;
 import com.mygdx.pixelworld.data.draw.BoundingCircle;
 import com.mygdx.pixelworld.data.entities.characters.Player;
 import com.mygdx.pixelworld.data.items.Chest;
@@ -25,17 +24,18 @@ public class GUI {
     private static final Vector2 mousePosition = new Vector2(0, 0);
     private static SpriteBatch batch;
     private static Player player;
-    private static Map map;
-    private static boolean[] isSelected = new boolean[20];
+    private static World world;
+    private static final boolean[] isSelected = new boolean[20];
     private static Chest chest = null;
     private static Vector2 mouseCatchOffset = new Vector2(0, 0);
     private static int startSlot;
+    private static final Texture panelTexture = new Texture("core/assets/panel.png");
 
 
-    public static void init(SpriteBatch batch, Player player, Map map) {
+    public static void init(SpriteBatch batch, Player player, World world) {
         GUI.batch = batch;
         GUI.player = player;
-        GUI.map = map;
+        GUI.world = world;
         for (int i = 0; i < 20; i++) {
             if (i < 4)//Equipped
                 itemPositions[i] = new Vector2(Constants.gameWidth + LEFT_BORDER + SLOT_SIZE * i, 220);
@@ -48,41 +48,36 @@ public class GUI {
     }
 
     public static void draw() {
-        batch.draw(Assets.getTexture(AssetType.PANEL, GUI.class), Constants.gameWidth, 0);
+        batch.draw(panelTexture, Constants.gameWidth + World.getCameraOffset().x, World.getCameraOffset().y);
         drawEquipped();
         drawInventory();
         if (chest != null) drawChest();
     }
 
-
-    public static void updateChest(Chest c) {
-        chest = c;
-    }
-
     private static void drawEquipped() {
-        if (!isSelected[0]) player.getWeapon().getImg().drawEffective(batch, itemPositions[0]);
-        else player.getWeapon().getImg().drawEffective(batch, new Vector2(mousePosition).add(mouseCatchOffset));
+        if (!isSelected[0]) player.getWeapon().getImg().drawOnScreen(batch, itemPositions[0]);
+        else player.getWeapon().getImg().drawOnScreen(batch, new Vector2(mousePosition).add(mouseCatchOffset));
 
-        if (!isSelected[1]) player.getManaSigil().getImg().drawEffective(batch, itemPositions[1]);
-        else player.getManaSigil().getImg().drawEffective(batch, new Vector2(mousePosition).add(mouseCatchOffset));
+        if (!isSelected[1]) player.getManaSigil().getImg().drawOnScreen(batch, itemPositions[1]);
+        else player.getManaSigil().getImg().drawOnScreen(batch, new Vector2(mousePosition).add(mouseCatchOffset));
 
-        if (!isSelected[2]) player.getArmor().getImg().drawEffective(batch, itemPositions[2]);
-        else player.getArmor().getImg().drawEffective(batch, new Vector2(mousePosition).add(mouseCatchOffset));
+        if (!isSelected[2]) player.getArmor().getImg().drawOnScreen(batch, itemPositions[2]);
+        else player.getArmor().getImg().drawOnScreen(batch, new Vector2(mousePosition).add(mouseCatchOffset));
     }
 
     private static void drawInventory() {
         Item[] inv = player.getInventory().getItems();
         for (int i = 0; i < inv.length; i++) {
-            if (!isSelected[i + 4]) inv[i].getImg().drawEffective(batch, itemPositions[i + 4]);
-            else inv[i].getImg().drawEffective(batch, new Vector2(mousePosition).add(mouseCatchOffset));
+            if (!isSelected[i + 4]) inv[i].getImg().drawOnScreen(batch, itemPositions[i + 4]);
+            else inv[i].getImg().drawOnScreen(batch, new Vector2(mousePosition).add(mouseCatchOffset));
         }
     }
 
     private static void drawChest() {
         Item[] inv = chest.getInventory().getItems();
         for (int i = 0; i < inv.length; i++) {
-            if (!isSelected[i + 12]) inv[i].getImg().drawEffective(batch, itemPositions[i + 12]);
-            else inv[i].getImg().drawEffective(batch, new Vector2(mousePosition).add(mouseCatchOffset));
+            if (!isSelected[i + 12]) inv[i].getImg().drawOnScreen(batch, itemPositions[i + 12]);
+            else inv[i].getImg().drawOnScreen(batch, new Vector2(mousePosition).add(mouseCatchOffset));
         }
     }
 
@@ -103,6 +98,10 @@ public class GUI {
     public static void updateMousePosition(int screenX, int screenY) {
         mousePosition.x = screenX;
         mousePosition.y = screenY;
+    }
+
+    public static void updateChest(Chest c) {
+        chest = c;
     }
 
     public static void clickUp(int screenX, int screenY) {
@@ -143,7 +142,7 @@ public class GUI {
             List<Item> dropList = new ArrayList<Item>();
             dropList.add(dropItem);
 
-            map.addChest(dropList, player.getPos());
+            world.addChest(dropList, player.getPos());
         }
         clearSelected();
     }

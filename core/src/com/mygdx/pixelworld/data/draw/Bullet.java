@@ -1,8 +1,8 @@
 package com.mygdx.pixelworld.data.draw;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
-import com.mygdx.pixelworld.Game;
 import com.mygdx.pixelworld.data.items.weapons.PlayerWeaponStats;
 import com.mygdx.pixelworld.data.items.weapons.WeaponStats;
 import com.mygdx.pixelworld.data.utilities.Damaging;
@@ -46,9 +46,9 @@ public class Bullet implements Damaging {
     }
 
     private void move() {
-        float movement = Game.deltaTime * speed;
+        float movement = Gdx.graphics.getDeltaTime() * speed;
         pos.add(direction.x * movement, direction.y * movement);
-        img.addRotationAngle(rotationSpeed * Game.deltaTime);
+        img.addRotationAngle(rotationSpeed * Gdx.graphics.getDeltaTime());
     }
 
     public void draw(SpriteBatch batch) {

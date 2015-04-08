@@ -4,9 +4,8 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.stbtt.TrueTypeFontFactory;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.mygdx.pixelworld.data.entities.Entity;
-import com.mygdx.pixelworld.data.utilities.Constants;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,8 +29,11 @@ public class DrawHitValue {
 
     public static void draw(SpriteBatch batch) {
         if (font == null) {
-            font = TrueTypeFontFactory.createBitmapFont(Gdx.files.internal("core/assets/Ubuntu-MI.ttf"), "-0123456789", 30f, 30f, 1.0f, Constants.gameWidth, Constants.gameHeight);
-            font.setColor(Color.RED);
+            FreeTypeFontGenerator ftFont = new FreeTypeFontGenerator(Gdx.files.internal("core/assets/Ubuntu.ttf"));
+            FreeTypeFontGenerator.FreeTypeFontParameter p = new FreeTypeFontGenerator.FreeTypeFontParameter();
+            p.size = 20;
+            p.color = Color.RED;
+            font = ftFont.generateFont(p);
         }
         for (Hit hit : hits) {
             font.setColor(new Color(1.0f, 0f, 0f, hit.shade));
@@ -47,8 +49,8 @@ public class DrawHitValue {
         public float shade;
 
         public Hit(Entity e, int damage) {
-            this.x = e.getImg().getEffectivePosition(e.getPos()).x;
-            this.y = e.getImg().getEffectivePosition(e.getPos()).y + e.getImg().getHeight() + 10;
+            this.x = e.getPos().x;
+            this.y = e.getPos().y + 10;
             this.shade = 1.0f;
             this.damage = damage;
         }

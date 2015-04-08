@@ -1,9 +1,9 @@
 package com.mygdx.pixelworld.GUI;
 
-import com.mygdx.pixelworld.DebugOptions;
+import com.mygdx.pixelworld.debug.Debug;
 
 public class Logger {
     public static void log(String methodName, String message) {
-        if (DebugOptions.VERBOSE) System.out.println("[" + methodName + "] -> " + message);
+        if (Debug.VERBOSE) System.out.println("[" + methodName + "] -> " + message);
     }
 }

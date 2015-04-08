@@ -14,11 +14,10 @@ import java.util.*;
  */
 public class Constants {
 
-    public static final String FONT_CHARACTERS = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789=-";
     public static final float X_LIMIT_MIN = 0.25f;
     public static final float X_LIMIT_MAX = 0.75f;
     public static final float Y_LIMIT_MIN = 0.15f;
-    public static final float Y_LIMIT_MAX = 0.30f;
+    public static final float Y_LIMIT_MAX = 0.50f;
     public static final Map<GameClasses, EntityStats> playerInitStats = new EnumMap<GameClasses, EntityStats>(GameClasses.class);
     public static final Map<Class, EntityStats> enemyInitStats = new HashMap<Class, EntityStats>();
     public static final Map<Class, WeaponStats> enemyStats = new HashMap<Class, WeaponStats>();
@@ -28,7 +27,7 @@ public class Constants {
     public static final float panelWidth = 160;
 
     public static void init() {
-        enemyStats.put(Blocker.class, new EnemyWeaponStats(Blocker.class,
+        enemyStats.put(Blocker.class, new EnemyWeaponStats(
                 10, //dmg
                 400,//range
                 400,//spd

@@ -1,8 +1,8 @@
 package com.mygdx.pixelworld.data.utilities;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
-import com.mygdx.pixelworld.Game;
-import com.mygdx.pixelworld.data.Map;
+import com.mygdx.pixelworld.data.World;
 import com.mygdx.pixelworld.data.draw.StaticDrawData;
 import com.mygdx.pixelworld.data.items.weapons.WeaponStats;
 
@@ -29,9 +29,9 @@ public class FireManager {
     }
 
 
-    public void updateFire(Vector2 pos, EntityStats entityStats, Map map, WeaponStats stats) {
+    public void updateFire(Vector2 pos, EntityStats entityStats, World world, WeaponStats stats) {
         if (!isFiring) return;
-        fireDelay -= Game.deltaTime;
+        fireDelay -= Gdx.graphics.getDeltaTime();
         if (fireDelay <= 0) {
 
             //centering target
@@ -39,7 +39,7 @@ public class FireManager {
             StaticDrawData dd = new StaticDrawData(stats.getName(), dir.angle());
             Vector2 drawOffset = new Vector2(dd.getWidth() / 2, dd.getHeight() / 2);
 
-            map.fire(pos, new Vector2(target).sub(drawOffset), entityStats, stats);
+            world.fire(pos, new Vector2(target).sub(drawOffset), entityStats, stats);
             fireDelay += 1 / Algorithms.map(entityStats.get(StatType.DEX), 1, 100, 1, 8);
         }
     }
