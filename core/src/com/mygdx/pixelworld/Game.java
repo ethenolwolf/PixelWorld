@@ -23,17 +23,18 @@ import com.mygdx.pixelworld.debug.Debug;
  */
 public class Game extends ApplicationAdapter implements InputProcessor {
 
+    public static OrthographicCamera camera;
     private SpriteBatch batch;
     private World world;
     private Player player;
     private ShapeRenderer shapeRenderer;
-    public static OrthographicCamera camera;
 
     @Override
     public void create() {
         batch = new SpriteBatch();
         Assets.init();
         Constants.init();
+        Debug.init();
         world = new World();
         world.generateEnemies(15);
         player = new Player(GameClasses.WIZARD);

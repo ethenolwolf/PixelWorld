@@ -12,7 +12,6 @@ import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.mygdx.pixelworld.GUI.GUI;
-import com.mygdx.pixelworld.debug.Debug;
 import com.mygdx.pixelworld.Game;
 import com.mygdx.pixelworld.data.draw.BoundingCircle;
 import com.mygdx.pixelworld.data.draw.Bullet;
@@ -27,6 +26,7 @@ import com.mygdx.pixelworld.data.items.weapons.WeaponStats;
 import com.mygdx.pixelworld.data.utilities.Constants;
 import com.mygdx.pixelworld.data.utilities.EntityStats;
 import com.mygdx.pixelworld.data.utilities.StatType;
+import com.mygdx.pixelworld.debug.Debug;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,12 +35,11 @@ import java.util.Random;
 
 public class World {
 
+    private static TiledMapRenderer tiledMapRenderer;
+    private static TiledMap tiledMap;
     private final List<Enemy> enemies = new ArrayList<Enemy>();
     private final List<Bullet> bullets = new ArrayList<Bullet>();
     private final List<Chest> chests = new ArrayList<Chest>();
-
-    private static TiledMapRenderer tiledMapRenderer;
-    private static TiledMap tiledMap;
 
     public World() {
         tiledMap = new TmxMapLoader().load("core/assets/map.tmx");
@@ -194,13 +193,13 @@ public class World {
         shapeRenderer.setColor(0.313f, 0.800f, 0.214f, 1.0f);
         shapeRenderer.rect(Constants.gameWidth + 10, 270, 140 * player.getExpPercentage(), 20);
 
-        if (Debug.SHOW_BOUNDING) {
+        if (Debug.valueOf("SHOW_BOUNDING")) {
             Vector2 pos = player.getPos();
             shapeRenderer.circle(pos.x, pos.y, 2);
             shapeRenderer.end();
             shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
             BoundingCircle bc = player.getImg().getBoundingCircle(player.getPos());
-            shapeRenderer.circle(bc.getCenter().x + World.getCameraOffset().x, bc.getCenter().y + World.getCameraOffset().y, bc.getRadius());
+            shapeRenderer.circle(bc.getCenter().x, bc.getCenter().y, bc.getRadius());
 
             shapeRenderer.setColor(1.0f, 0, 0, 1.0f);
             for (Bullet b : bullets) {
@@ -222,14 +221,14 @@ public class World {
                 }
         }
 
-        if (Debug.SHOW_OFFSET_TRIGGERS) {
+        if (Debug.valueOf("SHOW_OFFSET_TRIGGERS")) {
             shapeRenderer.end();
             shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
             shapeRenderer.setColor(Color.BLUE);
             shapeRenderer.line(0, Constants.Y_LIMIT_MAX*Constants.gameHeight, Constants.gameWidth,Constants.Y_LIMIT_MAX*Constants.gameHeight);
             shapeRenderer.line(0, Constants.Y_LIMIT_MIN*Constants.gameHeight, Constants.gameWidth,Constants.Y_LIMIT_MIN*Constants.gameHeight);
             shapeRenderer.line(Constants.X_LIMIT_MAX*Constants.gameWidth, 0, Constants.X_LIMIT_MAX*Constants.gameWidth, Constants.gameHeight);
-            shapeRenderer.line(Constants.X_LIMIT_MIN*Constants.gameWidth, 0, Constants.X_LIMIT_MIN*Constants.gameWidth, Constants.gameHeight);
+            shapeRenderer.line(Constants.X_LIMIT_MIN * Constants.gameWidth, 0, Constants.X_LIMIT_MIN * Constants.gameWidth, Constants.gameHeight);
         }
 
         shapeRenderer.end();
