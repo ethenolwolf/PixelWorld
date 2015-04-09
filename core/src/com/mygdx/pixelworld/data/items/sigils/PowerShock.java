@@ -8,6 +8,7 @@ import com.mygdx.pixelworld.GUI.Logger;
 import com.mygdx.pixelworld.data.assets.AssetType;
 import com.mygdx.pixelworld.data.draw.BoundingCircle;
 import com.mygdx.pixelworld.data.draw.StaticDrawData;
+import com.mygdx.pixelworld.data.entities.characters.GameClasses;
 import com.mygdx.pixelworld.data.entities.characters.Player;
 import com.mygdx.pixelworld.data.entities.enemies.Enemy;
 
@@ -66,6 +67,11 @@ public class PowerShock extends ManaSigil {
         for (BoundingCircle bc : getBoundingCircle())
             if (bc.intersect(e.getBoundingCircle())) return true;
         return false;
+    }
+
+    @Override
+    public boolean isSuitable(GameClasses gameClass) {
+        return gameClass == GameClasses.WIZARD;
     }
 
     private class PowerShockBlast {

@@ -5,8 +5,9 @@ import com.badlogic.gdx.math.Vector2;
 import com.mygdx.pixelworld.data.World;
 import com.mygdx.pixelworld.data.draw.AnimationDrawData;
 import com.mygdx.pixelworld.data.entities.characters.Player;
+import com.mygdx.pixelworld.data.items.weapons.WeaponStats;
 import com.mygdx.pixelworld.data.utilities.Algorithms;
-import com.mygdx.pixelworld.data.utilities.Constants;
+import com.mygdx.pixelworld.data.utilities.Config;
 import com.mygdx.pixelworld.data.utilities.FireManager;
 import com.mygdx.pixelworld.data.utilities.StatType;
 
@@ -15,11 +16,13 @@ import java.util.Random;
 public class Blocker extends Enemy {
 
     private final FireManager fireManager;
+    private final WeaponStats weaponStats;
 
     public Blocker(float x, float y) {
         super(x, y);
         img = new AnimationDrawData("core/assets/Enemies/", States.class, 10, 6);
         fireManager = new FireManager();
+        weaponStats = Config.getWeapon(Blocker.class);
         ATTACK_RANGE = 400;
         EXPERIENCE = 3;
     }
@@ -35,7 +38,7 @@ public class Blocker extends Enemy {
         Algorithms.moveTowards(pos, player.getPos(), stats.get(StatType.SPD) * Gdx.graphics.getDeltaTime());
         pos = img.boundMap(pos);
         fireManager.setTarget(player.getPos());
-        fireManager.updateFire(new Vector2(pos).add(img.getWidth() / 2, img.getHeight() / 2), stats, world, Constants.enemyStats.get(Blocker.class));
+        fireManager.updateFire(new Vector2(pos).add(img.getWidth() / 2, img.getHeight() / 2), stats, world, weaponStats);
     }
 
     @Override
@@ -50,7 +53,7 @@ public class Blocker extends Enemy {
         pos.add(x * 5, y * 5);
         pos = img.boundMap(pos);
         fireManager.setTarget(player.getPos());
-        fireManager.updateFire(pos, stats, world, Constants.enemyStats.get(Blocker.class));
+        fireManager.updateFire(pos, stats, world, weaponStats);
         img.update();
     }
 

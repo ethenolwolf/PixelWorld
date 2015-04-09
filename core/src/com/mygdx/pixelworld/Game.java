@@ -33,11 +33,10 @@ public class Game extends ApplicationAdapter implements InputProcessor {
     public void create() {
         batch = new SpriteBatch();
         Assets.init();
-        Constants.init();
         Debug.init();
         world = new World();
         world.generateEnemies(15);
-        player = new Player(GameClasses.WIZARD);
+        player = new Player(GameClasses.CLERIC);
 
         camera = new OrthographicCamera();
         camera.setToOrtho(false, Constants.gameWidth+Constants.panelWidth, Constants.gameHeight);

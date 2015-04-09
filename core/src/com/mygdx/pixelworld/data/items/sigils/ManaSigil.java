@@ -26,6 +26,7 @@ public class ManaSigil extends Item implements Damaging, EquipItem {
     public static ManaSigil getInitial(Player player) {
         if (player.getGameClass() == GameClasses.WIZARD) return new PowerShock(player);
         if (player.getGameClass() == GameClasses.NINJA) return new InvisibleCloak(player);
+        if (player.getGameClass() == GameClasses.CLERIC) return new PowerShock(player);
         return null;
     }
 
@@ -56,7 +57,7 @@ public class ManaSigil extends Item implements Damaging, EquipItem {
     }
 
     @Override
-    public GameClasses getGameClass() {
-        return gameClass;
+    public boolean isSuitable(GameClasses gameClass) {
+        return false;
     }
 }

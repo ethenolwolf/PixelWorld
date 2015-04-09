@@ -1,13 +1,11 @@
 package com.mygdx.pixelworld.data.items.weapons;
 
-import com.mygdx.pixelworld.data.entities.characters.GameClasses;
-
 public class PlayerWeaponStats extends WeaponStats {
 
-    private final GameClasses type;
+    private final WeaponType type;
 
-    public PlayerWeaponStats(GameClasses playerClass, String name, int damage, int range, int speed, float rotationSpeed) {
-        this.type = playerClass;
+    public PlayerWeaponStats(WeaponType weaponType, String name, int damage, int range, int speed, float rotationSpeed) {
+        this.type = weaponType;
         this.damage = damage;
         this.range = range;
         this.speed = speed;
@@ -15,7 +13,7 @@ public class PlayerWeaponStats extends WeaponStats {
         this.rotationSpeed = rotationSpeed;
     }
 
-    public GameClasses getType() {
+    public WeaponType getType() {
         return type;
     }
 }

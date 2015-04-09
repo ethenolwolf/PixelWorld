@@ -4,7 +4,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
-import com.mygdx.pixelworld.debug.Debug;
 import com.mygdx.pixelworld.GUI.Logger;
 import com.mygdx.pixelworld.data.World;
 import com.mygdx.pixelworld.data.draw.AnimationDrawData;
@@ -17,6 +16,7 @@ import com.mygdx.pixelworld.data.items.armors.Armor;
 import com.mygdx.pixelworld.data.items.sigils.ManaSigil;
 import com.mygdx.pixelworld.data.items.weapons.Weapon;
 import com.mygdx.pixelworld.data.utilities.*;
+import com.mygdx.pixelworld.debug.Debug;
 import com.mygdx.pixelworld.debug.Debuggable;
 
 import java.util.List;
@@ -36,7 +36,7 @@ public class Player extends Entity implements Debuggable{
         String name = NameExtractor.extract();
         this.pos = new Vector2(280, 0);
         this.gameClass = gameClass;
-        img = new AnimationDrawData("core/assets/Characters/" + gameClass + "/", States.class, 10, 6);
+        img = new AnimationDrawData("core/assets/Characters/" + gameClass + "/", States.class, 8, 8);
         stats = new EntityStats(gameClass);
         fireManager = new FireManager();
         equipped = new LockedInventory(this);
@@ -59,6 +59,8 @@ public class Player extends Entity implements Debuggable{
         else if (Gdx.input.isKeyPressed(Keys.D)) move(RIGHT);
         if (Gdx.input.isKeyPressed(Keys.S)) move(DOWN);
         else if (Gdx.input.isKeyPressed(Keys.W)) move(UP);
+
+        if (fireManager.isFiring()) currentState = States.FIRE;
 
         if (!equipped.getWeapon().isEmpty())
             fireManager.updateFire(img.getBoundingCircle(pos).getCenter(), stats, world, equipped.getWeapon().getStats());
@@ -156,7 +158,7 @@ public class Player extends Entity implements Debuggable{
     public void addExperience(int experience) {
         this.experience += experience;
         int level = 1;
-        for (Integer threshold : Constants.levelUpValues) {
+        for (Integer threshold : Config.getExperienceThresholds()) {
             if (this.experience > threshold) level++;
         }
         if (level != this.level) Logger.log("Player.addExperience()", "Level UP! Level=" + level);
@@ -164,7 +166,7 @@ public class Player extends Entity implements Debuggable{
     }
 
     public float getExpPercentage() {
-        for (Integer threshold : Constants.levelUpValues) {
+        for (Integer threshold : Config.getExperienceThresholds()) {
             if (experience < threshold) return (float) experience / (float) threshold;
         }
         return 1.0f;
@@ -194,6 +196,6 @@ public class Player extends Entity implements Debuggable{
     }
 
     private enum States {
-        IDLE, WALK
+        IDLE, WALK, FIRE
     }
 }

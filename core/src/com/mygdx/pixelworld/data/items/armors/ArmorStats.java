@@ -1,16 +1,14 @@
 package com.mygdx.pixelworld.data.items.armors;
 
-import com.mygdx.pixelworld.data.entities.characters.GameClasses;
-
 public class ArmorStats {
+    private final ArmorType type;
     private final String name;
     private final int defense;
-    private final GameClasses type;
 
-    public ArmorStats(String name, int defense, GameClasses type) {
+    public ArmorStats(ArmorType type, String name, int defense) {
+        this.type = type;
         this.name = name;
         this.defense = defense;
-        this.type = type;
     }
 
     public String getName() {
@@ -21,7 +19,7 @@ public class ArmorStats {
         return defense;
     }
 
-    public GameClasses getGameClass() {
+    public ArmorType getArmorType() {
         return type;
     }
 }

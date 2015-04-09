@@ -53,8 +53,8 @@ public class LockedInventory extends Inventory {
             return out;
         }
 
-
-        if (item instanceof EquipItem) if (!(((EquipItem) item).getGameClass() == playerClass)) return null;
+        if (!(item instanceof EquipItem)) return null;
+        if (!(((EquipItem) item).isSuitable(playerClass))) return null;
         if (item instanceof Weapon) return replace(item, 0);
         if (item instanceof ManaSigil) return replace(item, 1);
         if (item instanceof Armor) return replace(item, 2);

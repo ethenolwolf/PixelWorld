@@ -19,7 +19,7 @@ public class EntityStats {
     private boolean visible = true;
 
     public EntityStats(GameClasses type) {
-        this(Constants.playerInitStats.get(type));
+        this(Config.getStats(true, type.toString()));
         maxStats = new EnumMap<StatType, Float>(stats);
         this.gameClass = type;
         this.type = null;
@@ -48,7 +48,7 @@ public class EntityStats {
     }
 
     public EntityStats(Class<? extends Enemy> enemyClass) {
-        this(Constants.enemyInitStats.get(enemyClass));
+        this(Config.getStats(false, enemyClass.getSimpleName()));
         maxStats = new EnumMap<StatType, Float>(stats);
         this.type = enemyClass;
         this.gameClass = null;
@@ -67,8 +67,8 @@ public class EntityStats {
     }
 
     public float getInit(StatType statType) {
-        if (gameClass == null) return Constants.enemyInitStats.get(type).get(statType);
-        else return Constants.playerInitStats.get(gameClass).get(statType);
+        if (gameClass == null) return Config.getStats(false, type.getSimpleName()).get(statType);
+        else return Config.getStats(true, gameClass.toString()).get(statType);
     }
 
     public float getMax(StatType statType) {
