@@ -43,6 +43,7 @@ public class AnimationDrawData extends DrawData {
     }
 
     public void setCurrentAction(int action) {
+        if(currentAction == action) return;
         this.currentAction = action;
         stateTime = 0;
     }
