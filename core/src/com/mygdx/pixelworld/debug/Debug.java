@@ -24,7 +24,7 @@ public class Debug {
 
     public static void init() {
         try {
-            props.load(new FileInputStream("debug.properties"));
+            props.load(new FileInputStream("core/config/debug.properties"));
         } catch (IOException e) {
             Logger.log("Debug.init()", "File debug.properties not found.");
         }
