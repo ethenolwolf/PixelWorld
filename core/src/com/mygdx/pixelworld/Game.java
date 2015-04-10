@@ -33,7 +33,7 @@ public class Game extends ApplicationAdapter implements InputProcessor {
         batch = new SpriteBatch();
         Debug.init();
         world = new World();
-        world.generateEnemies(15);
+        world.generateEnemies(80);
         player = new Player(GameClasses.CLERIC);
 
         camera = new OrthographicCamera();

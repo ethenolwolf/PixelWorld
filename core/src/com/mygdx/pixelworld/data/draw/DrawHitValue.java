@@ -32,12 +32,12 @@ public class DrawHitValue {
             FreeTypeFontGenerator ftFont = new FreeTypeFontGenerator(Gdx.files.internal("core/assets/Ubuntu.ttf"));
             FreeTypeFontGenerator.FreeTypeFontParameter p = new FreeTypeFontGenerator.FreeTypeFontParameter();
             p.size = 20;
-            p.color = Color.RED;
             font = ftFont.generateFont(p);
         }
         for (Hit hit : hits) {
-            font.setColor(new Color(1.0f, 0f, 0f, hit.shade));
-            font.draw(batch, hit.toString(), hit.x, hit.y);
+            if (hit.damage > 0) font.setColor(new Color(1f, 0f, 0f, hit.shade));
+            else font.setColor(new Color(0f, 1f, 0f, hit.shade));
+            font.draw(batch, String.format("%+d", -hit.damage), hit.x, hit.y);
         }
     }
 
@@ -50,7 +50,7 @@ public class DrawHitValue {
 
         public Hit(Entity e, int damage) {
             this.x = e.getPos().x;
-            this.y = e.getPos().y + 10;
+            this.y = e.getPos().y + 60;
             this.shade = 1.0f;
             this.damage = damage;
         }
@@ -59,11 +59,6 @@ public class DrawHitValue {
             y += 1.5f; //ANIMATION SPEED
             shade -= 0.05f; //SHADE SPEED
             return shade > 0f; //if transparent die
-        }
-
-        @Override
-        public String toString() {
-            return "-" + String.valueOf(damage);
         }
     }
 }

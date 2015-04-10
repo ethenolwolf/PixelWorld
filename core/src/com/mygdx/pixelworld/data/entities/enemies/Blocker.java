@@ -5,10 +5,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.mygdx.pixelworld.data.World;
 import com.mygdx.pixelworld.data.entities.characters.Player;
 import com.mygdx.pixelworld.data.items.weapons.WeaponStats;
-import com.mygdx.pixelworld.data.utilities.Algorithms;
-import com.mygdx.pixelworld.data.utilities.Config;
-import com.mygdx.pixelworld.data.utilities.FireManager;
-import com.mygdx.pixelworld.data.utilities.StatType;
+import com.mygdx.pixelworld.data.utilities.*;
 
 import java.util.Random;
 
@@ -16,6 +13,8 @@ public class Blocker extends Enemy {
 
     private final FireManager fireManager;
     private final WeaponStats weaponStats;
+    private Directions currentDirection = Directions.LEFT;
+    private float AITimer = 0;
 
     public Blocker(float x, float y) {
         super(x, y);
@@ -44,14 +43,32 @@ public class Blocker extends Enemy {
     void passiveAIUpdate(Player player, World world) {
         currentState = States.IDLE;
         if (fireManager.isFiring()) fireManager.setIsFiring(false);
-        Random rand = new Random();
-        float x = rand.nextFloat();
-        float y = rand.nextFloat();
 
-        if (rand.nextInt(10) >= 5) x = -x;
-        if (rand.nextInt(10) >= 5) y = -y;
-        pos.add(x * 5, y * 5);
+        AITimer -= Gdx.graphics.getDeltaTime();
+        if (AITimer <= 0) {
+            Random rand = new Random();
+            currentDirection = Directions.values()[rand.nextInt(3)];
+            AITimer = 2.0f;
+        }
+
+        float speed = stats.get(StatType.SPD) * Gdx.graphics.getDeltaTime();
+
+        switch (currentDirection) {
+            case UP:
+                pos.add(0, speed);
+                break;
+            case DOWN:
+                pos.add(0, -speed);
+                break;
+            case LEFT:
+                pos.add(-speed, 0);
+                break;
+            case RIGHT:
+                pos.add(speed, 0);
+                break;
+        }
         pos = img.boundMap(pos);
+
         fireManager.setTarget(player.getPos());
         fireManager.updateFire(pos, stats, world, weaponStats);
         img.update();

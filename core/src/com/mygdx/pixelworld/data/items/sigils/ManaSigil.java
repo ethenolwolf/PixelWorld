@@ -26,7 +26,7 @@ public class ManaSigil extends Item implements Damaging, EquipItem {
     public static ManaSigil getInitial(Player player) {
         if (player.getGameClass() == GameClasses.WIZARD) return new PowerShock(player);
         if (player.getGameClass() == GameClasses.NINJA) return new InvisibleCloak(player);
-        if (player.getGameClass() == GameClasses.CLERIC) return new PowerShock(player);
+        if (player.getGameClass() == GameClasses.CLERIC) return new HealingCross(player);
         return null;
     }
 
