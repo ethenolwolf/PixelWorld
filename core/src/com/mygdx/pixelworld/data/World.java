@@ -11,6 +11,7 @@ import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.utils.Disposable;
 import com.mygdx.pixelworld.GUI.GUI;
 import com.mygdx.pixelworld.Game;
 import com.mygdx.pixelworld.data.draw.BoundingCircle;
@@ -33,7 +34,7 @@ import java.util.List;
 import java.util.ListIterator;
 import java.util.Random;
 
-public class World {
+public class World implements Disposable {
 
     private static TiledMapRenderer tiledMapRenderer;
     private static TiledMap tiledMap;
@@ -237,5 +238,13 @@ public class World {
         Random random = new Random();
         for (int i = 0; i < enemyNumber; i++)
             addEnemy(Blocker.class, random.nextInt(getWidth()), random.nextInt(getHeight()));
+    }
+
+    @Override
+    public void dispose() {
+        tiledMap.dispose();
+        for (Enemy e : enemies) e.dispose();
+        for (Bullet b : bullets) b.dispose();
+        for (Chest c : chests) c.dispose();
     }
 }

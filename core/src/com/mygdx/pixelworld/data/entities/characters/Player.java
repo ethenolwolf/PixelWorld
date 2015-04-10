@@ -126,6 +126,13 @@ public class Player extends Entity implements Debuggable{
         }
     }
 
+    @Override
+    public void dispose() {
+        super.dispose();
+        equipped.dispose();
+        inventory.dispose();
+    }
+
     public float getHealthPercentage() {
         return stats.get(StatType.HEALTH) / stats.getMax(StatType.HEALTH);
     }

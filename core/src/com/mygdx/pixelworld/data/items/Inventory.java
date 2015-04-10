@@ -1,12 +1,13 @@
 package com.mygdx.pixelworld.data.items;
 
+import com.badlogic.gdx.utils.Disposable;
 import com.mygdx.pixelworld.data.items.armors.Armor;
 import com.mygdx.pixelworld.data.items.sigils.ManaSigil;
 import com.mygdx.pixelworld.data.items.weapons.Weapon;
 
 import java.util.List;
 
-public class Inventory {
+public class Inventory implements Disposable {
     private Item[] inv;
 
     public Inventory(int dimension) {
@@ -82,5 +83,10 @@ public class Inventory {
 
     public Item[] getItems() {
         return inv;
+    }
+
+    @Override
+    public void dispose() {
+        for (Item i : inv) if (i != null) i.dispose();
     }
 }

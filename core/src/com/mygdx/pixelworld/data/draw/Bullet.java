@@ -3,13 +3,14 @@ package com.mygdx.pixelworld.data.draw;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.Disposable;
 import com.mygdx.pixelworld.data.items.weapons.PlayerWeaponStats;
 import com.mygdx.pixelworld.data.items.weapons.WeaponStats;
 import com.mygdx.pixelworld.data.utilities.Damaging;
 import com.mygdx.pixelworld.data.utilities.EntityStats;
 import com.mygdx.pixelworld.data.utilities.StatType;
 
-public class Bullet implements Damaging {
+public class Bullet implements Damaging, Disposable {
 
     private final boolean isPlayer;
     private final Vector2 startPoint;
@@ -70,5 +71,10 @@ public class Bullet implements Damaging {
 
     public BoundingCircle getBoundingCircle() {
         return img.getBoundingCircle(pos);
+    }
+
+    @Override
+    public void dispose() {
+        img.dispose();
     }
 }

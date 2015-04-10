@@ -1,11 +1,12 @@
 package com.mygdx.pixelworld.data.entities;
 
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.Disposable;
 import com.mygdx.pixelworld.data.draw.DrawData;
 import com.mygdx.pixelworld.data.utilities.Damaging;
 import com.mygdx.pixelworld.data.utilities.EntityStats;
 
-public abstract class Entity {
+public abstract class Entity implements Disposable {
     protected Vector2 pos;
     protected DrawData img;
     protected EntityStats stats;
@@ -28,5 +29,10 @@ public abstract class Entity {
 
     public DrawData getImg() {
         return img;
+    }
+
+    @Override
+    public void dispose() {
+        img.dispose();
     }
 }

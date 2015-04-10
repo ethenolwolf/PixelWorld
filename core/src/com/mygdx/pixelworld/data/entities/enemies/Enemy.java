@@ -2,6 +2,7 @@ package com.mygdx.pixelworld.data.entities.enemies;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.Disposable;
 import com.mygdx.pixelworld.data.World;
 import com.mygdx.pixelworld.data.draw.BoundingCircle;
 import com.mygdx.pixelworld.data.draw.Bullet;
@@ -17,11 +18,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-public abstract class Enemy extends Entity implements Debuggable {
+public abstract class Enemy extends Entity implements Debuggable, Disposable {
 
+    private final List<Item> dropItems = new ArrayList<Item>();
     int ATTACK_RANGE;
     int EXPERIENCE;
-    private final List<Item> dropItems = new ArrayList<Item>();
 
     Enemy(float x, float y) {
         pos = new Vector2(x, y);
@@ -73,5 +74,11 @@ public abstract class Enemy extends Entity implements Debuggable {
 
     public List<Item> getDropItems() {
         return dropItems;
+    }
+
+    @Override
+    public void dispose() {
+        super.dispose();
+        for (Item i : dropItems) i.dispose();
     }
 }

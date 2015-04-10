@@ -70,6 +70,15 @@ public class Game extends ApplicationAdapter implements InputProcessor {
     }
 
     @Override
+    public void dispose() {
+        super.dispose();
+        batch.dispose();
+        world.dispose();
+        player.dispose();
+        shapeRenderer.dispose();
+    }
+
+    @Override
     public boolean keyDown(int keycode) {
         if (keycode == Input.Keys.SPACE) player.manaTrigger();
         return false;

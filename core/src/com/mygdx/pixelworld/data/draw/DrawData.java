@@ -4,14 +4,19 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.Disposable;
 import com.mygdx.pixelworld.data.World;
 
-public abstract class DrawData {
+public abstract class DrawData implements Disposable {
     TextureRegion texture;
     Vector2 scaleFactor;
     float rotationAngle;
-
     DrawData() {
+    }
+
+    @Override
+    public void dispose() {
+        texture.getTexture().dispose();
     }
 
     public float getWidth() {
