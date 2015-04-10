@@ -98,7 +98,7 @@ public class Player extends Entity implements Debuggable{
     }
 
     public void draw(SpriteBatch batch) {
-        img.draw(batch, pos, stats.isVisible() ? 1f : 0.5f);
+        img.draw(batch, pos, 1.0f, stats.isVisible() ? 1f : 0.5f);
         equipped.getManaSigil().draw(batch);
     }
 

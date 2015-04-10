@@ -48,8 +48,7 @@ public class AnimationDrawData extends DrawData {
         stateTime = 0;
     }
 
-    @Override
-    public void draw(SpriteBatch batch, Vector2 absolutePosition) {
-        batch.draw(texture, absolutePosition.x, absolutePosition.y);
+    public void draw(SpriteBatch batch, Vector2 absolutePosition, float scaleFactor) {
+        batch.draw(texture, absolutePosition.x, absolutePosition.y, getOriginCenter().x, getOriginCenter().y, texture.getRegionWidth(), texture.getRegionHeight(), scaleFactor, scaleFactor, 0);
     }
 }

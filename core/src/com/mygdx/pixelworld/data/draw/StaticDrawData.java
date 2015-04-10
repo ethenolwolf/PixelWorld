@@ -39,6 +39,11 @@ public class StaticDrawData extends DrawData {
     }
 
     @Override
+    public void draw(SpriteBatch batch, Vector2 absolutePosition, float scaleFactor) {
+        draw(batch, absolutePosition);
+    }
+
+    @Override
     public void draw(SpriteBatch batch, Vector2 absolutePosition) {
         if (!isVisible(absolutePosition)) return;
         batch.draw(texture, getOriginalPosition(absolutePosition).x, getOriginalPosition(absolutePosition).y, getOriginCenter().x,

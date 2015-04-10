@@ -50,12 +50,16 @@ public abstract class DrawData implements Disposable {
         rotationAngle = angle;
     }
 
-    public abstract void draw(SpriteBatch batch, Vector2 absolutePosition);
+    public void draw(SpriteBatch batch, Vector2 absolutePosition) {
+        draw(batch, absolutePosition, 1.0f);
+    }
 
-    public void draw(SpriteBatch batch, Vector2 absolutePosition, float alpha) {
+    public abstract void draw(SpriteBatch batch, Vector2 absolutePosition, float scaleFactor);
+
+    public void draw(SpriteBatch batch, Vector2 absolutePosition, float scaleFactor, float alpha) {
         Color c = batch.getColor();
         batch.setColor(c.r, c.g, c.b, alpha);
-        draw(batch, absolutePosition);
+        draw(batch, absolutePosition, scaleFactor);
         batch.setColor(c.r, c.g, c.b, 1.0f);
     }
 
