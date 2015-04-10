@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Disposable;
 import com.mygdx.pixelworld.data.World;
+import com.mygdx.pixelworld.data.draw.AnimationDrawData;
 import com.mygdx.pixelworld.data.draw.BoundingCircle;
 import com.mygdx.pixelworld.data.draw.Bullet;
 import com.mygdx.pixelworld.data.entities.Entity;
@@ -21,12 +22,14 @@ import java.util.Random;
 public abstract class Enemy extends Entity implements Debuggable, Disposable {
 
     private final List<Item> dropItems = new ArrayList<Item>();
+    protected States currentState = States.IDLE;
     int ATTACK_RANGE;
     int EXPERIENCE;
 
     Enemy(float x, float y) {
         pos = new Vector2(x, y);
         stats = new EntityStats(this.getClass());
+        img = new AnimationDrawData("core/assets/enemies/" + this.getClass().getSimpleName().toLowerCase() + "/", States.class, 8, 8);
         calculateDropItems();
     }
 
@@ -44,6 +47,8 @@ public abstract class Enemy extends Entity implements Debuggable, Disposable {
         if (!stats.isAlive()) return;
         if (player.getPos().dst(pos) < ATTACK_RANGE) activeAIUpdate(player, world);
         else passiveAIUpdate(player, world);
+        if (!(img instanceof AnimationDrawData)) return;
+        ((AnimationDrawData) img).setCurrentAction(currentState.ordinal());
     }
 
     void activeAIUpdate(Player player, World world) {
@@ -53,7 +58,7 @@ public abstract class Enemy extends Entity implements Debuggable, Disposable {
     }
 
     public void draw(SpriteBatch batch) {
-        img.draw(batch, pos);
+        img.draw(batch, pos, 0.75f);
     }
 
     public boolean isAlive() {
@@ -80,5 +85,9 @@ public abstract class Enemy extends Entity implements Debuggable, Disposable {
     public void dispose() {
         super.dispose();
         for (Item i : dropItems) i.dispose();
+    }
+
+    protected enum States {
+        IDLE, WALK
     }
 }

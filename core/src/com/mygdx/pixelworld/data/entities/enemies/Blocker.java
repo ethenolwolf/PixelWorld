@@ -3,7 +3,6 @@ package com.mygdx.pixelworld.data.entities.enemies;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
 import com.mygdx.pixelworld.data.World;
-import com.mygdx.pixelworld.data.draw.AnimationDrawData;
 import com.mygdx.pixelworld.data.entities.characters.Player;
 import com.mygdx.pixelworld.data.items.weapons.WeaponStats;
 import com.mygdx.pixelworld.data.utilities.Algorithms;
@@ -20,7 +19,6 @@ public class Blocker extends Enemy {
 
     public Blocker(float x, float y) {
         super(x, y);
-        img = new AnimationDrawData("core/assets/Enemies/", States.class, 10, 6);
         fireManager = new FireManager();
         weaponStats = Config.getWeapon(Blocker.class);
         ATTACK_RANGE = 400;
@@ -33,6 +31,7 @@ public class Blocker extends Enemy {
             passiveAIUpdate(player, world);
             return;
         }
+        currentState = States.WALK;
         img.update();
         if (!fireManager.isFiring()) fireManager.setIsFiring(true);
         Algorithms.moveTowards(pos, player.getPos(), stats.get(StatType.SPD) * Gdx.graphics.getDeltaTime());
@@ -43,6 +42,7 @@ public class Blocker extends Enemy {
 
     @Override
     void passiveAIUpdate(Player player, World world) {
+        currentState = States.IDLE;
         if (fireManager.isFiring()) fireManager.setIsFiring(false);
         Random rand = new Random();
         float x = rand.nextFloat();
@@ -62,8 +62,5 @@ public class Blocker extends Enemy {
         return "";//String.format("Blocker@%x -> X = %.2f\t Y = %.2f", this.hashCode(), pos.x, pos.y);
     }
 
-    private enum States {
-        IDLE
-    }
 
 }
