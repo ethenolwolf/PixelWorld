@@ -10,7 +10,6 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.mygdx.pixelworld.GUI.GUI;
 import com.mygdx.pixelworld.data.World;
-import com.mygdx.pixelworld.data.assets.Assets;
 import com.mygdx.pixelworld.data.entities.characters.GameClasses;
 import com.mygdx.pixelworld.data.entities.characters.Player;
 import com.mygdx.pixelworld.data.utilities.Constants;
@@ -32,7 +31,6 @@ public class Game extends ApplicationAdapter implements InputProcessor {
     @Override
     public void create() {
         batch = new SpriteBatch();
-        Assets.init();
         Debug.init();
         world = new World();
         world.generateEnemies(15);

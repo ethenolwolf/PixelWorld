@@ -62,7 +62,7 @@ public class LockedInventory extends Inventory {
     }
 
     @Override
-    public void empty(int slot) {
+    void empty(int slot) {
         switch (slot) {
             case 0:
                 set(new Weapon(), 0);

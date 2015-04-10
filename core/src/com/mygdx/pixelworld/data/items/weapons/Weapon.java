@@ -13,7 +13,6 @@ public class Weapon extends Item implements EquipItem {
     private final boolean isEmpty;
 
     public Weapon(GameClasses playerClass, int rank) {
-        Logger.log("Weapon()", "Forging weapon for " + playerClass.toString() + " of rank " + rank);
         WeaponType weaponType = WeaponType.values()[0];
         for (int i = 0; i < WeaponType.values().length && !isSuitable(playerClass, weaponType); i++)
             weaponType = WeaponType.values()[i];
@@ -45,7 +44,7 @@ public class Weapon extends Item implements EquipItem {
         return isSuitable(gameClass, weaponStats.getType());
     }
 
-    public boolean isSuitable(GameClasses gameClass, WeaponType weaponType) {
+    private boolean isSuitable(GameClasses gameClass, WeaponType weaponType) {
         switch (weaponType) {
             case STAFF:
                 return gameClass == GameClasses.WIZARD ||

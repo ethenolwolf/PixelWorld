@@ -133,15 +133,14 @@ public class World {
         float of = Gdx.graphics.getDeltaTime() * stats.get(StatType.SPD) * 5; //Move with player's same speed
         Vector2 newPos = new Vector2(Game.camera.position.x, Game.camera.position.y);
 
-        float w = Constants.gameWidth;
-        float t = w + Constants.panelWidth;
+        float t = Constants.gameWidth + Constants.panelWidth;
         float h = Constants.gameHeight;
 
-        if      (playerPos.x - Game.camera.position.x + t/2 < w  * Constants.X_LIMIT_MIN) newPos.add(-of, 0);
-        else if (playerPos.x - Game.camera.position.x + t/2 > w  * Constants.X_LIMIT_MAX) newPos.add(of, 0);
+        if      (playerPos.x - Game.camera.position.x + t/2 < Constants.X_LIMIT_MIN) newPos.add(-of, 0);
+        else if (playerPos.x - Game.camera.position.x + t/2 > Constants.X_LIMIT_MAX) newPos.add(of, 0);
 
-        if      (playerPos.y - Game.camera.position.y + h/2 < h * Constants.Y_LIMIT_MIN) newPos.add(0, -of);
-        else if (playerPos.y - Game.camera.position.y + h/2 > h * Constants.Y_LIMIT_MAX) newPos.add(0, of);
+        if      (playerPos.y - Game.camera.position.y + h/2 < Constants.Y_LIMIT_MIN) newPos.add(0, -of);
+        else if (playerPos.y - Game.camera.position.y + h/2 > Constants.Y_LIMIT_MAX) newPos.add(0, of);
 
         //Limit offset
         if(newPos.x < t/2) newPos.x = t/2;
@@ -225,10 +224,10 @@ public class World {
             shapeRenderer.end();
             shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
             shapeRenderer.setColor(Color.BLUE);
-            shapeRenderer.line(0, Constants.Y_LIMIT_MAX*Constants.gameHeight, Constants.gameWidth,Constants.Y_LIMIT_MAX*Constants.gameHeight);
-            shapeRenderer.line(0, Constants.Y_LIMIT_MIN*Constants.gameHeight, Constants.gameWidth,Constants.Y_LIMIT_MIN*Constants.gameHeight);
-            shapeRenderer.line(Constants.X_LIMIT_MAX*Constants.gameWidth, 0, Constants.X_LIMIT_MAX*Constants.gameWidth, Constants.gameHeight);
-            shapeRenderer.line(Constants.X_LIMIT_MIN * Constants.gameWidth, 0, Constants.X_LIMIT_MIN * Constants.gameWidth, Constants.gameHeight);
+            shapeRenderer.line(0, Constants.Y_LIMIT_MAX, Constants.gameWidth,Constants.Y_LIMIT_MAX);
+            shapeRenderer.line(0, Constants.Y_LIMIT_MIN, Constants.gameWidth,Constants.Y_LIMIT_MIN);
+            shapeRenderer.line(Constants.X_LIMIT_MAX, 0, Constants.X_LIMIT_MAX, Constants.gameHeight);
+            shapeRenderer.line(Constants.X_LIMIT_MIN, 0, Constants.X_LIMIT_MIN, Constants.gameHeight);
         }
 
         shapeRenderer.end();

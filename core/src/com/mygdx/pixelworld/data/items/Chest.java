@@ -15,7 +15,7 @@ public class Chest extends Item {
     public Chest(List<Item> items, Vector2 pos) {
         inventory.fill(items);
         this.pos = pos;
-        img = new StaticDrawData(AssetType.CHEST, "chest");
+        img = new StaticDrawData(AssetType.CHEST);
     }
 
     public Inventory getInventory() {

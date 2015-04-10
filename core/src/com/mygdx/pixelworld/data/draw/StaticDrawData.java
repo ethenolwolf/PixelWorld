@@ -5,7 +5,6 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.mygdx.pixelworld.data.assets.AssetType;
-import com.mygdx.pixelworld.data.assets.Assets;
 
 public class StaticDrawData extends DrawData {
 
@@ -20,14 +19,23 @@ public class StaticDrawData extends DrawData {
         //Bullet
         setScaleFactor(new Vector2(1, 1));
         setRotationAngle(bulletDirection);
-        texture = new TextureRegion(Assets.getTexture(AssetType.BULLET, name));
+        texture = new TextureRegion(new Texture("core/assets/Bullets/" + name + ".png"));
     }
 
     public StaticDrawData(AssetType assetType, String name) {
         //Weapon // Armor //Sigil
         setScaleFactor(new Vector2(1, 1));
         setRotationAngle(0);
-        texture = new TextureRegion(Assets.getTexture(assetType, name));
+        texture = new TextureRegion(new Texture("core/assets/" + assetType.toString().toLowerCase() + "/" + name + ".png"));
+
+    }
+
+    public StaticDrawData(AssetType assetType) {
+        //Chest
+        setScaleFactor(new Vector2(1, 1));
+        setRotationAngle(0);
+        texture = new TextureRegion(new Texture("core/assets/" + assetType.toString().toLowerCase() + ".png"));
+
     }
 
     @Override
