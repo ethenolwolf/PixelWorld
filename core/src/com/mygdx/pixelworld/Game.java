@@ -4,9 +4,12 @@ import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
+import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.mygdx.pixelworld.GUI.GUI;
 import com.mygdx.pixelworld.data.World;
@@ -23,13 +26,20 @@ import com.mygdx.pixelworld.debug.Debug;
 public class Game extends ApplicationAdapter implements InputProcessor {
 
     public static OrthographicCamera camera;
+    public static AssetManager assetManager;
     private SpriteBatch batch;
     private World world;
     private Player player;
     private ShapeRenderer shapeRenderer;
 
+    private TextureRegion loadingImage;
+
     @Override
     public void create() {
+        assetManager = new AssetManager();
+        Texture tmp = new Texture("core/assets/Characters/CLERIC/idle.png");
+        loadingImage = new TextureRegion(tmp, tmp.getWidth() / 8, tmp.getHeight() / 8);
+
         batch = new SpriteBatch();
         Debug.init();
         world = new World();
@@ -50,6 +60,26 @@ public class Game extends ApplicationAdapter implements InputProcessor {
      */
     @Override
     public void render() {
+        if (assetManager.update()) {
+            gameLoop();
+        } else {
+            Gdx.gl.glClearColor(0, 0, 0, 1);
+            Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
+            Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+            batch.begin();
+            batch.draw(loadingImage, (Constants.gameWidth + Constants.panelWidth) / 2, Constants.gameHeight / 2);
+            batch.end();
+            shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+            shapeRenderer.setColor(0.0f, 0.0f, 0.392f, 1.0f);
+            shapeRenderer.rect(50, 50, (Constants.gameWidth + Constants.panelWidth) - 100, 30);
+            //Mana bar
+            shapeRenderer.setColor(0.0f, 0.05f, 0.95f, 1.0f);
+            shapeRenderer.rect(50, 50, ((Constants.gameWidth + Constants.panelWidth) - 100) * assetManager.getProgress(), 30);
+            shapeRenderer.end();
+        }
+    }
+
+    private void gameLoop() {
         //Logic update
         player.update(world);
         world.update(player);

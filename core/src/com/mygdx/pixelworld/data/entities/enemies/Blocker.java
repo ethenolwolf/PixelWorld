@@ -3,6 +3,8 @@ package com.mygdx.pixelworld.data.entities.enemies;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
 import com.mygdx.pixelworld.data.World;
+import com.mygdx.pixelworld.data.assets.AssetType;
+import com.mygdx.pixelworld.data.draw.StaticDrawData;
 import com.mygdx.pixelworld.data.entities.characters.Player;
 import com.mygdx.pixelworld.data.items.weapons.WeaponStats;
 import com.mygdx.pixelworld.data.utilities.*;
@@ -20,6 +22,7 @@ public class Blocker extends Enemy {
         super(x, y);
         fireManager = new FireManager();
         weaponStats = Config.getWeapon(Blocker.class);
+        StaticDrawData tmp = new StaticDrawData(AssetType.BULLET, weaponStats.getName());
         ATTACK_RANGE = 400;
         EXPERIENCE = 3;
     }

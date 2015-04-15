@@ -18,6 +18,7 @@ public class Weapon extends Item implements EquipItem {
             weaponType = WeaponType.values()[i];
         weaponStats = Config.getWeapon(weaponType, rank);
         img = new StaticDrawData(AssetType.WEAPON, weaponStats != null ? weaponStats.getName() : null);
+        StaticDrawData tmp = new StaticDrawData(AssetType.BULLET, weaponStats != null ? weaponStats.getName() : null);
         isEmpty = false;
     }
 

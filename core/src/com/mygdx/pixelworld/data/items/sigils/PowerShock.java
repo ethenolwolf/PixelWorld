@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.mygdx.pixelworld.GUI.Logger;
+import com.mygdx.pixelworld.Game;
 import com.mygdx.pixelworld.data.assets.AssetType;
 import com.mygdx.pixelworld.data.draw.BoundingCircle;
 import com.mygdx.pixelworld.data.draw.StaticDrawData;
@@ -18,13 +19,13 @@ import java.util.ListIterator;
 
 public class PowerShock extends ManaSigil {
 
-    private final List<PowerShockBlast> blasts = new ArrayList<PowerShockBlast>();
-    private final TextureRegion texture;
+    private final List<PowerShockBlast> blasts = new ArrayList<>();
+    private TextureRegion texture;
 
     public PowerShock(Player player) {
         damage = 100;
         price = 40;
-        texture = new TextureRegion(new Texture("core/assets/Mana/powerShock.png"));
+        Game.assetManager.load("core/assets/mana/powerShock.png", Texture.class);
         img = new StaticDrawData(AssetType.SIGIL, "powerShock");
         name = SigilName.powerShock;
         empty = false;
@@ -47,6 +48,8 @@ public class PowerShock extends ManaSigil {
 
     @Override
     public void update() {
+        if (texture == null)
+            texture = new TextureRegion(Game.assetManager.get("core/assets/mana/powerShock.png", Texture.class));
         ListIterator<PowerShockBlast> iterator = blasts.listIterator();
         while (iterator.hasNext()) {
             PowerShockBlast b = iterator.next();

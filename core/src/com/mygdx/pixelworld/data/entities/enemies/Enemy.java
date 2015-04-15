@@ -21,7 +21,7 @@ import java.util.Random;
 
 public abstract class Enemy extends Entity implements Debuggable, Disposable {
 
-    private final List<Item> dropItems = new ArrayList<Item>();
+    private final List<Item> dropItems = new ArrayList<>();
     protected States currentState = States.IDLE;
     int ATTACK_RANGE;
     int EXPERIENCE;

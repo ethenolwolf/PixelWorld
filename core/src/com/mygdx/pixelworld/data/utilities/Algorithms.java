@@ -11,5 +11,4 @@ public class Algorithms {
         Vector2 diff = new Vector2(targetPos.x - pos.x, targetPos.y - pos.y);
         pos.add(diff.nor().scl(speed));
     }
-
 }

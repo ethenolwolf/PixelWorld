@@ -6,20 +6,39 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
+import com.mygdx.pixelworld.Game;
 
 import java.util.HashMap;
 
 public class AnimationDrawData extends DrawData {
 
-    private final java.util.Map<Integer, Animation> animationMap;
+    private java.util.Map<Integer, Animation> animationMap;
     private int currentAction;
     private float stateTime;
+    private int sheetCols, sheetRows;
+    private Class enumClass;
+    private String baseFilePath;
 
-    public <E extends Enum<E>> AnimationDrawData(String baseFilePath, Class<E> enumClass, int sheetCols, int sheetRows) {
-        E[] values = enumClass.getEnumConstants();
-        animationMap = new HashMap<Integer, Animation>();
-        for (E value : values) {
-            Texture walkSheet = new Texture(Gdx.files.internal(baseFilePath + value.toString().toLowerCase() + ".png")); //Load the big image
+    public AnimationDrawData(String baseFilePath, Class enumClass, int sheetCols, int sheetRows) {
+        Object[] values = enumClass.getEnumConstants();
+        this.sheetCols = sheetCols;
+        this.sheetRows = sheetRows;
+        this.enumClass = enumClass;
+        this.baseFilePath = baseFilePath;
+        for (Object value : values) {
+            Game.assetManager.load(baseFilePath + value.toString().toLowerCase() + ".png", Texture.class);
+            //Logger.log("AnimationDrawData()", "Queued "+baseFilePath + value.toString().toLowerCase() + ".png ...");
+        }
+        setScaleFactor(new Vector2(1, 1));
+        setRotationAngle(0);
+    }
+
+    private void initAnimation() {
+        Object[] values = enumClass.getEnumConstants();
+        animationMap = new HashMap<>();
+        for (int i1 = 0; i1 < values.length; i1++) {
+            Object value = values[i1];
+            Texture walkSheet = Game.assetManager.get(baseFilePath + value.toString().toLowerCase() + ".png", Texture.class);
             TextureRegion[][] tmp = TextureRegion.split(walkSheet, walkSheet.getWidth() / sheetCols, walkSheet.getHeight() / sheetRows); //Get bidimensional array
             TextureRegion[] walkFrames = new TextureRegion[sheetCols * sheetRows];
             int index = 0;
@@ -28,18 +47,14 @@ public class AnimationDrawData extends DrawData {
                     walkFrames[index++] = tmp[i][j];
                 }
             }
-            animationMap.put(value.ordinal(), new Animation(0.025f, walkFrames));
+            animationMap.put(i1, new Animation(0.025f, walkFrames));
         }
         stateTime = 0f;
-        texture = animationMap.get(0).getKeyFrame(0);
-        setScaleFactor(new Vector2(1, 1));
-        setRotationAngle(0);
     }
 
     @Override
     public void update() {
         stateTime += Gdx.graphics.getDeltaTime();
-        texture = animationMap.get(currentAction).getKeyFrame(stateTime, true);
     }
 
     public void setCurrentAction(int action) {
@@ -48,7 +63,13 @@ public class AnimationDrawData extends DrawData {
         stateTime = 0;
     }
 
+    @Override
+    protected TextureRegion getTexture() {
+        if (animationMap == null) initAnimation();
+        return animationMap.get(currentAction).getKeyFrame(stateTime, true);
+    }
+
     public void draw(SpriteBatch batch, Vector2 absolutePosition, float scaleFactor) {
-        batch.draw(texture, absolutePosition.x, absolutePosition.y, getOriginCenter().x, getOriginCenter().y, texture.getRegionWidth(), texture.getRegionHeight(), scaleFactor, scaleFactor, 0);
+        batch.draw(getTexture(), absolutePosition.x, absolutePosition.y, getOriginCenter().x, getOriginCenter().y, getTexture().getRegionWidth(), getTexture().getRegionHeight(), scaleFactor, scaleFactor, 0);
     }
 }

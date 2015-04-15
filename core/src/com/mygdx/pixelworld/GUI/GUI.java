@@ -3,6 +3,7 @@ package com.mygdx.pixelworld.GUI;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
+import com.mygdx.pixelworld.Game;
 import com.mygdx.pixelworld.data.World;
 import com.mygdx.pixelworld.data.draw.BoundingCircle;
 import com.mygdx.pixelworld.data.entities.characters.Player;
@@ -22,14 +23,14 @@ public class GUI {
     private final static int ITEMS_SIZE = 20;
     private final static int SLOT_SIZE = 30;
     private static final Vector2 mousePosition = new Vector2(0, 0);
+    private static final boolean[] isSelected = new boolean[20];
     private static SpriteBatch batch;
     private static Player player;
     private static World world;
-    private static final boolean[] isSelected = new boolean[20];
     private static Chest chest = null;
     private static Vector2 mouseCatchOffset = new Vector2(0, 0);
     private static int startSlot;
-    private static final Texture panelTexture = new Texture("core/assets/panel.png");
+    private static Texture panelTexture;
 
 
     public static void init(SpriteBatch batch, Player player, World world) {
@@ -45,10 +46,12 @@ public class GUI {
                 itemPositions[i] = new Vector2(Constants.gameWidth + LEFT_BORDER + SLOT_SIZE * (i % 4), 120 - SLOT_SIZE * ((i - 4) / 4));
         }
         clearSelected();
+        Game.assetManager.load("core/assets/panel.png", Texture.class);
+        Game.assetManager.load("core/assets/chest.png", Texture.class);
     }
 
     public static void draw() {
-        batch.draw(panelTexture, Constants.gameWidth + World.getCameraOffset().x, World.getCameraOffset().y);
+        batch.draw(Game.assetManager.get("core/assets/panel.png", Texture.class), Constants.gameWidth + World.getCameraOffset().x, World.getCameraOffset().y);
         drawEquipped();
         drawInventory();
         if (chest != null) drawChest();
@@ -139,7 +142,7 @@ public class GUI {
             else if (startSlot < 12) dropItem = player.getInventory().replace(new EmptyItem(), startSlot - 4);
             else dropItem = chest.getInventory().replace(new EmptyItem(), startSlot - 12);
 
-            List<Item> dropList = new ArrayList<Item>();
+            List<Item> dropList = new ArrayList<>();
             dropList.add(dropItem);
 
             world.addChest(dropList, player.getPos());
@@ -150,6 +153,4 @@ public class GUI {
     private static void clearSelected() {
         for (int i = 0; i < 20; i++) isSelected[i] = false;
     }
-
-
 }

@@ -38,16 +38,14 @@ public class World implements Disposable {
 
     private static TiledMapRenderer tiledMapRenderer;
     private static TiledMap tiledMap;
-    private final List<Enemy> enemies = new ArrayList<Enemy>();
-    private final List<Bullet> bullets = new ArrayList<Bullet>();
-    private final List<Chest> chests = new ArrayList<Chest>();
+    private final List<Enemy> enemies = new ArrayList<>();
+    private final List<Bullet> bullets = new ArrayList<>();
+    private final List<Chest> chests = new ArrayList<>();
 
     public World() {
         tiledMap = new TmxMapLoader().load("core/assets/map.tmx");
         tiledMapRenderer = new OrthogonalTiledMapRenderer(tiledMap);
-        for(int i = 0; i < tiledMap.getLayers().getCount(); i++){
-            System.out.println("Layer "+i+" loaded, name = "+tiledMap.getLayers().get(i).getName());
-        }
+        //for(int i = 0; i < tiledMap.getLayers().getCount(); i++) System.out.println("Layer " + i + " loaded, name = " + tiledMap.getLayers().get(i).getName());
     }
 
     public static Vector2 getCameraOffset() {

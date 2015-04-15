@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Disposable;
+import com.mygdx.pixelworld.data.assets.AssetType;
 import com.mygdx.pixelworld.data.items.weapons.PlayerWeaponStats;
 import com.mygdx.pixelworld.data.items.weapons.WeaponStats;
 import com.mygdx.pixelworld.data.utilities.Damaging;
@@ -28,7 +29,8 @@ public class Bullet implements Damaging, Disposable {
         this.direction = new Vector2(endingPos.x - startingPos.x, endingPos.y - startingPos.y).nor();
         isPlayer = ws instanceof PlayerWeaponStats;
         this.pos = new Vector2(startingPos);
-        img = new StaticDrawData(ws.getName(), direction.angle());
+        img = new StaticDrawData(AssetType.BULLET, ws.getName());
+        img.setRotationAngle(direction.angle());
         this.damage = (int) (ws.getDamage() + es.get(StatType.ATK));
         this.range = ws.getRange();
         this.speed = ws.getSpeed();

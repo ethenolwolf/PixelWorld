@@ -11,7 +11,7 @@ import java.util.Map;
 
 public class EntityStats {
 
-    private final Map<StatType, Float> stats = new EnumMap<StatType, Float>(StatType.class);
+    private final Map<StatType, Float> stats = new EnumMap<>(StatType.class);
     private Class type;
     private GameClasses gameClass;
     private boolean alive = true;
@@ -20,7 +20,7 @@ public class EntityStats {
 
     public EntityStats(GameClasses type) {
         this(Config.getStats(true, type.toString()));
-        maxStats = new EnumMap<StatType, Float>(stats);
+        maxStats = new EnumMap<>(stats);
         this.gameClass = type;
         this.type = null;
     }
@@ -34,7 +34,7 @@ public class EntityStats {
         stats.put(StatType.VIT, (float) vitality);
         stats.put(StatType.ATK, (float) attack);
         stats.put(StatType.DEF, (float) defense);
-        maxStats = new EnumMap<StatType, Float>(stats);
+        maxStats = new EnumMap<>(stats);
         stats.get(StatType.HEALTH);
         maxStats.get(StatType.HEALTH);
         gameClass = null;
@@ -49,7 +49,7 @@ public class EntityStats {
 
     public EntityStats(Class<? extends Enemy> enemyClass) {
         this(Config.getStats(false, enemyClass.getSimpleName()));
-        maxStats = new EnumMap<StatType, Float>(stats);
+        maxStats = new EnumMap<>(stats);
         this.type = enemyClass;
         this.gameClass = null;
     }

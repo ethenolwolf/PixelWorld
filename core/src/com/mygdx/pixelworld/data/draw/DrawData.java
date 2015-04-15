@@ -11,12 +11,15 @@ public abstract class DrawData implements Disposable {
     TextureRegion texture;
     Vector2 scaleFactor;
     float rotationAngle;
+
     DrawData() {
     }
 
+    protected abstract TextureRegion getTexture();
+
     @Override
     public void dispose() {
-        texture.getTexture().dispose();
+        getTexture().getTexture().dispose();
     }
 
     public float getWidth() {
@@ -24,7 +27,7 @@ public abstract class DrawData implements Disposable {
     }
 
     float getOriginalWidth() {
-        return texture.getRegionWidth();
+        return getTexture().getRegionWidth();
     }
 
     public float getHeight() {
@@ -32,7 +35,7 @@ public abstract class DrawData implements Disposable {
     }
 
     float getOriginalHeight() {
-        return texture.getRegionHeight();
+        return getTexture().getRegionHeight();
     }
 
     Vector2 getOriginCenter() {
@@ -69,7 +72,7 @@ public abstract class DrawData implements Disposable {
     }
 
     public void drawOnScreen(SpriteBatch batch, Vector2 screenPosition) {
-        batch.draw(texture, screenPosition.x + World.getCameraOffset().x, screenPosition.y + World.getCameraOffset().y, getOriginCenter().x,
+        batch.draw(getTexture(), screenPosition.x + World.getCameraOffset().x, screenPosition.y + World.getCameraOffset().y, getOriginCenter().x,
                 getOriginCenter().y, getWidth(), getHeight(), scaleFactor.x, scaleFactor.y, rotationAngle);
     }
 
