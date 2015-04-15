@@ -25,10 +25,8 @@ public class AnimationDrawData extends DrawData {
         this.sheetRows = sheetRows;
         this.enumClass = enumClass;
         this.baseFilePath = baseFilePath;
-        for (Object value : values) {
+        for (Object value : values)
             Game.assetManager.load(baseFilePath + value.toString().toLowerCase() + ".png", Texture.class);
-            //Logger.log("AnimationDrawData()", "Queued "+baseFilePath + value.toString().toLowerCase() + ".png ...");
-        }
         setScaleFactor(new Vector2(1, 1));
         setRotationAngle(0);
     }

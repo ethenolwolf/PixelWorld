@@ -93,7 +93,7 @@ public abstract class DrawData implements Disposable {
         return out;
     }
 
-    void setScaleFactor(Vector2 scaleFactor) {
+    public void setScaleFactor(Vector2 scaleFactor) {
         this.scaleFactor = scaleFactor;
     }
 

@@ -7,22 +7,22 @@ import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.Vector2;
 import com.mygdx.pixelworld.GUI.GUI;
 import com.mygdx.pixelworld.data.World;
+import com.mygdx.pixelworld.data.draw.StaticDrawData;
 import com.mygdx.pixelworld.data.entities.characters.GameClasses;
 import com.mygdx.pixelworld.data.entities.characters.Player;
 import com.mygdx.pixelworld.data.utilities.Constants;
 import com.mygdx.pixelworld.debug.Debug;
 
-/**
- * Main game class.
- *
- * @author alessandro
- */
+//TODO Add support for multiple map
+//TODO Add collision from map
+//TODO Test circle / square collision
+
+
 public class Game extends ApplicationAdapter implements InputProcessor {
 
     public static OrthographicCamera camera;
@@ -31,15 +31,14 @@ public class Game extends ApplicationAdapter implements InputProcessor {
     private World world;
     private Player player;
     private ShapeRenderer shapeRenderer;
-
-    private TextureRegion loadingImage;
+    private StaticDrawData loadingImage;
 
     @Override
     public void create() {
         assetManager = new AssetManager();
-        Texture tmp = new Texture("core/assets/Characters/CLERIC/idle.png");
-        loadingImage = new TextureRegion(tmp, tmp.getWidth() / 8, tmp.getHeight() / 8);
-
+        loadingImage = new StaticDrawData("core/assets/loadingImage.png");
+        loadingImage.setScaleFactor(new Vector2(4, 4));
+        assetManager.finishLoading();
         batch = new SpriteBatch();
         Debug.init();
         world = new World();
@@ -55,9 +54,6 @@ public class Game extends ApplicationAdapter implements InputProcessor {
         GUI.init(batch, player, world);
     }
 
-    /**
-     * Main loop.
-     */
     @Override
     public void render() {
         if (assetManager.update()) {
@@ -67,14 +63,13 @@ public class Game extends ApplicationAdapter implements InputProcessor {
             Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
             Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
             batch.begin();
-            batch.draw(loadingImage, (Constants.gameWidth + Constants.panelWidth) / 2, Constants.gameHeight / 2);
+            loadingImage.draw(batch, new Vector2(Constants.totalWidth / 2 - 50, Constants.gameHeight / 2));
             batch.end();
             shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
             shapeRenderer.setColor(0.0f, 0.0f, 0.392f, 1.0f);
-            shapeRenderer.rect(50, 50, (Constants.gameWidth + Constants.panelWidth) - 100, 30);
-            //Mana bar
+            shapeRenderer.rect(50, 50, Constants.totalWidth - 100, 30);
             shapeRenderer.setColor(0.0f, 0.05f, 0.95f, 1.0f);
-            shapeRenderer.rect(50, 50, ((Constants.gameWidth + Constants.panelWidth) - 100) * assetManager.getProgress(), 30);
+            shapeRenderer.rect(50, 50, (Constants.totalWidth - 100) * assetManager.getProgress(), 30);
             shapeRenderer.end();
         }
     }
@@ -106,6 +101,7 @@ public class Game extends ApplicationAdapter implements InputProcessor {
         world.dispose();
         player.dispose();
         shapeRenderer.dispose();
+        assetManager.clear();
     }
 
     @Override

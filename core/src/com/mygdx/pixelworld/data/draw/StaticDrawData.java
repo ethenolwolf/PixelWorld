@@ -11,34 +11,30 @@ public class StaticDrawData extends DrawData {
 
     String path;
 
-    public StaticDrawData() {
-        //EmptyItem
+    public StaticDrawData(String path) {
         setScaleFactor(new Vector2(1, 1));
         setRotationAngle(0);
-        path = "core/assets/placeholder.png";
+        this.path = path;
         addToLoader();
+    }
+
+    public StaticDrawData() {
+        this("core/assets/placeholder.png");
     }
 
     public StaticDrawData(AssetType assetType, String name) {
         //Weapon // Armor //Sigil //Bullet
-        setScaleFactor(new Vector2(1, 1));
-        setRotationAngle(0);
-        path = "core/assets/" + assetType.toString().toLowerCase() + "/" + name + ".png";
-        addToLoader();
+        this("core/assets/" + assetType.toString().toLowerCase() + "/" + name + ".png");
     }
 
     public StaticDrawData(AssetType assetType) {
         //Chest
-        setScaleFactor(new Vector2(1, 1));
-        setRotationAngle(0);
-        path = "core/assets/" + assetType.toString().toLowerCase() + ".png";
-        addToLoader();
+        this("core/assets/" + assetType.toString().toLowerCase() + ".png");
     }
 
     private void addToLoader() {
         if (Game.assetManager.isLoaded(path)) return;
         Game.assetManager.load(path, Texture.class);
-        //Logger.log("StaticDrawData.addToLoader()", "Queued " + path + "...");
     }
 
     @Override

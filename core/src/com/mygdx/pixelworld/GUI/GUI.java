@@ -30,8 +30,6 @@ public class GUI {
     private static Chest chest = null;
     private static Vector2 mouseCatchOffset = new Vector2(0, 0);
     private static int startSlot;
-    private static Texture panelTexture;
-
 
     public static void init(SpriteBatch batch, Player player, World world) {
         GUI.batch = batch;
