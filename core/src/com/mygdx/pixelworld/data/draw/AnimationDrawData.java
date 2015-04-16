@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.mygdx.pixelworld.Game;
+import com.mygdx.pixelworld.data.utilities.bounding.BoundingShape;
 
 import java.util.HashMap;
 
@@ -19,7 +20,7 @@ public class AnimationDrawData extends DrawData {
     private Class enumClass;
     private String baseFilePath;
 
-    public AnimationDrawData(String baseFilePath, Class enumClass, int sheetCols, int sheetRows) {
+    public AnimationDrawData(String baseFilePath, Class enumClass, int sheetCols, int sheetRows, Class<? extends BoundingShape> boundingType) {
         Object[] values = enumClass.getEnumConstants();
         this.sheetCols = sheetCols;
         this.sheetRows = sheetRows;
@@ -29,6 +30,7 @@ public class AnimationDrawData extends DrawData {
             Game.assetManager.load(baseFilePath + value.toString().toLowerCase() + ".png", Texture.class);
         setScaleFactor(new Vector2(1, 1));
         setRotationAngle(0);
+        this.boundingType = boundingType;
     }
 
     private void initAnimation() {

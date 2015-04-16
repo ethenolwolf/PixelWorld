@@ -16,6 +16,8 @@ import com.mygdx.pixelworld.data.items.armors.Armor;
 import com.mygdx.pixelworld.data.items.sigils.ManaSigil;
 import com.mygdx.pixelworld.data.items.weapons.Weapon;
 import com.mygdx.pixelworld.data.utilities.*;
+import com.mygdx.pixelworld.data.utilities.bounding.BoundingRect;
+import com.mygdx.pixelworld.data.utilities.bounding.BoundingShape;
 import com.mygdx.pixelworld.debug.Debug;
 import com.mygdx.pixelworld.debug.Debuggable;
 
@@ -36,7 +38,7 @@ public class Player extends Entity implements Debuggable{
         String name = NameExtractor.extract();
         this.pos = new Vector2(280, 0);
         this.gameClass = gameClass;
-        img = new AnimationDrawData("core/assets/Characters/" + gameClass + "/", States.class, 8, 8);
+        img = new AnimationDrawData("core/assets/Characters/" + gameClass + "/", States.class, 8, 8, BoundingRect.class);
         stats = new EntityStats(gameClass);
         fireManager = new FireManager();
         equipped = new LockedInventory(this);
@@ -63,7 +65,7 @@ public class Player extends Entity implements Debuggable{
         if (fireManager.isFiring()) currentState = States.FIRE;
 
         if (!equipped.getWeapon().isEmpty())
-            fireManager.updateFire(img.getBoundingCircle(pos).getCenter(), stats, world, equipped.getWeapon().getStats());
+            fireManager.updateFire(pos, stats, world, equipped.getWeapon().getStats());
         regen();
         if (!equipped.getManaSigil().isEmpty()) equipped.getManaSigil().update();
         ((AnimationDrawData) img).setCurrentAction(currentState.ordinal());
@@ -113,7 +115,7 @@ public class Player extends Entity implements Debuggable{
     }
 
     public boolean checkIfInside(Bullet b) {
-        return img.getBoundingCircle(pos).intersect(b.getBoundingCircle());
+        return BoundingShape.intersect(b.getBoundingShape(), img.getBoundingShape(pos));
     }
 
     @Override
@@ -147,6 +149,10 @@ public class Player extends Entity implements Debuggable{
 
     public ManaSigil getManaSigil() {
         return equipped.getManaSigil();
+    }
+
+    public BoundingShape getBoundingShape() {
+        return img.getBoundingShape(pos);
     }
 
     public void checkMana(List<Enemy> e) {

@@ -14,7 +14,6 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Disposable;
 import com.mygdx.pixelworld.GUI.GUI;
 import com.mygdx.pixelworld.Game;
-import com.mygdx.pixelworld.data.draw.BoundingCircle;
 import com.mygdx.pixelworld.data.draw.Bullet;
 import com.mygdx.pixelworld.data.draw.DrawHitValue;
 import com.mygdx.pixelworld.data.entities.characters.Player;
@@ -22,7 +21,6 @@ import com.mygdx.pixelworld.data.entities.enemies.Blocker;
 import com.mygdx.pixelworld.data.entities.enemies.Enemy;
 import com.mygdx.pixelworld.data.items.Chest;
 import com.mygdx.pixelworld.data.items.Item;
-import com.mygdx.pixelworld.data.items.sigils.PowerShock;
 import com.mygdx.pixelworld.data.items.weapons.WeaponStats;
 import com.mygdx.pixelworld.data.utilities.Constants;
 import com.mygdx.pixelworld.data.utilities.EntityStats;
@@ -45,7 +43,8 @@ public class World implements Disposable {
     public World() {
         tiledMap = new TmxMapLoader().load("core/assets/map.tmx");
         tiledMapRenderer = new OrthogonalTiledMapRenderer(tiledMap);
-        //for(int i = 0; i < tiledMap.getLayers().getCount(); i++) System.out.println("Layer " + i + " loaded, name = " + tiledMap.getLayers().get(i).getName());
+        for (int i = 0; i < tiledMap.getLayers().getCount(); i++)
+            System.out.println("Layer " + i + " loaded, name = " + tiledMap.getLayers().get(i).getName());
     }
 
     public static Vector2 getCameraOffset() {
@@ -163,7 +162,7 @@ public class World implements Disposable {
     }
 
     public void drawTop(){
-        tiledMapRenderer.render(new int[]{3});
+        tiledMapRenderer.render(new int[]{2});
     }
 
     public void fire(Vector2 startPos, Vector2 targetPos, EntityStats es, WeaponStats ws) {
@@ -190,33 +189,24 @@ public class World implements Disposable {
         //Exp bar
         shapeRenderer.setColor(0.313f, 0.800f, 0.214f, 1.0f);
         shapeRenderer.rect(Constants.gameWidth + 10, 270, 140 * player.getExpPercentage(), 20);
+        shapeRenderer.end();
 
         if (Debug.valueOf("SHOW_BOUNDING")) {
-            Vector2 pos = player.getPos();
-            shapeRenderer.circle(pos.x, pos.y, 2);
-            shapeRenderer.end();
+            //TODO Debug
             shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
-            BoundingCircle bc = player.getImg().getBoundingCircle(player.getPos());
-            shapeRenderer.circle(bc.getCenter().x, bc.getCenter().y, bc.getRadius());
+            //Player
+            shapeRenderer.setColor(0, 1, 0, 1);
+            player.getBoundingShape().draw(shapeRenderer);
+            //Enemies
+            shapeRenderer.setColor(1, 0, 0, 1);
+            for (Enemy e : enemies) e.getBoundingShape().draw(shapeRenderer);
+            //Bullets
+            shapeRenderer.setColor(0, 0, 1, 1);
+            for (Bullet b : bullets) b.getBoundingShape().draw(shapeRenderer);
+            //Chests
+            shapeRenderer.setColor(0, 1, 1, 1);
+            for (Chest c : chests) c.getBoundingShape().draw(shapeRenderer);
 
-            shapeRenderer.setColor(1.0f, 0, 0, 1.0f);
-            for (Bullet b : bullets) {
-                Vector2 center = b.getBoundingCircle().getCenter();
-                shapeRenderer.circle(center.x + getCameraOffset().x, center.y + getCameraOffset().y, b.getBoundingCircle().getRadius());
-            }
-
-            shapeRenderer.setColor(0f, 1.0f, 0, 1.0f);
-            for (Enemy e : enemies) {
-                Vector2 center = e.getBoundingCircle().getCenter();
-                shapeRenderer.circle(center.x + getCameraOffset().x, center.y + getCameraOffset().y, e.getBoundingCircle().getRadius());
-            }
-
-            shapeRenderer.setColor(1.0f, 1.0f, 0, 1.0f);
-            if (player.getManaSigil() instanceof PowerShock)
-                for (BoundingCircle bdc : ((PowerShock) player.getManaSigil()).getBoundingCircle()) {
-                    Vector2 center = bdc.getCenter();
-                    shapeRenderer.circle(center.x + getCameraOffset().x, center.y + getCameraOffset().y, bdc.getRadius());
-                }
         }
 
         if (Debug.valueOf("SHOW_OFFSET_TRIGGERS")) {

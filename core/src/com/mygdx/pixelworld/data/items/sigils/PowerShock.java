@@ -6,12 +6,13 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.mygdx.pixelworld.GUI.Logger;
 import com.mygdx.pixelworld.Game;
-import com.mygdx.pixelworld.data.assets.AssetType;
-import com.mygdx.pixelworld.data.draw.BoundingCircle;
 import com.mygdx.pixelworld.data.draw.StaticDrawData;
 import com.mygdx.pixelworld.data.entities.characters.GameClasses;
 import com.mygdx.pixelworld.data.entities.characters.Player;
 import com.mygdx.pixelworld.data.entities.enemies.Enemy;
+import com.mygdx.pixelworld.data.utilities.AssetType;
+import com.mygdx.pixelworld.data.utilities.bounding.BoundingCircle;
+import com.mygdx.pixelworld.data.utilities.bounding.BoundingShape;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -59,16 +60,17 @@ public class PowerShock extends ManaSigil {
         }
     }
 
-    public BoundingCircle[] getBoundingCircle() {
-        BoundingCircle[] bc = new BoundingCircle[blasts.size()];
-        for (int i = 0; i < bc.length; i++) bc[i] = blasts.get(i).getBoundingCircle(texture.getRegionWidth() / 2);
-        return bc;
+    public BoundingShape[] getBoundingShape() {
+        BoundingShape[] boundingShapes = new BoundingShape[blasts.size()];
+        for (int i = 0; i < boundingShapes.length; i++)
+            boundingShapes[i] = blasts.get(i).getBoundingShape(texture.getRegionWidth() / 2);
+        return boundingShapes;
     }
 
     @Override
     public boolean checkIfInside(Enemy e) {
-        for (BoundingCircle bc : getBoundingCircle())
-            if (bc.intersect(e.getBoundingCircle())) return true;
+        for (BoundingShape boundingShape : getBoundingShape())
+            if (BoundingShape.intersect(boundingShape, e.getBoundingShape())) return true;
         return false;
     }
 
@@ -94,10 +96,10 @@ public class PowerShock extends ManaSigil {
             return center;
         }
 
-        public BoundingCircle getBoundingCircle(float originalRadius) {
-            BoundingCircle out = new BoundingCircle(new Vector2(center), currentDimension.x * originalRadius);
+        public BoundingShape getBoundingShape(float originalRadius) {
+            BoundingShape out = new BoundingCircle(new Vector2(center), (int) (currentDimension.x * originalRadius));
             if (out.isValid()) return out;
-            Logger.log("PowerShockBlast.getBoundingCircle()", "Circle not valid!");
+            Logger.log("PowerShockBlast.getBoundingShape()", "Circle not valid!");
             return null;
         }
 

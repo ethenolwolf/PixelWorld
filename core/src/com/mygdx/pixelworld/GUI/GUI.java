@@ -5,13 +5,14 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.mygdx.pixelworld.Game;
 import com.mygdx.pixelworld.data.World;
-import com.mygdx.pixelworld.data.draw.BoundingCircle;
 import com.mygdx.pixelworld.data.entities.characters.Player;
 import com.mygdx.pixelworld.data.items.Chest;
 import com.mygdx.pixelworld.data.items.EmptyItem;
 import com.mygdx.pixelworld.data.items.Inventory;
 import com.mygdx.pixelworld.data.items.Item;
 import com.mygdx.pixelworld.data.utilities.Constants;
+import com.mygdx.pixelworld.data.utilities.bounding.BoundingCircle;
+import com.mygdx.pixelworld.data.utilities.bounding.BoundingShape;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -87,7 +88,7 @@ public class GUI {
         updateMousePosition(screenX, screenY);
         for (int i = 0; i < 20; i++) {
             Vector2 center = new Vector2(itemPositions[i].x + ITEMS_SIZE / 2, itemPositions[i].y + ITEMS_SIZE / 2);
-            if (new BoundingCircle(center, ITEMS_SIZE / 2).intersect(new BoundingCircle(new Vector2(screenX, screenY), 1))) {
+            if (BoundingShape.intersect(new BoundingCircle(center, ITEMS_SIZE / 2), new BoundingCircle(new Vector2(screenX, screenY), 1))) {
                 isSelected[i] = true;
                 startSlot = i;
                 mouseCatchOffset = new Vector2(itemPositions[i].x - screenX, itemPositions[i].y - screenY);
@@ -110,7 +111,7 @@ public class GUI {
         if (screenX >= Constants.gameWidth) {
             for (int endSlot = 0; endSlot < 20; endSlot++) {
                 Vector2 center = new Vector2(itemPositions[endSlot].x + ITEMS_SIZE / 2, itemPositions[endSlot].y + ITEMS_SIZE / 2);
-                if (!new BoundingCircle(center, ITEMS_SIZE / 2).intersect(new BoundingCircle(new Vector2(screenX, screenY), 1)))
+                if (!BoundingShape.intersect(new BoundingCircle(center, ITEMS_SIZE / 2), new BoundingCircle(new Vector2(screenX, screenY), 1)))
                     continue;
 
                 if (endSlot < 4) {//Equipped

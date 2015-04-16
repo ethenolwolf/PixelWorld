@@ -1,11 +1,11 @@
 package com.mygdx.pixelworld.data.items.armors;
 
 import com.mygdx.pixelworld.GUI.Logger;
-import com.mygdx.pixelworld.data.assets.AssetType;
 import com.mygdx.pixelworld.data.draw.StaticDrawData;
 import com.mygdx.pixelworld.data.entities.characters.GameClasses;
 import com.mygdx.pixelworld.data.items.EquipItem;
 import com.mygdx.pixelworld.data.items.Item;
+import com.mygdx.pixelworld.data.utilities.AssetType;
 import com.mygdx.pixelworld.data.utilities.Config;
 
 public class Armor extends Item implements EquipItem {

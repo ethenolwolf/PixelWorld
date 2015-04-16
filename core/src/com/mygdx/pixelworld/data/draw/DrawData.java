@@ -5,12 +5,16 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Disposable;
+import com.mygdx.pixelworld.GUI.Logger;
 import com.mygdx.pixelworld.data.World;
+import com.mygdx.pixelworld.data.utilities.bounding.BoundingCircle;
+import com.mygdx.pixelworld.data.utilities.bounding.BoundingRect;
+import com.mygdx.pixelworld.data.utilities.bounding.BoundingShape;
 
 public abstract class DrawData implements Disposable {
-    TextureRegion texture;
     Vector2 scaleFactor;
     float rotationAngle;
+    Class<? extends BoundingShape> boundingType;
 
     DrawData() {
     }
@@ -76,11 +80,18 @@ public abstract class DrawData implements Disposable {
                 getOriginCenter().y, getWidth(), getHeight(), scaleFactor.x, scaleFactor.y, rotationAngle);
     }
 
-    public BoundingCircle getBoundingCircle(Vector2 pos) {
-        Vector2 absolutePosition = getOriginalPosition(pos);
-        BoundingCircle out = new BoundingCircle(new Vector2(absolutePosition.x + getOriginCenter().x, absolutePosition.y + getOriginCenter().y), Math.max(getWidth() / 2, getHeight() / 2));
+    public BoundingShape getBoundingShape(Vector2 pos) {
+        //TODO
+        Vector2 position = new Vector2(pos).sub(World.getCameraOffset());
+        TextureRegion textureRegion = getTexture();
+        BoundingShape out = new BoundingCircle(new Vector2(), -1);
+
+        if (boundingType == BoundingCircle.class)
+            out = new BoundingCircle(position.add(textureRegion.getRegionWidth() / 2, textureRegion.getRegionHeight() / 2), (int) Math.max(textureRegion.getRegionWidth() * scaleFactor.x, textureRegion.getRegionHeight() * scaleFactor.y) / 2);
+        else if (boundingType == BoundingRect.class)
+            out = new BoundingRect(position, new Vector2(textureRegion.getRegionWidth() * scaleFactor.x, textureRegion.getRegionHeight() * scaleFactor.y));
         if (out.isValid()) return out;
-        System.out.println("NOT VALID!");
+        Logger.log("DrawData.getBoundingShape()", "Error constructing " + boundingType.toString() + ": bounding is invalid.");
         return null;
     }
 

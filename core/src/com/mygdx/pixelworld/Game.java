@@ -16,11 +16,11 @@ import com.mygdx.pixelworld.data.draw.StaticDrawData;
 import com.mygdx.pixelworld.data.entities.characters.GameClasses;
 import com.mygdx.pixelworld.data.entities.characters.Player;
 import com.mygdx.pixelworld.data.utilities.Constants;
+import com.mygdx.pixelworld.data.utilities.bounding.BoundingRect;
 import com.mygdx.pixelworld.debug.Debug;
 
 //TODO Add support for multiple map
 //TODO Add collision from map
-//TODO Test circle / square collision
 
 
 public class Game extends ApplicationAdapter implements InputProcessor {
@@ -36,13 +36,13 @@ public class Game extends ApplicationAdapter implements InputProcessor {
     @Override
     public void create() {
         assetManager = new AssetManager();
-        loadingImage = new StaticDrawData("core/assets/loadingImage.png");
+        loadingImage = new StaticDrawData("core/assets/loadingImage.png", BoundingRect.class);
         loadingImage.setScaleFactor(new Vector2(4, 4));
         assetManager.finishLoading();
         batch = new SpriteBatch();
         Debug.init();
         world = new World();
-        world.generateEnemies(80);
+        world.generateEnemies(10);
         player = new Player(GameClasses.CLERIC);
 
         camera = new OrthographicCamera();
@@ -123,10 +123,10 @@ public class Game extends ApplicationAdapter implements InputProcessor {
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
         if (button == Input.Buttons.LEFT) {
-            if (screenX < Constants.gameWidth) {
+            if (screenX < Constants.gameWidth) { //InScreen click
                 player.getFireManager().setIsFiring(true);
                 player.getFireManager().setTarget(screenX + World.getCameraOffset().x, Gdx.graphics.getHeight() - screenY + World.getCameraOffset().y);
-            } else {
+            } else { //Panel click
                 GUI.clickDown(screenX, (int) Constants.gameHeight - screenY);
             }
         }

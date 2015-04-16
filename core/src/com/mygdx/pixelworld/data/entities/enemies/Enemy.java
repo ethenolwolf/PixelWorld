@@ -5,7 +5,6 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Disposable;
 import com.mygdx.pixelworld.data.World;
 import com.mygdx.pixelworld.data.draw.AnimationDrawData;
-import com.mygdx.pixelworld.data.draw.BoundingCircle;
 import com.mygdx.pixelworld.data.draw.Bullet;
 import com.mygdx.pixelworld.data.entities.Entity;
 import com.mygdx.pixelworld.data.entities.characters.GameClasses;
@@ -13,6 +12,8 @@ import com.mygdx.pixelworld.data.entities.characters.Player;
 import com.mygdx.pixelworld.data.items.Item;
 import com.mygdx.pixelworld.data.items.weapons.Weapon;
 import com.mygdx.pixelworld.data.utilities.EntityStats;
+import com.mygdx.pixelworld.data.utilities.bounding.BoundingRect;
+import com.mygdx.pixelworld.data.utilities.bounding.BoundingShape;
 import com.mygdx.pixelworld.debug.Debuggable;
 
 import java.util.ArrayList;
@@ -29,7 +30,7 @@ public abstract class Enemy extends Entity implements Debuggable, Disposable {
     Enemy(float x, float y) {
         pos = new Vector2(x, y);
         stats = new EntityStats(this.getClass());
-        img = new AnimationDrawData("core/assets/enemies/" + this.getClass().getSimpleName().toLowerCase() + "/", States.class, 8, 8);
+        img = new AnimationDrawData("core/assets/enemies/" + this.getClass().getSimpleName().toLowerCase() + "/", States.class, 8, 8, BoundingRect.class);
         calculateDropItems();
     }
 
@@ -66,11 +67,11 @@ public abstract class Enemy extends Entity implements Debuggable, Disposable {
     }
 
     public boolean checkIfInside(Bullet b) {
-        return img.getBoundingCircle(pos).intersect(b.getBoundingCircle());
+        return BoundingShape.intersect(getBoundingShape(), b.getBoundingShape());
     }
 
-    public BoundingCircle getBoundingCircle() {
-        return img.getBoundingCircle(pos);
+    public BoundingShape getBoundingShape() {
+        return img.getBoundingShape(pos);
     }
 
     public int getExperience() {
