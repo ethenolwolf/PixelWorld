@@ -47,7 +47,7 @@ public class World implements Disposable {
     private final List<BoundingRect> mapObstacles = new ArrayList<>();
     private final int[] backgroundLayers = {0, 1};
     private final int[] foregroundLayers = {2};
-    private String currentMap = "core/assets/map.tmx";
+    private String currentMap = "core/assets/maps/start.tmx";
 
     public World() {
         Game.assetManager.setLoader(TiledMap.class, new TmxMapLoader(new InternalFileHandleResolver()));

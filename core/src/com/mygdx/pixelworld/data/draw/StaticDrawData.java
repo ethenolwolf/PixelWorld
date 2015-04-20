@@ -23,7 +23,7 @@ public class StaticDrawData extends DrawData {
     }
 
     public StaticDrawData() {
-        this("core/assets/placeholder.png", BoundingRect.class);
+        this("core/assets/gui/placeholder.png", BoundingRect.class);
     }
 
     public StaticDrawData(AssetType assetType, String name) {
@@ -33,7 +33,7 @@ public class StaticDrawData extends DrawData {
 
     public StaticDrawData(AssetType assetType) {
         //Chest
-        this("core/assets/" + assetType.toString().toLowerCase() + ".png", BoundingRect.class);
+        this("core/assets/background/" + assetType.toString().toLowerCase() + "/chest.png", BoundingRect.class);
     }
 
     private void addToLoader() {

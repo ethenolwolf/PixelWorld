@@ -22,7 +22,7 @@ import java.util.Properties;
 public class Debug {
 
     private static final Properties props = new Properties();
-    private static final List<Debuggable> debuggable = new ArrayList<Debuggable>();
+    private static final List<Debuggable> debuggable = new ArrayList<>();
     private static BitmapFont font;
 
     public static void init() {
@@ -32,7 +32,7 @@ public class Debug {
             Logger.log("Debug.init()", "File debug.properties not found.");
         }
 
-        FreeTypeFontGenerator ft = new FreeTypeFontGenerator(Gdx.files.internal("core/assets/Ubuntu.ttf"));
+        FreeTypeFontGenerator ft = new FreeTypeFontGenerator(Gdx.files.internal("core/assets/various/Ubuntu.ttf"));
         FreeTypeFontGenerator.FreeTypeFontParameter p = new FreeTypeFontGenerator.FreeTypeFontParameter();
         p.size = 16;
         p.color = Color.RED;

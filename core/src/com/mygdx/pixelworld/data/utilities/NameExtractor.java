@@ -7,7 +7,7 @@ import java.util.Random;
 
 public class NameExtractor {
 
-    private final static String FILE_PATH = "core/assets/maleNames.dic";
+    private final static String FILE_PATH = "core/assets/various/maleNames.dic";
     private final static String DEFAULT_NAME = "Alex";
 
     public static String extract() {

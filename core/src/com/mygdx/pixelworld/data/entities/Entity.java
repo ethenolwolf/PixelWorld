@@ -37,27 +37,31 @@ public abstract class Entity implements Disposable {
 
     protected void bound(List<BoundingRect> boundingRects, Vector2 currentMove) {
         for (BoundingRect b : boundingRects) {
-
             if (currentMove.x > 0) {
-                if (BoundingShape.intersect(new BoundingRect(pos, new Vector2(img.getWidth() + currentMove.x, img.getHeight())), b))
+                if (BoundingShape.intersect(new BoundingRect(pos, new Vector2(img.getWidth() + currentMove.x, img.getHeight())), b)) {
                     pos.x = b.get().x - img.getWidth();
-                else pos.x += currentMove.x;
+                    return;
+                }
             } else if (currentMove.x < 0) {
-                if (BoundingShape.intersect(new BoundingRect(new Vector2(pos.x + currentMove.x, pos.y), new Vector2(img.getWidth() - currentMove.x, img.getHeight())), b))
+                if (BoundingShape.intersect(new BoundingRect(new Vector2(pos.x + currentMove.x, pos.y), new Vector2(img.getWidth() - currentMove.x, img.getHeight())), b)) {
                     pos.x = b.get().x + b.get().width;
-                else pos.x += currentMove.x;
+                    return;
+                }
             }
 
             if (currentMove.y > 0) {
-                if (BoundingShape.intersect(new BoundingRect(pos, new Vector2(img.getWidth(), img.getHeight() + currentMove.y)), b))
+                if (BoundingShape.intersect(new BoundingRect(pos, new Vector2(img.getWidth(), img.getHeight() + currentMove.y)), b)) {
                     pos.y = b.get().y - img.getHeight();
-                else pos.y += currentMove.y;
+                    return;
+                }
             } else {
-                if (BoundingShape.intersect(new BoundingRect(new Vector2(pos.x, pos.y + currentMove.y), new Vector2(img.getWidth(), img.getHeight() - currentMove.y)), b))
+                if (BoundingShape.intersect(new BoundingRect(new Vector2(pos.x, pos.y + currentMove.y), new Vector2(img.getWidth(), img.getHeight() - currentMove.y)), b)) {
                     pos.y = b.get().y + b.get().height;
-                else pos.y += currentMove.y;
+                    return;
+                }
             }
         }
+        pos.add(currentMove);
     }
 
     @Override

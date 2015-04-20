@@ -38,7 +38,7 @@ public class Player extends Entity implements Debuggable{
         String name = NameExtractor.extract();
         this.pos = new Vector2(280, 0);
         this.gameClass = gameClass;
-        img = new AnimationDrawData("core/assets/Characters/" + gameClass + "/", States.class, 8, 8, BoundingRect.class);
+        img = new AnimationDrawData("core/assets/characters/" + gameClass.toString().toLowerCase() + "/", States.class, 8, 8, BoundingRect.class);
         stats = new EntityStats(gameClass);
         fireManager = new FireManager();
         equipped = new LockedInventory(this);

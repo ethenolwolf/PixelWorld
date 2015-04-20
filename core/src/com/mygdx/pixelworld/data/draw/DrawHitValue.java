@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.ListIterator;
 
 public class DrawHitValue {
-    private static final List<Hit> hits = new ArrayList<Hit>();
+    private static final List<Hit> hits = new ArrayList<>();
     private static BitmapFont font = null;
 
     public static void add(Entity e, int damage) {
@@ -29,7 +29,7 @@ public class DrawHitValue {
 
     public static void draw(SpriteBatch batch) {
         if (font == null) {
-            FreeTypeFontGenerator ftFont = new FreeTypeFontGenerator(Gdx.files.internal("core/assets/Ubuntu.ttf"));
+            FreeTypeFontGenerator ftFont = new FreeTypeFontGenerator(Gdx.files.internal("core/assets/various/Ubuntu.ttf"));
             FreeTypeFontGenerator.FreeTypeFontParameter p = new FreeTypeFontGenerator.FreeTypeFontParameter();
             p.size = 20;
             font = ftFont.generateFont(p);

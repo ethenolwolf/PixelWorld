@@ -45,12 +45,12 @@ public class GUI {
                 itemPositions[i] = new Vector2(Constants.gameWidth + LEFT_BORDER + SLOT_SIZE * (i % 4), 120 - SLOT_SIZE * ((i - 4) / 4));
         }
         clearSelected();
-        Game.assetManager.load("core/assets/panel.png", Texture.class);
-        Game.assetManager.load("core/assets/chest.png", Texture.class);
+        Game.assetManager.load("core/assets/gui/panel.png", Texture.class);
+        Game.assetManager.load("core/assets/background/chest/chest.png", Texture.class);
     }
 
     public static void draw() {
-        batch.draw(Game.assetManager.get("core/assets/panel.png", Texture.class), Constants.gameWidth + World.getCameraOffset().x, World.getCameraOffset().y);
+        batch.draw(Game.assetManager.get("core/assets/gui/panel.png", Texture.class), Constants.gameWidth + World.getCameraOffset().x, World.getCameraOffset().y);
         drawEquipped();
         drawInventory();
         if (chest != null) drawChest();
