@@ -37,4 +37,11 @@
    </properties>
   </object>
  </objectgroup>
+ <objectgroup name="Spawn" width="30" height="30">
+  <object type="Blocker" x="352" y="160" width="320" height="96">
+   <properties>
+    <property name="Number" value="10"/>
+   </properties>
+  </object>
+ </objectgroup>
 </map>

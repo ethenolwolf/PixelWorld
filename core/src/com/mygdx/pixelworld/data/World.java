@@ -12,6 +12,7 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Disposable;
@@ -48,6 +49,7 @@ public class World implements Disposable {
     private final List<Chest> chests = new ArrayList<>();
     private final List<BoundingRect> mapObstacles = new ArrayList<>();
     private final List<ExitBoundingRect> exits = new ArrayList<>();
+    private final List<BoundingRect> spawnPoints = new ArrayList<>();
     private final int[] backgroundLayers = {0, 1};
     private final int[] foregroundLayers = {2};
     private String currentMap;
@@ -115,15 +117,27 @@ public class World implements Disposable {
             exits.add(new ExitBoundingRect(((RectangleMapObject) object).getRectangle(), (String) object.getProperties().get("NextMap")));
             Logger.log("World()", "Added exit : " + exits.get(exits.size() - 1).toString());
         }
+        for (MapObject object : tiledMap.getLayers().get("Spawn").getObjects()) {
+            if (!(object instanceof RectangleMapObject)) continue;
+            String type = object.getProperties().get("type", String.class);
+            int number = Integer.parseInt(object.getProperties().get("Number", String.class));
+            generateEnemies(((RectangleMapObject) object).getRectangle(), type, number);
+            spawnPoints.add(new BoundingRect(((RectangleMapObject) object).getRectangle()));
+        }
         for (int i = 0; i < tiledMap.getLayers().getCount(); i++)
             System.out.println("Layer " + i + " loaded, name = " + tiledMap.getLayers().get(i).getName());
-        generateEnemies(10);
     }
 
-    private void addEnemy(Class enemyType, float x, float y) {
+    private void addEnemy(String enemyType, float x, float y) {
         Enemy e;
-        if (enemyType == Blocker.class) e = new Blocker(x, y);
-        else e = new Blocker(x,y);
+        switch (enemyType) {
+            case "blocker":
+                e = new Blocker(x, y);
+                break;
+            default:
+                e = new Blocker(x, y);
+                break;
+        }
         enemies.add(e);
         Debug.addDebuggable(e);
     }
@@ -262,7 +276,7 @@ public class World implements Disposable {
         if (Debug.valueOf("SHOW_BOUNDING")) {
             shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
             //Player
-            shapeRenderer.setColor(0, 1, 0, 1);
+            shapeRenderer.setColor(1, 0, 1, 1);
             player.getBoundingShape().draw(shapeRenderer);
             //Enemies
             shapeRenderer.setColor(1, 0, 0, 1);
@@ -276,6 +290,12 @@ public class World implements Disposable {
             //Obstacles
             shapeRenderer.setColor(1, 1, 0, 1);
             for (BoundingRect rect : mapObstacles) rect.drawOnScreen(shapeRenderer, getCameraOffset());
+            //Exits
+            shapeRenderer.setColor(0, 1, 0, 1);
+            for (ExitBoundingRect rect : exits) rect.drawOnScreen(shapeRenderer, getCameraOffset());
+            //SpawnPoints
+            shapeRenderer.setColor(0.5f, 1, 0, 1);
+            for (BoundingRect rect : spawnPoints) rect.drawOnScreen(shapeRenderer, getCameraOffset());
 
         }
 
@@ -292,10 +312,14 @@ public class World implements Disposable {
         shapeRenderer.end();
     }
 
-    private void generateEnemies(int enemyNumber) {
+    private void generateEnemies(Rectangle rectangle, String type, int enemyNumber) {
         Random random = new Random();
-        for (int i = 0; i < enemyNumber; i++)
-            addEnemy(Blocker.class, random.nextInt(getWidth()), random.nextInt(getHeight()));
+        for (int i = 0; i < enemyNumber; i++) {
+            int x = (int) (random.nextInt((int) (rectangle.width)) + rectangle.x);
+            int y = (int) (random.nextInt((int) (rectangle.height)) + rectangle.y);
+            System.out.println("Adding enemy at X = " + x + " and Y = " + y);
+            addEnemy(type, x, y);
+        }
     }
 
     @Override
