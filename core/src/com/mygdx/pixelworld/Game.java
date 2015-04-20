@@ -20,8 +20,6 @@ import com.mygdx.pixelworld.data.utilities.bounding.BoundingRect;
 import com.mygdx.pixelworld.debug.Debug;
 
 //TODO Add support for multiple map
-//TODO Add collision from map
-
 
 public class Game extends ApplicationAdapter implements InputProcessor {
 

@@ -5,6 +5,8 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.maps.MapObject;
+import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
@@ -13,6 +15,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Disposable;
 import com.mygdx.pixelworld.GUI.GUI;
+import com.mygdx.pixelworld.GUI.Logger;
 import com.mygdx.pixelworld.Game;
 import com.mygdx.pixelworld.data.draw.Bullet;
 import com.mygdx.pixelworld.data.draw.DrawHitValue;
@@ -25,6 +28,7 @@ import com.mygdx.pixelworld.data.items.weapons.WeaponStats;
 import com.mygdx.pixelworld.data.utilities.Constants;
 import com.mygdx.pixelworld.data.utilities.EntityStats;
 import com.mygdx.pixelworld.data.utilities.StatType;
+import com.mygdx.pixelworld.data.utilities.bounding.BoundingRect;
 import com.mygdx.pixelworld.debug.Debug;
 
 import java.util.ArrayList;
@@ -39,10 +43,16 @@ public class World implements Disposable {
     private final List<Enemy> enemies = new ArrayList<>();
     private final List<Bullet> bullets = new ArrayList<>();
     private final List<Chest> chests = new ArrayList<>();
+    private final List<BoundingRect> mapObstacles = new ArrayList<>();
 
     public World() {
         tiledMap = new TmxMapLoader().load("core/assets/map.tmx");
         tiledMapRenderer = new OrthogonalTiledMapRenderer(tiledMap);
+        for (MapObject object : tiledMap.getLayers().get("Collisions").getObjects()) {
+            if (!(object instanceof RectangleMapObject)) continue;
+            mapObstacles.add(new BoundingRect(((RectangleMapObject) object).getRectangle()));
+            Logger.log("World()", "Added mapObstacle : " + mapObstacles.get(mapObstacles.size() - 1).toString());
+        }
         for (int i = 0; i < tiledMap.getLayers().getCount(); i++)
             System.out.println("Layer " + i + " loaded, name = " + tiledMap.getLayers().get(i).getName());
     }
@@ -101,7 +111,7 @@ public class World implements Disposable {
         ListIterator<Bullet> bulletIterator = bullets.listIterator();
         while (bulletIterator.hasNext()) {
             Bullet b = bulletIterator.next();
-            b.update();
+            b.update(mapObstacles);
             if (b.isPlayer()) {
                 enemyIterator = enemies.listIterator();
                 while (enemyIterator.hasNext()) {
@@ -192,7 +202,6 @@ public class World implements Disposable {
         shapeRenderer.end();
 
         if (Debug.valueOf("SHOW_BOUNDING")) {
-            //TODO Debug
             shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
             //Player
             shapeRenderer.setColor(0, 1, 0, 1);
@@ -206,6 +215,9 @@ public class World implements Disposable {
             //Chests
             shapeRenderer.setColor(0, 1, 1, 1);
             for (Chest c : chests) c.getBoundingShape().draw(shapeRenderer);
+            //Obstacles
+            shapeRenderer.setColor(1, 1, 0, 1);
+            for (BoundingRect rect : mapObstacles) rect.drawOnScreen(shapeRenderer, getCameraOffset());
 
         }
 
@@ -234,5 +246,9 @@ public class World implements Disposable {
         for (Enemy e : enemies) e.dispose();
         for (Bullet b : bullets) b.dispose();
         for (Chest c : chests) c.dispose();
+    }
+
+    public List<BoundingRect> getBoundingRects() {
+        return mapObstacles;
     }
 }

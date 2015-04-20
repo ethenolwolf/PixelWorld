@@ -81,8 +81,7 @@ public abstract class DrawData implements Disposable {
     }
 
     public BoundingShape getBoundingShape(Vector2 pos) {
-        //TODO
-        Vector2 position = new Vector2(pos).sub(World.getCameraOffset());
+        Vector2 position = new Vector2(pos);
         TextureRegion textureRegion = getTexture();
         BoundingShape out = new BoundingCircle(new Vector2(), -1);
 

@@ -10,7 +10,10 @@ import com.mygdx.pixelworld.data.utilities.AssetType;
 import com.mygdx.pixelworld.data.utilities.Damaging;
 import com.mygdx.pixelworld.data.utilities.EntityStats;
 import com.mygdx.pixelworld.data.utilities.StatType;
+import com.mygdx.pixelworld.data.utilities.bounding.BoundingRect;
 import com.mygdx.pixelworld.data.utilities.bounding.BoundingShape;
+
+import java.util.List;
 
 public class Bullet implements Damaging, Disposable {
 
@@ -38,11 +41,10 @@ public class Bullet implements Damaging, Disposable {
         this.rotationSpeed = ws.getRotationSpeed();
     }
 
-    public void update() {
+    public void update(List<BoundingRect> mapObstacles) {
         move();
-        if (pos.dst(startPoint) > range) {
-            alive = false;
-        }
+        for (BoundingRect b : mapObstacles) if (BoundingShape.intersect(b, getBoundingShape())) alive = false;
+        if (pos.dst(startPoint) > range) alive = false;
     }
 
     public boolean isAlive() {

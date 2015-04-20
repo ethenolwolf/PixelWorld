@@ -14,7 +14,7 @@ public class Blocker extends Enemy {
 
     private final FireManager fireManager;
     private final WeaponStats weaponStats;
-    private Directions currentDirection = Directions.LEFT;
+    private Direction currentDirection = Direction.LEFT;
     private float AITimer = 0;
 
     public Blocker(float x, float y) {
@@ -35,7 +35,8 @@ public class Blocker extends Enemy {
         currentState = States.WALK;
         img.update();
         if (!fireManager.isFiring()) fireManager.setIsFiring(true);
-        Algorithms.moveTowards(pos, player.getPos(), stats.get(StatType.SPD) * Gdx.graphics.getDeltaTime());
+        Vector2 diff = new Vector2(player.getPos().x - pos.x, player.getPos().y - pos.y);
+        bound(world.getBoundingRects(), diff.nor().scl(stats.get(StatType.SPD) * Gdx.graphics.getDeltaTime()));
         pos = img.boundMap(pos);
         fireManager.setTarget(player.getPos());
         fireManager.updateFire(new Vector2(pos).add(img.getWidth() / 2, img.getHeight() / 2), stats, world, weaponStats);
@@ -49,7 +50,7 @@ public class Blocker extends Enemy {
         AITimer -= Gdx.graphics.getDeltaTime();
         if (AITimer <= 0) {
             Random rand = new Random();
-            currentDirection = Directions.values()[rand.nextInt(3)];
+            currentDirection = Direction.values()[rand.nextInt(3)];
             AITimer = 2.0f;
         }
 
@@ -57,20 +58,19 @@ public class Blocker extends Enemy {
 
         switch (currentDirection) {
             case UP:
-                pos.add(0, speed);
+                bound(world.getBoundingRects(), new Vector2(0, speed));
                 break;
             case DOWN:
-                pos.add(0, -speed);
+                bound(world.getBoundingRects(), new Vector2(0, -speed));
                 break;
             case LEFT:
-                pos.add(-speed, 0);
+                bound(world.getBoundingRects(), new Vector2(-speed, 0));
                 break;
             case RIGHT:
-                pos.add(speed, 0);
+                bound(world.getBoundingRects(), new Vector2(speed, 0));
                 break;
         }
         pos = img.boundMap(pos);
-
         fireManager.setTarget(player.getPos());
         fireManager.updateFire(pos, stats, world, weaponStats);
         img.update();

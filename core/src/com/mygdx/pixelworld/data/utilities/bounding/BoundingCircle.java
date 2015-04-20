@@ -3,9 +3,10 @@ package com.mygdx.pixelworld.data.utilities.bounding;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Vector2;
+import com.mygdx.pixelworld.data.World;
 
 public class BoundingCircle extends BoundingShape {
-    Circle circle;
+    private Circle circle;
 
     public BoundingCircle(Vector2 pos, int radius) {
         circle = new Circle(pos, radius);
@@ -17,7 +18,7 @@ public class BoundingCircle extends BoundingShape {
 
     @Override
     public void draw(ShapeRenderer shapeRenderer) {
-        shapeRenderer.circle(circle.x, circle.y, circle.radius);
+        shapeRenderer.circle(circle.x - World.getCameraOffset().x, circle.y - World.getCameraOffset().y, circle.radius);
     }
 
     @Override
@@ -33,6 +34,11 @@ public class BoundingCircle extends BoundingShape {
 
     @Override
     public boolean isValid() {
-        return circle.radius > 0;
+        return circle.area() > 0;
+    }
+
+    @Override
+    public String toString() {
+        return String.format("X = %.2f, Y = %.2f, R = %.2f", circle.x, circle.y, circle.radius);
     }
 }

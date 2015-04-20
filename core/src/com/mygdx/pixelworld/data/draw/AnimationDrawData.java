@@ -13,12 +13,13 @@ import java.util.HashMap;
 
 public class AnimationDrawData extends DrawData {
 
+    private final int sheetCols;
+    private final int sheetRows;
+    private final Class enumClass;
+    private final String baseFilePath;
     private java.util.Map<Integer, Animation> animationMap;
     private int currentAction;
     private float stateTime;
-    private int sheetCols, sheetRows;
-    private Class enumClass;
-    private String baseFilePath;
 
     public AnimationDrawData(String baseFilePath, Class enumClass, int sheetCols, int sheetRows, Class<? extends BoundingShape> boundingType) {
         Object[] values = enumClass.getEnumConstants();
@@ -50,6 +51,7 @@ public class AnimationDrawData extends DrawData {
             animationMap.put(i1, new Animation(0.025f, walkFrames));
         }
         stateTime = 0f;
+        //Logger.log("AnimationDrawData.initAnimation()", "Loaded "+baseFilePath+". Has W = "+getTexture().getRegionWidth()+" and H = "+getTexture().getRegionHeight());
     }
 
     @Override

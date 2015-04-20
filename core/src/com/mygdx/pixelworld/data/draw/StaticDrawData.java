@@ -12,7 +12,7 @@ import com.mygdx.pixelworld.data.utilities.bounding.BoundingShape;
 
 public class StaticDrawData extends DrawData {
 
-    String path;
+    private String path;
 
     public StaticDrawData(String path, Class<? extends BoundingShape> boundingType) {
         setScaleFactor(new Vector2(1, 1));

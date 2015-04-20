@@ -23,7 +23,7 @@ import com.mygdx.pixelworld.debug.Debuggable;
 
 import java.util.List;
 
-import static com.mygdx.pixelworld.data.utilities.Directions.*;
+import static com.mygdx.pixelworld.data.utilities.Direction.*;
 
 public class Player extends Entity implements Debuggable{
 
@@ -57,10 +57,10 @@ public class Player extends Entity implements Debuggable{
         States currentState;
         if (Gdx.input.isKeyPressed(Keys.ANY_KEY)) currentState = States.WALK;
         else currentState = States.IDLE;
-        if (Gdx.input.isKeyPressed(Keys.A)) move(LEFT);
-        else if (Gdx.input.isKeyPressed(Keys.D)) move(RIGHT);
-        if (Gdx.input.isKeyPressed(Keys.S)) move(DOWN);
-        else if (Gdx.input.isKeyPressed(Keys.W)) move(UP);
+        if (Gdx.input.isKeyPressed(Keys.A)) move(LEFT, world.getBoundingRects());
+        else if (Gdx.input.isKeyPressed(Keys.D)) move(RIGHT, world.getBoundingRects());
+        if (Gdx.input.isKeyPressed(Keys.S)) move(DOWN, world.getBoundingRects());
+        else if (Gdx.input.isKeyPressed(Keys.W)) move(UP, world.getBoundingRects());
 
         if (fireManager.isFiring()) currentState = States.FIRE;
 
@@ -80,20 +80,20 @@ public class Player extends Entity implements Debuggable{
         }
     }
 
-    private void move(Directions dir) {
+    private void move(Direction dir, List<BoundingRect> boundingRects) {
         float movement = Gdx.graphics.getDeltaTime() * stats.get(StatType.SPD) * 5;
         switch (dir) {
             case UP:
-                pos.add(0, movement);
+                bound(boundingRects, new Vector2(0, movement));
                 break;
             case DOWN:
-                pos.add(0, -movement);
+                bound(boundingRects, new Vector2(0, -movement));
                 break;
             case LEFT:
-                pos.add(-movement, 0);
+                bound(boundingRects, new Vector2(-movement, 0));
                 break;
             case RIGHT:
-                pos.add(movement, 0);
+                bound(boundingRects, new Vector2(movement, 0));
                 break;
         }
         pos = img.boundMap(pos);

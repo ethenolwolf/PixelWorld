@@ -11,7 +11,7 @@ import com.mygdx.pixelworld.data.utilities.StatType;
 
 public class HealingCross extends ManaSigil {
 
-    Player player;
+    private Player player;
 
     public HealingCross(Player player) {
         damage = 0;
@@ -21,10 +21,6 @@ public class HealingCross extends ManaSigil {
         img = new StaticDrawData(AssetType.SIGIL, "healingCross");
         gameClass = player.getGameClass();
         empty = false;
-    }
-
-    @Override
-    public void update() {
     }
 
     @Override

@@ -60,7 +60,7 @@ public class PowerShock extends ManaSigil {
         }
     }
 
-    public BoundingShape[] getBoundingShape() {
+    private BoundingShape[] getBoundingShape() {
         BoundingShape[] boundingShapes = new BoundingShape[blasts.size()];
         for (int i = 0; i < boundingShapes.length; i++)
             boundingShapes[i] = blasts.get(i).getBoundingShape(texture.getRegionWidth() / 2);

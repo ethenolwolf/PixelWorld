@@ -23,7 +23,7 @@ import java.util.Random;
 public abstract class Enemy extends Entity implements Debuggable, Disposable {
 
     private final List<Item> dropItems = new ArrayList<>();
-    protected States currentState = States.IDLE;
+    States currentState = States.IDLE;
     int ATTACK_RANGE;
     int EXPERIENCE;
 
@@ -52,11 +52,9 @@ public abstract class Enemy extends Entity implements Debuggable, Disposable {
         ((AnimationDrawData) img).setCurrentAction(currentState.ordinal());
     }
 
-    void activeAIUpdate(Player player, World world) {
-    }
+    abstract void activeAIUpdate(Player player, World world);
 
-    void passiveAIUpdate(Player player, World world) {
-    }
+    abstract void passiveAIUpdate(Player player, World world);
 
     public void draw(SpriteBatch batch) {
         img.draw(batch, pos, 0.75f);
