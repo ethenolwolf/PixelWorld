@@ -35,7 +35,6 @@ public abstract class Enemy extends Entity implements Debuggable, Disposable {
     }
 
     private void calculateDropItems() {
-        //TODO Flavio
         Random rand = new Random();
         int k = rand.nextInt(10);
         if (k > 3) dropItems.add(new Weapon(GameClasses.NINJA, 1));

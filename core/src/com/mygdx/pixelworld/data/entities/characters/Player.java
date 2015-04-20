@@ -36,7 +36,7 @@ public class Player extends Entity implements Debuggable{
 
     public Player(GameClasses gameClass) {
         String name = NameExtractor.extract();
-        this.pos = new Vector2(280, 0);
+        this.pos = new Vector2();
         this.gameClass = gameClass;
         img = new AnimationDrawData("core/assets/characters/" + gameClass.toString().toLowerCase() + "/", States.class, 8, 8, BoundingRect.class);
         stats = new EntityStats(gameClass);

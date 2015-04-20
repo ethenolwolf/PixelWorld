@@ -68,4 +68,8 @@ public abstract class Entity implements Disposable {
     public void dispose() {
         img.dispose();
     }
+
+    public void setInitialPos(int x, int y) {
+        pos = new Vector2(x, y);
+    }
 }

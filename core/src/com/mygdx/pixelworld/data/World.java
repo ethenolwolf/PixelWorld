@@ -30,6 +30,8 @@ import com.mygdx.pixelworld.data.utilities.Constants;
 import com.mygdx.pixelworld.data.utilities.EntityStats;
 import com.mygdx.pixelworld.data.utilities.StatType;
 import com.mygdx.pixelworld.data.utilities.bounding.BoundingRect;
+import com.mygdx.pixelworld.data.utilities.bounding.BoundingShape;
+import com.mygdx.pixelworld.data.utilities.bounding.ExitBoundingRect;
 import com.mygdx.pixelworld.debug.Debug;
 
 import java.util.ArrayList;
@@ -45,13 +47,16 @@ public class World implements Disposable {
     private final List<Bullet> bullets = new ArrayList<>();
     private final List<Chest> chests = new ArrayList<>();
     private final List<BoundingRect> mapObstacles = new ArrayList<>();
+    private final List<ExitBoundingRect> exits = new ArrayList<>();
     private final int[] backgroundLayers = {0, 1};
     private final int[] foregroundLayers = {2};
-    private String currentMap = "core/assets/maps/start.tmx";
+    private String currentMap;
+    private Player player;
 
-    public World() {
+    public World(Player player) {
+        this.player = player;
         Game.assetManager.setLoader(TiledMap.class, new TmxMapLoader(new InternalFileHandleResolver()));
-        Game.assetManager.load(currentMap, TiledMap.class);
+        loadNewMap("core/assets/maps/start.tmx");
         new Blocker(0, 0);
     }
 
@@ -74,13 +79,41 @@ public class World implements Disposable {
         return tileNumber * tileHeight;
     }
 
+    private void loadNewMap(String mapPath) {
+        Logger.log("World.loadNewMap()", "Loading " + mapPath + "...");
+        enemies.clear();
+        bullets.clear();
+        chests.clear();
+        mapObstacles.clear();
+        exits.clear();
+        if (tiledMap != null) {
+            Game.assetManager.unload(currentMap);
+            tiledMap.dispose();
+        }
+        tiledMap = null;
+        currentMap = mapPath;
+        Game.assetManager.load(currentMap, TiledMap.class);
+    }
+
     private void initMap() {
         tiledMap = Game.assetManager.get(currentMap);
         tiledMapRenderer = new OrthogonalTiledMapRenderer(tiledMap);
+
+        int x = Integer.parseInt(tiledMap.getProperties().get("PlayerPositionX", String.class)) * tiledMap.getProperties().get("tilewidth", Integer.class);
+        int y = Integer.parseInt(tiledMap.getProperties().get("PlayerPositionY", String.class)) * tiledMap.getProperties().get("tileheight", Integer.class);
+        player.setInitialPos(x, y);
+        setOffset(player.getPos());
+        Logger.log("World()", "Player position set to " + player.getPos().toString());
+
         for (MapObject object : tiledMap.getLayers().get("Collisions").getObjects()) {
             if (!(object instanceof RectangleMapObject)) continue;
             mapObstacles.add(new BoundingRect(((RectangleMapObject) object).getRectangle()));
             Logger.log("World()", "Added mapObstacle : " + mapObstacles.get(mapObstacles.size() - 1).toString());
+        }
+        for (MapObject object : tiledMap.getLayers().get("Exits").getObjects()) {
+            if (!(object instanceof RectangleMapObject)) continue;
+            exits.add(new ExitBoundingRect(((RectangleMapObject) object).getRectangle(), (String) object.getProperties().get("NextMap")));
+            Logger.log("World()", "Added exit : " + exits.get(exits.size() - 1).toString());
         }
         for (int i = 0; i < tiledMap.getLayers().getCount(); i++)
             System.out.println("Layer " + i + " loaded, name = " + tiledMap.getLayers().get(i).getName());
@@ -99,8 +132,16 @@ public class World implements Disposable {
         chests.add(new Chest(items, pos));
     }
 
-    public void update(Player player) {
+    public void update() {
         if (tiledMap == null) initMap();
+
+        for (ExitBoundingRect e : exits) {
+            if (BoundingShape.intersect(player.getBoundingShape(), e)) {
+                loadNewMap(e.getNextMap());
+                return;
+            }
+        }
+
         ListIterator<Enemy> enemyIterator = enemies.listIterator();
         while (enemyIterator.hasNext()) {
             Enemy e = enemyIterator.next();
@@ -169,7 +210,11 @@ public class World implements Disposable {
         if(newPos.y < h/2) newPos.y = h/2;
         if(newPos.y > getHeight() - h/2) newPos.y = getHeight() - h/2;
 
-        Game.camera.position.set(newPos.x, newPos.y, 0);
+        setOffset(newPos);
+    }
+
+    private void setOffset(Vector2 offset) {
+        Game.camera.position.set(offset.x, offset.y, 0);
         Game.camera.update();
     }
 

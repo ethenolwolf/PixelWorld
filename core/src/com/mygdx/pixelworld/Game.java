@@ -19,8 +19,6 @@ import com.mygdx.pixelworld.data.utilities.Constants;
 import com.mygdx.pixelworld.data.utilities.bounding.BoundingRect;
 import com.mygdx.pixelworld.debug.Debug;
 
-//TODO Add support for multiple map
-
 public class Game extends ApplicationAdapter implements InputProcessor {
 
     public static OrthographicCamera camera;
@@ -39,8 +37,8 @@ public class Game extends ApplicationAdapter implements InputProcessor {
         assetManager.finishLoading();
         batch = new SpriteBatch();
         Debug.init();
-        world = new World();
         player = new Player(GameClasses.CLERIC);
+        world = new World(player);
 
         camera = new OrthographicCamera();
         camera.setToOrtho(false, Constants.gameWidth+Constants.panelWidth, Constants.gameHeight);
@@ -74,7 +72,7 @@ public class Game extends ApplicationAdapter implements InputProcessor {
     private void gameLoop() {
         //Logic update
         player.update(world);
-        world.update(player);
+        world.update();
 
         //Clear screen
         Gdx.gl.glClearColor(0.5f, 0, 0, 1);
