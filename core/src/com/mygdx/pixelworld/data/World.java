@@ -1,6 +1,7 @@
 package com.mygdx.pixelworld.data;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -44,17 +45,14 @@ public class World implements Disposable {
     private final List<Bullet> bullets = new ArrayList<>();
     private final List<Chest> chests = new ArrayList<>();
     private final List<BoundingRect> mapObstacles = new ArrayList<>();
+    private final int[] backgroundLayers = {0, 1};
+    private final int[] foregroundLayers = {2};
+    private String currentMap = "core/assets/map.tmx";
 
     public World() {
-        tiledMap = new TmxMapLoader().load("core/assets/map.tmx");
-        tiledMapRenderer = new OrthogonalTiledMapRenderer(tiledMap);
-        for (MapObject object : tiledMap.getLayers().get("Collisions").getObjects()) {
-            if (!(object instanceof RectangleMapObject)) continue;
-            mapObstacles.add(new BoundingRect(((RectangleMapObject) object).getRectangle()));
-            Logger.log("World()", "Added mapObstacle : " + mapObstacles.get(mapObstacles.size() - 1).toString());
-        }
-        for (int i = 0; i < tiledMap.getLayers().getCount(); i++)
-            System.out.println("Layer " + i + " loaded, name = " + tiledMap.getLayers().get(i).getName());
+        Game.assetManager.setLoader(TiledMap.class, new TmxMapLoader(new InternalFileHandleResolver()));
+        Game.assetManager.load(currentMap, TiledMap.class);
+        new Blocker(0, 0);
     }
 
     public static Vector2 getCameraOffset() {
@@ -63,15 +61,30 @@ public class World implements Disposable {
     }
 
     public static int getWidth() {
+        if (tiledMap == null) return (int) Constants.totalWidth;
         int tileNumber = tiledMap.getProperties().get("width", Integer.class);
         int tileWidth = tiledMap.getProperties().get("tilewidth", Integer.class);
         return tileNumber * tileWidth;
     }
 
     public static int getHeight() {
+        if (tiledMap == null) return (int) Constants.gameHeight;
         int tileNumber = tiledMap.getProperties().get("height", Integer.class);
         int tileHeight = tiledMap.getProperties().get("tileheight", Integer.class);
         return tileNumber * tileHeight;
+    }
+
+    private void initMap() {
+        tiledMap = Game.assetManager.get(currentMap);
+        tiledMapRenderer = new OrthogonalTiledMapRenderer(tiledMap);
+        for (MapObject object : tiledMap.getLayers().get("Collisions").getObjects()) {
+            if (!(object instanceof RectangleMapObject)) continue;
+            mapObstacles.add(new BoundingRect(((RectangleMapObject) object).getRectangle()));
+            Logger.log("World()", "Added mapObstacle : " + mapObstacles.get(mapObstacles.size() - 1).toString());
+        }
+        for (int i = 0; i < tiledMap.getLayers().getCount(); i++)
+            System.out.println("Layer " + i + " loaded, name = " + tiledMap.getLayers().get(i).getName());
+        generateEnemies(10);
     }
 
     private void addEnemy(Class enemyType, float x, float y) {
@@ -87,7 +100,7 @@ public class World implements Disposable {
     }
 
     public void update(Player player) {
-
+        if (tiledMap == null) initMap();
         ListIterator<Enemy> enemyIterator = enemies.listIterator();
         while (enemyIterator.hasNext()) {
             Enemy e = enemyIterator.next();
@@ -162,7 +175,7 @@ public class World implements Disposable {
 
     public void drawBottom(SpriteBatch batch, OrthographicCamera camera) {
         tiledMapRenderer.setView(camera);
-        tiledMapRenderer.render(new int[]{0, 1});
+        tiledMapRenderer.render(backgroundLayers);
         batch.setProjectionMatrix(camera.combined);
         batch.begin();
         for (Enemy e : enemies) e.draw(batch);
@@ -172,7 +185,7 @@ public class World implements Disposable {
     }
 
     public void drawTop(){
-        tiledMapRenderer.render(new int[]{2});
+        tiledMapRenderer.render(foregroundLayers);
     }
 
     public void fire(Vector2 startPos, Vector2 targetPos, EntityStats es, WeaponStats ws) {
@@ -234,7 +247,7 @@ public class World implements Disposable {
         shapeRenderer.end();
     }
 
-    public void generateEnemies(int enemyNumber) {
+    private void generateEnemies(int enemyNumber) {
         Random random = new Random();
         for (int i = 0; i < enemyNumber; i++)
             addEnemy(Blocker.class, random.nextInt(getWidth()), random.nextInt(getHeight()));

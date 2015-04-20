@@ -40,7 +40,6 @@ public class Game extends ApplicationAdapter implements InputProcessor {
         batch = new SpriteBatch();
         Debug.init();
         world = new World();
-        world.generateEnemies(10);
         player = new Player(GameClasses.CLERIC);
 
         camera = new OrthographicCamera();
@@ -61,7 +60,8 @@ public class Game extends ApplicationAdapter implements InputProcessor {
             Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
             Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
             batch.begin();
-            loadingImage.draw(batch, new Vector2(Constants.totalWidth / 2 - 50, Constants.gameHeight / 2));
+            Vector2 loadingImagePos = new Vector2(Constants.totalWidth / 2 - 50, Constants.gameHeight / 2);
+            loadingImage.draw(batch, loadingImagePos);
             batch.end();
             shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
             shapeRenderer.setColor(0.0f, 0.0f, 0.392f, 1.0f);

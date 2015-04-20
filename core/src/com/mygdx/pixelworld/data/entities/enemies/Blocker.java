@@ -21,7 +21,7 @@ public class Blocker extends Enemy {
         super(x, y);
         fireManager = new FireManager();
         weaponStats = Config.getWeapon(Blocker.class);
-        StaticDrawData tmp = new StaticDrawData(AssetType.BULLET, weaponStats.getName());
+        new StaticDrawData(AssetType.BULLET, weaponStats.getName());
         ATTACK_RANGE = 400;
         EXPERIENCE = 3;
     }
