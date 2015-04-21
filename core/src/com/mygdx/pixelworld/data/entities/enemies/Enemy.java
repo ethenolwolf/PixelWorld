@@ -20,6 +20,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+/**
+ * Class used to generify enemies of the game.
+ */
 public abstract class Enemy extends Entity implements Debuggable, Disposable {
 
     private final List<Item> dropItems = new ArrayList<>();
@@ -34,6 +37,9 @@ public abstract class Enemy extends Entity implements Debuggable, Disposable {
         calculateDropItems();
     }
 
+    /**
+     * Calculates items that this enemy will drop dying.
+     */
     private void calculateDropItems() {
         Random rand = new Random();
         int k = rand.nextInt(10);
@@ -43,6 +49,12 @@ public abstract class Enemy extends Entity implements Debuggable, Disposable {
 
     }
 
+    /**
+     * Updates AI
+     *
+     * @param player Player
+     * @param world  World
+     */
     public void update(Player player, World world) {
         if (!stats.isAlive()) return;
         if (player.getPos().dst(pos) < ATTACK_RANGE) activeAIUpdate(player, world);
@@ -51,30 +63,31 @@ public abstract class Enemy extends Entity implements Debuggable, Disposable {
         ((AnimationDrawData) img).setCurrentAction(currentState.ordinal());
     }
 
+    /**
+     * AI when near player
+     */
     abstract void activeAIUpdate(Player player, World world);
 
+    /**
+     * AI when far from player
+     */
     abstract void passiveAIUpdate(Player player, World world);
 
     public void draw(SpriteBatch batch) {
-        img.draw(batch, pos, 0.75f);
+        img.draw(batch, pos, 1);
     }
-
     public boolean isAlive() {
         return stats.isAlive();
     }
-
     public boolean checkIfInside(Bullet b) {
         return BoundingShape.intersect(getBoundingShape(), b.getBoundingShape());
     }
-
     public BoundingShape getBoundingShape() {
         return img.getBoundingShape(pos);
     }
-
     public int getExperience() {
         return EXPERIENCE;
     }
-
     public List<Item> getDropItems() {
         return dropItems;
     }

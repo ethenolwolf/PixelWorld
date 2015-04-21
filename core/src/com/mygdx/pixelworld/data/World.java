@@ -40,6 +40,9 @@ import java.util.List;
 import java.util.ListIterator;
 import java.util.Random;
 
+/**
+ * Class for managing map loading / world update and draw.
+ */
 public class World implements Disposable {
 
     private static TiledMapRenderer tiledMapRenderer;
@@ -62,11 +65,17 @@ public class World implements Disposable {
         new Blocker(0, 0);
     }
 
+    /**
+     * @return Offset of camera.
+     */
     public static Vector2 getCameraOffset() {
         Vector3 tmp = Game.camera.position;
         return new Vector2(tmp.x - (Constants.panelWidth + Constants.gameWidth)/2, tmp.y - Constants.gameHeight/2);
     }
 
+    /**
+     * @return Width of current map.
+     */
     public static int getWidth() {
         if (tiledMap == null) return (int) Constants.totalWidth;
         int tileNumber = tiledMap.getProperties().get("width", Integer.class);
@@ -74,6 +83,9 @@ public class World implements Disposable {
         return tileNumber * tileWidth;
     }
 
+    /**
+     * @return Height of current map.
+     */
     public static int getHeight() {
         if (tiledMap == null) return (int) Constants.gameHeight;
         int tileNumber = tiledMap.getProperties().get("height", Integer.class);
@@ -81,6 +93,11 @@ public class World implements Disposable {
         return tileNumber * tileHeight;
     }
 
+    /**
+     * Loads new map's obstacles, exits, spawn monsters etc.
+     *
+     * @param mapPath File path of map file
+     */
     private void loadNewMap(String mapPath) {
         Logger.log("World.loadNewMap()", "Loading " + mapPath + "...");
         enemies.clear();
@@ -97,6 +114,9 @@ public class World implements Disposable {
         Game.assetManager.load(currentMap, TiledMap.class);
     }
 
+    /**
+     * When map is loaded reads all data and initializes the map.
+     */
     private void initMap() {
         tiledMap = Game.assetManager.get(currentMap);
         tiledMapRenderer = new OrthogonalTiledMapRenderer(tiledMap);
@@ -105,17 +125,14 @@ public class World implements Disposable {
         int y = Integer.parseInt(tiledMap.getProperties().get("PlayerPositionY", String.class)) * tiledMap.getProperties().get("tileheight", Integer.class);
         player.setInitialPos(x, y);
         setOffset(player.getPos());
-        Logger.log("World()", "Player position set to " + player.getPos().toString());
 
         for (MapObject object : tiledMap.getLayers().get("Collisions").getObjects()) {
             if (!(object instanceof RectangleMapObject)) continue;
             mapObstacles.add(new BoundingRect(((RectangleMapObject) object).getRectangle()));
-            Logger.log("World()", "Added mapObstacle : " + mapObstacles.get(mapObstacles.size() - 1).toString());
         }
         for (MapObject object : tiledMap.getLayers().get("Exits").getObjects()) {
             if (!(object instanceof RectangleMapObject)) continue;
             exits.add(new ExitBoundingRect(((RectangleMapObject) object).getRectangle(), (String) object.getProperties().get("NextMap")));
-            Logger.log("World()", "Added exit : " + exits.get(exits.size() - 1).toString());
         }
         for (MapObject object : tiledMap.getLayers().get("Spawn").getObjects()) {
             if (!(object instanceof RectangleMapObject)) continue;
@@ -124,10 +141,14 @@ public class World implements Disposable {
             generateEnemies(((RectangleMapObject) object).getRectangle(), type, number);
             spawnPoints.add(new BoundingRect(((RectangleMapObject) object).getRectangle()));
         }
-        for (int i = 0; i < tiledMap.getLayers().getCount(); i++)
-            System.out.println("Layer " + i + " loaded, name = " + tiledMap.getLayers().get(i).getName());
+        Logger.log("World.initMap()", String.format("Loaded %d layers, %d obstacles, %d exits, %d spawn points (%d total enemies).",
+                tiledMap.getLayers().getCount(), mapObstacles.size(), exits.size(), spawnPoints.size(), enemies.size()));
     }
 
+    /**
+     * Adds an enemy to the map.
+     * @param enemyType Type of enemy
+     */
     private void addEnemy(String enemyType, float x, float y) {
         Enemy e;
         switch (enemyType) {
@@ -142,6 +163,11 @@ public class World implements Disposable {
         Debug.addDebuggable(e);
     }
 
+    /**
+     * Adds chest to current map.
+     * @param items Items inside the chest
+     * @param pos Position of the chest
+     */
     public void addChest(List<Item> items, Vector2 pos) {
         Chest c = new Chest(items, pos);
         for (Chest old : chests)
@@ -151,6 +177,9 @@ public class World implements Disposable {
         chests.add(new Chest(items, pos));
     }
 
+    /**
+     * Updates all map component and checks collisions.
+     */
     public void update() {
         if (tiledMap == null) initMap();
 
@@ -210,6 +239,11 @@ public class World implements Disposable {
 
     }
 
+    /**
+     * Updates offset if player tries to move outside thresholds.
+     * @param playerPos Position of the player
+     * @param stats Stats of the player
+     */
     private void updateOffset(Vector2 playerPos, EntityStats stats) {
         float of = Gdx.graphics.getDeltaTime() * stats.get(StatType.SPD) * 5; //Move with player's same speed
         Vector2 newPos = new Vector2(Game.camera.position.x, Game.camera.position.y);
@@ -232,11 +266,18 @@ public class World implements Disposable {
         setOffset(newPos);
     }
 
+    /**
+     * Sets camera offset
+     * @param offset New offset
+     */
     private void setOffset(Vector2 offset) {
         Game.camera.position.set(offset.x, offset.y, 0);
         Game.camera.update();
     }
 
+    /**
+     * Draws map layers before entities
+     */
     public void drawBottom(SpriteBatch batch, OrthographicCamera camera) {
         tiledMapRenderer.setView(camera);
         tiledMapRenderer.render(backgroundLayers);
@@ -248,14 +289,27 @@ public class World implements Disposable {
         DrawHitValue.draw(batch);
     }
 
+    /**
+     * Draws layers after entities
+     */
     public void drawTop(){
         tiledMapRenderer.render(foregroundLayers);
     }
 
+    /**
+     * Adds a bullet
+     * @param startPos Bullet starting position
+     * @param targetPos Bullet target
+     * @param es Stats of firing entity
+     * @param ws Stats of firing weapon
+     */
     public void fire(Vector2 startPos, Vector2 targetPos, EntityStats es, WeaponStats ws) {
         bullets.add(new Bullet(startPos, targetPos, es, ws));
     }
 
+    /**
+     * Draws shapes for GUI.
+     */
     public void shapeDraw(ShapeRenderer shapeRenderer, Player player) {
         shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
         //Health bar background
@@ -317,12 +371,18 @@ public class World implements Disposable {
         shapeRenderer.end();
     }
 
-    private void generateEnemies(Rectangle rectangle, String type, int enemyNumber) {
+    /**
+     * Generate enemies at map loading.
+     *
+     * @param spawnArea   Spawn area
+     * @param type        Type of enemy
+     * @param enemyNumber Number of enemies
+     */
+    private void generateEnemies(Rectangle spawnArea, String type, int enemyNumber) {
         Random random = new Random();
         for (int i = 0; i < enemyNumber; i++) {
-            int x = (int) (random.nextInt((int) (rectangle.width)) + rectangle.x);
-            int y = (int) (random.nextInt((int) (rectangle.height)) + rectangle.y);
-            System.out.println("Adding enemy at X = " + x + " and Y = " + y);
+            int x = (int) (random.nextInt((int) (spawnArea.width)) + spawnArea.x);
+            int y = (int) (random.nextInt((int) (spawnArea.height)) + spawnArea.y);
             addEnemy(type, x, y);
         }
     }
@@ -335,7 +395,7 @@ public class World implements Disposable {
         for (Chest c : chests) c.dispose();
     }
 
-    public List<BoundingRect> getBoundingRects() {
+    public List<BoundingRect> getMapObstacles() {
         return mapObstacles;
     }
 }

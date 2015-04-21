@@ -11,8 +11,10 @@ import com.mygdx.pixelworld.data.utilities.bounding.BoundingShape;
 
 import java.util.HashMap;
 
+/**
+ * Class that handles moving sprites loaded from spritesheets.
+ */
 public class AnimationDrawData extends DrawData {
-
     private final int sheetCols;
     private final int sheetRows;
     private final Class enumClass;
@@ -21,6 +23,13 @@ public class AnimationDrawData extends DrawData {
     private int currentAction;
     private float stateTime;
 
+    /**
+     * @param baseFilePath Base relative path for loading an image
+     * @param enumClass    Class file of enum containing every possible animation
+     * @param sheetCols    Column count of spritesheet file
+     * @param sheetRows    Rows count of spritesheet file
+     * @param boundingType Class file of desired bounding type
+     */
     public AnimationDrawData(String baseFilePath, Class enumClass, int sheetCols, int sheetRows, Class<? extends BoundingShape> boundingType) {
         Object[] values = enumClass.getEnumConstants();
         this.sheetCols = sheetCols;
@@ -34,6 +43,9 @@ public class AnimationDrawData extends DrawData {
         this.boundingType = boundingType;
     }
 
+    /**
+     * Method called when sprites have finished loading.
+     */
     private void initAnimation() {
         Object[] values = enumClass.getEnumConstants();
         animationMap = new HashMap<>();
@@ -51,26 +63,41 @@ public class AnimationDrawData extends DrawData {
             animationMap.put(i1, new Animation(0.025f, walkFrames));
         }
         stateTime = 0f;
-        //Logger.log("AnimationDrawData.initAnimation()", "Loaded "+baseFilePath+". Has W = "+getTexture().getRegionWidth()+" and H = "+getTexture().getRegionHeight());
     }
 
+    /**
+     * You must call this method for going forward in timeline and move the sprite.
+     */
     @Override
     public void update() {
         stateTime += Gdx.graphics.getDeltaTime();
     }
 
+    /**
+     * Sets current animation.
+     * @param action New action (by enum index)
+     */
     public void setCurrentAction(int action) {
         if(currentAction == action) return;
         this.currentAction = action;
         stateTime = 0;
     }
 
+    /**
+     * @return Current texture
+     */
     @Override
     protected TextureRegion getTexture() {
         if (animationMap == null) initAnimation();
         return animationMap.get(currentAction).getKeyFrame(stateTime, true);
     }
 
+    /**
+     * Draws current texture on screen.
+     * @param batch SpriteBatch for drawing
+     * @param absolutePosition Absolute position of the sprite
+     * @param scaleFactor Scale factor
+     */
     public void draw(SpriteBatch batch, Vector2 absolutePosition, float scaleFactor) {
         batch.draw(getTexture(), absolutePosition.x, absolutePosition.y, getOriginCenter().x, getOriginCenter().y, getTexture().getRegionWidth(), getTexture().getRegionHeight(), scaleFactor, scaleFactor, 0);
     }

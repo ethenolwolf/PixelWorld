@@ -5,6 +5,9 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.mygdx.pixelworld.data.World;
 
+/**
+ * BoundingShape of type Rectangle.
+ */
 public class BoundingRect extends BoundingShape {
     private Rectangle rectangle;
 

@@ -6,6 +6,9 @@ import com.mygdx.pixelworld.GUI.Logger;
 import com.mygdx.pixelworld.Game;
 import com.mygdx.pixelworld.data.utilities.Constants;
 
+/**
+ * Desktop launcher for the game : call this main().
+ */
 class DesktopLauncher {
     public static void main (String[] arg) {
         Logger.log("DesktopLauncher.main()", "Game starting...");

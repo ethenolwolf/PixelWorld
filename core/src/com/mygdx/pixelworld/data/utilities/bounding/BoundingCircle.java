@@ -5,6 +5,9 @@ import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Vector2;
 import com.mygdx.pixelworld.data.World;
 
+/**
+ * BoundingShape of type Circle.
+ */
 public class BoundingCircle extends BoundingShape {
     private Circle circle;
 

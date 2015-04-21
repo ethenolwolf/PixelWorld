@@ -19,6 +19,9 @@ import com.mygdx.pixelworld.data.utilities.Constants;
 import com.mygdx.pixelworld.data.utilities.bounding.BoundingRect;
 import com.mygdx.pixelworld.debug.Debug;
 
+/**
+ * Class containing main game loop and init.
+ */
 public class Game extends ApplicationAdapter implements InputProcessor {
 
     public static OrthographicCamera camera;
@@ -49,6 +52,9 @@ public class Game extends ApplicationAdapter implements InputProcessor {
         GUI.init(batch, player, world);
     }
 
+    /**
+     * If there are assets unloaded load and draw splash screen, otherwise execute game loop.
+     */
     @Override
     public void render() {
         if (assetManager.update()) gameLoop();
@@ -69,6 +75,9 @@ public class Game extends ApplicationAdapter implements InputProcessor {
         }
     }
 
+    /**
+     * Main game loop.
+     */
     private void gameLoop() {
         //Logic update
         player.update(world);

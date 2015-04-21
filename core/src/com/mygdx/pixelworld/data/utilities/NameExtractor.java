@@ -5,6 +5,9 @@ import com.mygdx.pixelworld.GUI.Logger;
 import java.io.*;
 import java.util.Random;
 
+/**
+ * Utility class that choose a name randomly from a list.
+ */
 public class NameExtractor {
 
     private final static String FILE_PATH = "core/assets/various/maleNames.dic";

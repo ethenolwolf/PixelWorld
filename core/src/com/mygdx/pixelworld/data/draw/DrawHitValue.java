@@ -11,10 +11,19 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.ListIterator;
 
+/**
+ * Class used to draw damage dealt when something is hit
+ */
 public class DrawHitValue {
     private static final List<Hit> hits = new ArrayList<>();
     private static BitmapFont font = null;
 
+    /**
+     * Adds new hit
+     *
+     * @param e      Entity damaged
+     * @param damage Amount of damage dealt
+     */
     public static void add(Entity e, int damage) {
         hits.add(new Hit(e, damage));
     }

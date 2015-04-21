@@ -1,5 +1,8 @@
 package com.mygdx.pixelworld.data.items.weapons;
 
+/**
+ * Stats for weapon.
+ */
 public abstract class WeaponStats {
     int damage;
     int range;

@@ -17,6 +17,9 @@ import com.mygdx.pixelworld.data.utilities.bounding.BoundingShape;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Class used to manage all kind of GUI elements.
+ */
 public class GUI {
 
     private static final Vector2[] itemPositions = new Vector2[20];
@@ -56,6 +59,9 @@ public class GUI {
         if (chest != null) drawChest();
     }
 
+    /**
+     * Draw equipped items for player
+     */
     private static void drawEquipped() {
         if (!isSelected[0]) player.getWeapon().getImg().drawOnScreen(batch, itemPositions[0]);
         else player.getWeapon().getImg().drawOnScreen(batch, new Vector2(mousePosition).add(mouseCatchOffset));
@@ -67,6 +73,9 @@ public class GUI {
         else player.getArmor().getImg().drawOnScreen(batch, new Vector2(mousePosition).add(mouseCatchOffset));
     }
 
+    /**
+     * Draws player's inventory
+     */
     private static void drawInventory() {
         Item[] inv = player.getInventory().getItems();
         for (int i = 0; i < inv.length; i++) {
@@ -75,6 +84,9 @@ public class GUI {
         }
     }
 
+    /**
+     * Draws chest content if player is on it
+     */
     private static void drawChest() {
         Item[] inv = chest.getInventory().getItems();
         for (int i = 0; i < inv.length; i++) {

@@ -12,8 +12,17 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Properties;
 
+/**
+ * Utility class for loading data from .config files in /config folder.
+ */
 public class Config {
 
+    /**
+     * Attempts to load config file.
+     *
+     * @param fileName Name of config file
+     * @return Properties object
+     */
     private static Properties loadFrom(String fileName) {
         if (!fileName.endsWith(".properties")) fileName += ".properties";
         Properties properties = new Properties();
@@ -25,6 +34,10 @@ public class Config {
         return properties;
     }
 
+    /**
+     * Loads experience thresholds needed for the player to level up.
+     * @return Array of thresholds.
+     */
     public static Integer[] getExperienceThresholds() {
         Properties p = loadFrom("core/config/experienceThresholds.properties");
         String[] ths = p.getProperty("thresholds").split(",");
@@ -33,8 +46,15 @@ public class Config {
         return out;
     }
 
-    public static EntityStats getStats(boolean isPlayer, String gameClass) {
-        Properties p = loadFrom("core/config/stats/" + (isPlayer ? "characters/" : "enemies/") + gameClass.toLowerCase());
+    /**
+     * Loads stats for an entity.
+     *
+     * @param isPlayer   Is entity a player
+     * @param entityName Name of entity
+     * @return Loaded EntityStats.
+     */
+    public static EntityStats getStats(boolean isPlayer, String entityName) {
+        Properties p = loadFrom("core/config/stats/" + (isPlayer ? "characters/" : "enemies/") + entityName.toLowerCase());
         return new EntityStats(
                 Float.parseFloat(p.getProperty("health")),
                 Float.parseFloat(p.getProperty("mana")),
@@ -47,6 +67,11 @@ public class Config {
         );
     }
 
+    /**
+     * Loads EnemyWeaponStats.
+     * @param type Type of enemy
+     * @return WeaponStats of the enemy.
+     */
     public static EnemyWeaponStats getWeapon(Class<? extends Enemy> type) {
         Properties p = loadFrom("core/config/weapons/enemies/" + type.getSimpleName().toLowerCase());
         return new EnemyWeaponStats(
@@ -58,6 +83,12 @@ public class Config {
         );
     }
 
+    /**
+     * Loads PlayerWeaponStats.
+     * @param weaponType Type of weapon
+     * @param rank Rank of weapon
+     * @return WeaponStats of the player.
+     */
     public static PlayerWeaponStats getWeapon(WeaponType weaponType, int rank) {
         Properties p = loadFrom("core/config/weapons/characters/" + weaponType.toString().toLowerCase());
         String prefix = String.valueOf(rank) + ".";
@@ -71,6 +102,12 @@ public class Config {
         );
     }
 
+    /**
+     * Loads ArmorStats.
+     * @param armorType Type of armor
+     * @param rank Rank of armor
+     * @return ArmorStats
+     */
     public static ArmorStats getArmor(ArmorType armorType, int rank) {
         Properties p = loadFrom("core/config/armors/" + armorType.toString().toLowerCase());
         String prefix = String.valueOf(rank) + ".";

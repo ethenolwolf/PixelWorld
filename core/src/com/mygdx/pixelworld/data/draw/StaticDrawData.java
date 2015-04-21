@@ -10,10 +10,17 @@ import com.mygdx.pixelworld.data.utilities.bounding.BoundingCircle;
 import com.mygdx.pixelworld.data.utilities.bounding.BoundingRect;
 import com.mygdx.pixelworld.data.utilities.bounding.BoundingShape;
 
+/**
+ * Draw data class for static images.
+ */
 public class StaticDrawData extends DrawData {
 
     private String path;
 
+    /**
+     * @param path         Path of image
+     * @param boundingType Type of bounding shape
+     */
     public StaticDrawData(String path, Class<? extends BoundingShape> boundingType) {
         setScaleFactor(new Vector2(1, 1));
         setRotationAngle(0);
@@ -22,18 +29,21 @@ public class StaticDrawData extends DrawData {
         addToLoader();
     }
 
+    /**
+     * Empty items
+     */
     public StaticDrawData() {
         this("core/assets/gui/placeholder.png", BoundingRect.class);
     }
 
+    /**
+     * Generic constructor
+     * @param assetType Type of asset
+     * @param name Name of asset
+     */
     public StaticDrawData(AssetType assetType, String name) {
         //Weapon // Armor //Sigil //Bullet
         this("core/assets/" + assetType.toString().toLowerCase() + "/" + name + ".png", assetType == AssetType.BULLET ? BoundingCircle.class : BoundingRect.class);
-    }
-
-    public StaticDrawData(AssetType assetType) {
-        //Chest
-        this("core/assets/background/" + assetType.toString().toLowerCase() + "/chest.png", BoundingRect.class);
     }
 
     private void addToLoader() {

@@ -15,6 +15,9 @@ import com.mygdx.pixelworld.data.utilities.bounding.BoundingShape;
 
 import java.util.List;
 
+/**
+ * Class used to contain bullets.
+ */
 public class Bullet implements Damaging, Disposable {
 
     private final boolean isPlayer;
@@ -28,6 +31,12 @@ public class Bullet implements Damaging, Disposable {
     private final float rotationSpeed;
     private boolean alive = true;
 
+    /**
+     * @param startingPos Bullet firing position
+     * @param endingPos   Target position
+     * @param es          Stats of shooting entity
+     * @param ws          WeaponStats of shooting weapon
+     */
     public Bullet(Vector2 startingPos, Vector2 endingPos, EntityStats es, WeaponStats ws) {
         this.startPoint = new Vector2(startingPos);
         this.direction = new Vector2(endingPos.x - startingPos.x, endingPos.y - startingPos.y).nor();
@@ -41,6 +50,10 @@ public class Bullet implements Damaging, Disposable {
         this.rotationSpeed = ws.getRotationSpeed();
     }
 
+    /**
+     * Checks if bullet should still be alive.
+     * @param mapObstacles Map obstacles that could break the bullet
+     */
     public void update(List<BoundingRect> mapObstacles) {
         move();
         for (BoundingRect b : mapObstacles) if (BoundingShape.intersect(b, getBoundingShape())) alive = false;
@@ -51,6 +64,9 @@ public class Bullet implements Damaging, Disposable {
         return alive;
     }
 
+    /**
+     * Moves the bullet towards its target.
+     */
     private void move() {
         float movement = Gdx.graphics.getDeltaTime() * speed;
         pos.add(direction.x * movement, direction.y * movement);

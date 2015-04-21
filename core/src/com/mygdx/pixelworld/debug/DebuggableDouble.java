@@ -1,8 +1,11 @@
 package com.mygdx.pixelworld.debug;
 
+/**
+ * Debuggable value of type double.
+ */
 public class DebuggableDouble implements Debuggable{
-    private double val;
     private final String name;
+    private double val;
 
     public DebuggableDouble(String name){
         this.name = name;

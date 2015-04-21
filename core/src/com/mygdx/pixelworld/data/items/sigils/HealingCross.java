@@ -9,6 +9,9 @@ import com.mygdx.pixelworld.data.entities.enemies.Enemy;
 import com.mygdx.pixelworld.data.utilities.AssetType;
 import com.mygdx.pixelworld.data.utilities.StatType;
 
+/**
+ * Healing cross is a sigil that can heal the owner.
+ */
 public class HealingCross extends ManaSigil {
 
     private Player player;

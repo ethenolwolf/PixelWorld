@@ -6,6 +6,9 @@ import com.mygdx.pixelworld.data.items.armors.Armor;
 import com.mygdx.pixelworld.data.items.sigils.ManaSigil;
 import com.mygdx.pixelworld.data.items.weapons.Weapon;
 
+/**
+ * Inventory for player where every slot can be only of a certain kind.
+ */
 public class LockedInventory extends Inventory {
 
     private final GameClasses playerClass;
@@ -30,6 +33,13 @@ public class LockedInventory extends Inventory {
         return (Armor) get(2);
     }
 
+    /**
+     * Tries replacing an item in a certain slot. If the item is compatible it swaps.
+     *
+     * @param item New item
+     * @param slot Inventory slot
+     * @return Old item, if swap is successful, or null if swap is impossible.
+     */
     public Item tryReplace(Item item, int slot) {
         if (item instanceof EmptyItem) {
             Item out = get(slot);
@@ -78,6 +88,12 @@ public class LockedInventory extends Inventory {
         }
     }
 
+    /**
+     * @param inventory Inventory to check
+     * @param slot Slot to check
+     * @param equipSlot Slot of this inventory
+     * @return is swap possible
+     */
     public boolean isCompatible(Inventory inventory, int slot, int equipSlot) {
         Item item = inventory.get(slot);
         if (item instanceof EmptyItem) return true;

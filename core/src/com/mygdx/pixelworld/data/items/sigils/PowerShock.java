@@ -18,6 +18,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.ListIterator;
 
+/**
+ * Mana sigil dealing damage with an explosion.
+ */
 public class PowerShock extends ManaSigil {
 
     private final List<PowerShockBlast> blasts = new ArrayList<>();

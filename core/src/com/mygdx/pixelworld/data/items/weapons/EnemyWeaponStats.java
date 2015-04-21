@@ -1,7 +1,9 @@
 package com.mygdx.pixelworld.data.items.weapons;
 
+/**
+ * Weapon stats for enemies
+ */
 public class EnemyWeaponStats extends WeaponStats {
-
     public EnemyWeaponStats(int damage, int range, int speed, String name, float rotationSpeed) {
         this.damage = damage;
         this.range = range;

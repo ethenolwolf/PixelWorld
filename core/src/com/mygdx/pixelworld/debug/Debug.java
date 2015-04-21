@@ -17,7 +17,7 @@ import java.util.ListIterator;
 import java.util.Properties;
 
 /**
- * Class created to contain all debug options that can be easily switched from here.
+ * Class for debugging utilities.
  */
 public class Debug {
 
@@ -25,6 +25,9 @@ public class Debug {
     private static final List<Debuggable> debuggable = new ArrayList<>();
     private static BitmapFont font;
 
+    /**
+     * Load values and init font.
+     */
     public static void init() {
         try {
             props.load(new FileInputStream("core/config/debug.properties"));
@@ -39,14 +42,27 @@ public class Debug {
         font = ft.generateFont(p);
     }
 
+    /**
+     * @param propertyName Name of the property to read from debug.properties
+     * @return Boolean value of the property
+     */
     public static boolean valueOf(String propertyName) {
         return Boolean.parseBoolean(props.getProperty(propertyName));
     }
 
+    /**
+     * Adds a debuggable item ready to watch.
+     *
+     * @param debuggable Debuggable item
+     */
     public static void addDebuggable(Debuggable debuggable){
         Debug.debuggable.add(debuggable);
     }
 
+    /**
+     * Print every debuggable with its informations.
+     * @param batch SpriteBatch for writing.
+     */
     public static void draw(SpriteBatch batch){
         if (!valueOf("SHOW_DEBUG_VALUES")) return;
         float y = Constants.gameHeight - 20 + Game.camera.position.y;
@@ -62,6 +78,13 @@ public class Debug {
         }
     }
 
+    /**
+     * Write on screen.
+     * @param batch SpriteBatch for drawing
+     * @param message Message to write
+     * @param x X of the message
+     * @param y Y of the message
+     */
     private static void write(SpriteBatch batch, String message, float x, float y) {
         font.draw(batch, message, x, y);
     }

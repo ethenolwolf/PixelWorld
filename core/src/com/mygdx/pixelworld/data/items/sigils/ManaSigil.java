@@ -10,6 +10,9 @@ import com.mygdx.pixelworld.data.items.EquipItem;
 import com.mygdx.pixelworld.data.items.Item;
 import com.mygdx.pixelworld.data.utilities.Damaging;
 
+/**
+ * Generic ManaSigil that uses mana to give the player a special ability.
+ */
 public class ManaSigil extends Item implements Damaging, EquipItem {
 
     boolean empty;

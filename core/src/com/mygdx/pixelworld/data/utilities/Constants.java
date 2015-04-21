@@ -1,5 +1,8 @@
 package com.mygdx.pixelworld.data.utilities;
 
+/**
+ * Utility class for containing all game related constants.
+ */
 public class Constants {
     public static final float gameWidth = 640;
     public static final float gameHeight = 480;

@@ -1,5 +1,8 @@
 package com.mygdx.pixelworld.data.items.weapons;
 
+/**
+ * Weapon stats for the player.
+ */
 public class PlayerWeaponStats extends WeaponStats {
 
     private final WeaponType type;

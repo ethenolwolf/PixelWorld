@@ -9,6 +9,9 @@ import com.mygdx.pixelworld.data.entities.enemies.Enemy;
 import com.mygdx.pixelworld.data.utilities.AssetType;
 import com.mygdx.pixelworld.data.utilities.EntityStats;
 
+/**
+ * Sigil that allows the player to become invisible.
+ */
 public class InvisibleCloak extends ManaSigil {
 
     private static final float TIME = 5.0f;

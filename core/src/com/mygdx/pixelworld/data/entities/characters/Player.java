@@ -25,6 +25,9 @@ import java.util.List;
 
 import static com.mygdx.pixelworld.data.utilities.Direction.*;
 
+/**
+ * Main player class.
+ */
 public class Player extends Entity implements Debuggable{
 
     private final FireManager fireManager;
@@ -34,6 +37,11 @@ public class Player extends Entity implements Debuggable{
     private int experience = 0;
     private int level = 1;
 
+    /**
+     * Initializes a new player.
+     *
+     * @param gameClass Class of new player
+     */
     public Player(GameClasses gameClass) {
         String name = NameExtractor.extract();
         this.pos = new Vector2();
@@ -52,15 +60,18 @@ public class Player extends Entity implements Debuggable{
         return inventory;
     }
 
+    /**
+     * Updates moving.
+     */
     public void update(World world) {
         //Keyboard events
         States currentState;
         if (Gdx.input.isKeyPressed(Keys.ANY_KEY)) currentState = States.WALK;
         else currentState = States.IDLE;
-        if (Gdx.input.isKeyPressed(Keys.A)) move(LEFT, world.getBoundingRects());
-        else if (Gdx.input.isKeyPressed(Keys.D)) move(RIGHT, world.getBoundingRects());
-        if (Gdx.input.isKeyPressed(Keys.S)) move(DOWN, world.getBoundingRects());
-        else if (Gdx.input.isKeyPressed(Keys.W)) move(UP, world.getBoundingRects());
+        if (Gdx.input.isKeyPressed(Keys.A)) move(LEFT, world.getMapObstacles());
+        else if (Gdx.input.isKeyPressed(Keys.D)) move(RIGHT, world.getMapObstacles());
+        if (Gdx.input.isKeyPressed(Keys.S)) move(DOWN, world.getMapObstacles());
+        else if (Gdx.input.isKeyPressed(Keys.W)) move(UP, world.getMapObstacles());
 
         if (fireManager.isFiring()) currentState = States.FIRE;
 
@@ -72,6 +83,9 @@ public class Player extends Entity implements Debuggable{
         img.update();
     }
 
+    /**
+     * Activates the mana sigil.
+     */
     public void manaTrigger() {
         if (equipped.getManaSigil().isEmpty()) Logger.log("Player.manaTrigger()", "You must equip a sigil first.");
         if (stats.get(StatType.MANA) >= equipped.getManaSigil().getPrice()) {
@@ -80,20 +94,26 @@ public class Player extends Entity implements Debuggable{
         }
     }
 
-    private void move(Direction dir, List<BoundingRect> boundingRects) {
+    /**
+     * Moves the player
+     *
+     * @param direction          Direction of the movement
+     * @param boundingRectangles Obstacles around the map
+     */
+    private void move(Direction direction, List<BoundingRect> boundingRectangles) {
         float movement = Gdx.graphics.getDeltaTime() * stats.get(StatType.SPD) * 5;
-        switch (dir) {
+        switch (direction) {
             case UP:
-                bound(boundingRects, new Vector2(0, movement));
+                bound(boundingRectangles, new Vector2(0, movement));
                 break;
             case DOWN:
-                bound(boundingRects, new Vector2(0, -movement));
+                bound(boundingRectangles, new Vector2(0, -movement));
                 break;
             case LEFT:
-                bound(boundingRects, new Vector2(-movement, 0));
+                bound(boundingRectangles, new Vector2(-movement, 0));
                 break;
             case RIGHT:
-                bound(boundingRects, new Vector2(movement, 0));
+                bound(boundingRectangles, new Vector2(movement, 0));
                 break;
         }
         pos = img.boundMap(pos);
@@ -104,6 +124,9 @@ public class Player extends Entity implements Debuggable{
         equipped.getManaSigil().draw(batch);
     }
 
+    /**
+     * Regenerates health and mana.
+     */
     private void regen() {
         if (stats.get(StatType.HEALTH) < stats.getInit(StatType.HEALTH))
             stats.addStat(StatType.HEALTH, Gdx.graphics.getDeltaTime() * stats.get(StatType.VIT));
@@ -168,6 +191,11 @@ public class Player extends Entity implements Debuggable{
         return equipped.getArmor();
     }
 
+    /**
+     * When defeating an enemy adds experience.
+     *
+     * @param experience Experience to add
+     */
     public void addExperience(int experience) {
         this.experience += experience;
         int level = 1;
@@ -185,10 +213,21 @@ public class Player extends Entity implements Debuggable{
         return 1.0f;
     }
 
+    /**
+     * Equips item
+     * @param inv Item's inventory
+     * @param slot Item's slot
+     */
     public void equip(Inventory inv, int slot) {
         Inventory.swap(equipped, inv, slot);
     }
 
+    /**
+     * Removes an Item from locked inv.
+     * @param equipSlot Slot of item
+     * @param inv New Inventory
+     * @param inventorySlot New slot
+     */
     public void unequip(int equipSlot, Inventory inv, int inventorySlot) {
         if (equipped.isCompatible(inv, inventorySlot, equipSlot)) {
             Inventory.swap(equipped, equipSlot, inv, inventorySlot);

@@ -10,6 +10,9 @@ import com.mygdx.pixelworld.data.utilities.bounding.BoundingShape;
 
 import java.util.List;
 
+/**
+ * Class used to generify entity in game
+ */
 public abstract class Entity implements Disposable {
     protected Vector2 pos;
     protected DrawData img;
@@ -18,23 +21,25 @@ public abstract class Entity implements Disposable {
     public Vector2 getPos() {
         return new Vector2(pos);
     }
-
     public EntityStats getStats() {
         return stats;
     }
-
     protected void getHit(int damage) {
         stats.getHit(this, damage);
     }
-
     public void getHit(Damaging d) {
         stats.getHit(this, d.getDamage());
     }
-
     public DrawData getImg() {
         return img;
     }
 
+    /**
+     * Checks whenever the next movement will be possible, and act consequently
+     *
+     * @param boundingRects Obstacles around the map
+     * @param currentMove   Move to be done
+     */
     protected void bound(List<BoundingRect> boundingRects, Vector2 currentMove) {
         for (BoundingRect b : boundingRects) {
             if (currentMove.x > 0) {
@@ -68,7 +73,6 @@ public abstract class Entity implements Disposable {
     public void dispose() {
         img.dispose();
     }
-
     public void setInitialPos(int x, int y) {
         pos = new Vector2(x, y);
     }

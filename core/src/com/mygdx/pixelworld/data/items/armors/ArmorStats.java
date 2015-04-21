@@ -1,5 +1,8 @@
 package com.mygdx.pixelworld.data.items.armors;
 
+/**
+ * Class used to contain armor stats.
+ */
 public class ArmorStats {
     private final ArmorType type;
     private final String name;

@@ -2,6 +2,9 @@ package com.mygdx.pixelworld.data.utilities.bounding;
 
 import com.badlogic.gdx.math.Rectangle;
 
+/**
+ * Bounding rect indicating exits to other maps.
+ */
 public class ExitBoundingRect extends BoundingRect {
 
     private String nextMap;

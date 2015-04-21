@@ -9,6 +9,9 @@ import com.mygdx.pixelworld.data.entities.enemies.Enemy;
 import java.util.EnumMap;
 import java.util.Map;
 
+/**
+ * Stats for every entity.
+ */
 public class EntityStats {
 
     private final Map<StatType, Float> stats = new EnumMap<>(StatType.class);
@@ -25,6 +28,16 @@ public class EntityStats {
         this.type = null;
     }
 
+    /**
+     * @param health    Health
+     * @param mana      Mana
+     * @param speed     Movement speed
+     * @param dexterity Fire rate
+     * @param wisdom    Mana regen rate
+     * @param vitality  Health regen rate
+     * @param attack    Attack
+     * @param defense   Defense
+     */
     public EntityStats(float health, float mana, int speed, int dexterity, int wisdom, int vitality, int attack, int defense) {
         stats.put(StatType.HEALTH, health);
         stats.put(StatType.MANA, mana);
@@ -57,42 +70,33 @@ public class EntityStats {
     private void setStat(StatType statType, float value) {
         stats.put(statType, value);
     }
-
     public void addStat(StatType statType, float value) {
         setStat(statType, value + get(statType));
     }
-
     public float get(StatType statType) {
         return stats.get(statType);
     }
-
     public float getInit(StatType statType) {
         if (gameClass == null) return Config.getStats(false, type.getSimpleName()).get(statType);
         else return Config.getStats(true, gameClass.toString()).get(statType);
     }
-
     public float getMax(StatType statType) {
         return maxStats.get(statType);
     }
-
     public void setAsInit(StatType statType) {
         setStat(statType, getInit(statType));
     }
-
     public void getHit(Entity e, int damage) {
         if (damage > get(StatType.DEF)) addStat(StatType.HEALTH, get(StatType.DEF) - damage);
         if (get(StatType.HEALTH) <= 0) alive = false;
         DrawHitValue.add(e, damage);
     }
-
     public boolean isAlive() {
         return alive;
     }
-
     public boolean isVisible() {
         return visible;
     }
-
     public void setIsVisible(boolean isVisible) {
         this.visible = isVisible;
     }

@@ -5,6 +5,9 @@ import com.badlogic.gdx.math.Vector2;
 import com.mygdx.pixelworld.data.World;
 import com.mygdx.pixelworld.data.items.weapons.WeaponStats;
 
+/**
+ * Class used to handle weapon fire rate and keep it stable.
+ */
 public class FireManager {
 
     private double fireDelay;
@@ -27,7 +30,14 @@ public class FireManager {
         target.y = y;
     }
 
-
+    /**
+     * Updates timers and fire if necessary.
+     *
+     * @param pos         Position of entity
+     * @param entityStats Stats of the shooting entity
+     * @param world       World
+     * @param stats       WeaponStats of the weapon used to shoot
+     */
     public void updateFire(Vector2 pos, EntityStats entityStats, World world, WeaponStats stats) {
         if (!isFiring) return;
         fireDelay -= Gdx.graphics.getDeltaTime();

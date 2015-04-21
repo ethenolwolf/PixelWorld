@@ -2,9 +2,12 @@ package com.mygdx.pixelworld.debug;
 
 import com.badlogic.gdx.math.Vector2;
 
+/**
+ * Debuggable value of type Vector2.
+ */
 public class DebuggableVector2 implements Debuggable{
-    private Vector2 val;
     private final String name;
+    private Vector2 val;
 
     public DebuggableVector2(String name, Vector2 init) {
         val = init;
