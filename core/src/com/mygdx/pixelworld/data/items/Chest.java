@@ -19,6 +19,20 @@ public class Chest extends Item {
         img = new StaticDrawData(AssetType.CHEST);
     }
 
+    public boolean move(Chest c) {
+        //Take all items in c and place them here: if it can't be done returns false
+        if (c.getInventory().size() + inventory.size() > 8) return false;
+        List<Item> oldItems = c.getInventory().getFilledItems();
+        for (int i = 0; i < inventory.getItems().length; i++) {
+            if (oldItems.size() == 0) return true;
+            if (inventory.get(i) instanceof EmptyItem) {
+                inventory.set(oldItems.get(0), i);
+                oldItems.remove(0);
+            }
+        }
+        return true;
+    }
+
     public Inventory getInventory() {
         return inventory;
     }

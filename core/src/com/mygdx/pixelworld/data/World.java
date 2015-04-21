@@ -143,6 +143,11 @@ public class World implements Disposable {
     }
 
     public void addChest(List<Item> items, Vector2 pos) {
+        Chest c = new Chest(items, pos);
+        for (Chest old : chests)
+            if (BoundingShape.intersect(c.getBoundingShape(), old.getBoundingShape())) {
+                if (old.move(c)) return;
+            }
         chests.add(new Chest(items, pos));
     }
 

@@ -5,6 +5,7 @@ import com.mygdx.pixelworld.data.items.armors.Armor;
 import com.mygdx.pixelworld.data.items.sigils.ManaSigil;
 import com.mygdx.pixelworld.data.items.weapons.Weapon;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Inventory implements Disposable {
@@ -88,5 +89,17 @@ public class Inventory implements Disposable {
     @Override
     public void dispose() {
         for (Item i : inv) if (i != null) i.dispose();
+    }
+
+    public int size() {
+        int count = 0;
+        for (Item i : inv) if (!(i instanceof EmptyItem)) count++;
+        return count;
+    }
+
+    public List<Item> getFilledItems() {
+        List<Item> out = new ArrayList<>();
+        for (Item i : inv) if (!(i instanceof EmptyItem)) out.add(i);
+        return out;
     }
 }
