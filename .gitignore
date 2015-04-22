@@ -5,6 +5,7 @@
 build/
 ## Gradle
 .gradle
+gradle/
 ## Linux testing
 *.sh
 ## Windows

@@ -240,7 +240,7 @@ public class World implements Disposable {
             bulletBoundingShape.free();
             if (!b.isAlive()) bulletIterator.remove();
         }
-
+        playerBoundingShape.free();
         player.checkMana(enemies);
         DrawHitValue.update();
         updateOffset(player.getPos(), player.getStats());
