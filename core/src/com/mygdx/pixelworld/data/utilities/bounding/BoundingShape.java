@@ -16,15 +16,17 @@ public abstract class BoundingShape {
      * @return Are they intersecting
      */
     public static boolean intersect(BoundingShape a, BoundingShape b) {
+        boolean out;
         if (a instanceof BoundingRect) {
             if (b instanceof BoundingRect)
-                return Intersector.overlaps(((BoundingRect) a).get(), ((BoundingRect) b).get());
-            else return Intersector.overlaps(((BoundingCircle) b).get(), ((BoundingRect) a).get());
+                out = Intersector.overlaps(((BoundingRect) a).get(), ((BoundingRect) b).get());
+            else out = Intersector.overlaps(((BoundingCircle) b).get(), ((BoundingRect) a).get());
         } else {
             if (b instanceof BoundingRect)
-                return Intersector.overlaps(((BoundingCircle) a).get(), ((BoundingRect) b).get());
-            else return Intersector.overlaps(((BoundingCircle) b).get(), ((BoundingCircle) a).get());
+                out = Intersector.overlaps(((BoundingCircle) a).get(), ((BoundingRect) b).get());
+            else out = Intersector.overlaps(((BoundingCircle) b).get(), ((BoundingCircle) a).get());
         }
+        return out;
     }
 
     /**
@@ -42,4 +44,6 @@ public abstract class BoundingShape {
      * @return is valid
      */
     public abstract boolean isValid();
+
+    public abstract void free();
 }

@@ -22,7 +22,7 @@ public class StaticDrawData extends DrawData {
      * @param boundingType Type of bounding shape
      */
     public StaticDrawData(String path, Class<? extends BoundingShape> boundingType) {
-        setScaleFactor(new Vector2(1, 1));
+        setScaleFactor(1);
         setRotationAngle(0);
         this.path = path;
         this.boundingType = boundingType;
@@ -65,7 +65,7 @@ public class StaticDrawData extends DrawData {
     public void draw(SpriteBatch batch, Vector2 absolutePosition) {
         if (!isVisible(absolutePosition)) return;
         batch.draw(getTexture(), getOriginalPosition(absolutePosition).x, getOriginalPosition(absolutePosition).y, getOriginCenter().x,
-                getOriginCenter().y, getOriginalWidth(), getOriginalHeight(), scaleFactor.x, scaleFactor.y, rotationAngle);
+                getOriginCenter().y, getOriginalWidth(), getOriginalHeight(), scaleFactor, scaleFactor, rotationAngle);
     }
 
     @Override

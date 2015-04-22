@@ -3,6 +3,7 @@ package com.mygdx.pixelworld.data.utilities.bounding;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.Pools;
 import com.mygdx.pixelworld.data.World;
 
 /**
@@ -12,7 +13,10 @@ public class BoundingCircle extends BoundingShape {
     private Circle circle;
 
     public BoundingCircle(Vector2 pos, int radius) {
-        circle = new Circle(pos, radius);
+        circle = Pools.get(Circle.class).obtain();
+        circle.x = pos.x;
+        circle.y = pos.y;
+        circle.radius = radius;
     }
 
     public Circle get() {
@@ -38,6 +42,11 @@ public class BoundingCircle extends BoundingShape {
     @Override
     public boolean isValid() {
         return circle.area() > 0;
+    }
+
+    @Override
+    public void free() {
+        Pools.get(Circle.class).free(circle);
     }
 
     @Override

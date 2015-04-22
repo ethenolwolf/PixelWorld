@@ -183,8 +183,10 @@ public class World implements Disposable {
     public void update() {
         if (tiledMap == null) initMap();
 
+        BoundingShape playerBoundingShape = player.getBoundingShape();
+
         for (ExitBoundingRect e : exits) {
-            if (BoundingShape.intersect(player.getBoundingShape(), e)) {
+            if (BoundingShape.intersect(playerBoundingShape, e)) {
                 loadNewMap(e.getNextMap());
                 return;
             }
@@ -200,36 +202,42 @@ public class World implements Disposable {
                 enemyIterator.remove();
             }
         }
+
         GUI.updateChest(null);
         ListIterator<Chest> chestIterator = chests.listIterator();
         while (chestIterator.hasNext()) {
             Chest c = chestIterator.next();
-            if (c.checkIfInside(player)) GUI.updateChest(c);
+            BoundingShape boundingShape = c.getBoundingShape();
+            if (BoundingShape.intersect(boundingShape, playerBoundingShape)) GUI.updateChest(c);
             if (c.isEmpty()) {
                 chestIterator.remove();
             }
+            boundingShape.free();
         }
 
         ListIterator<Bullet> bulletIterator = bullets.listIterator();
         while (bulletIterator.hasNext()) {
             Bullet b = bulletIterator.next();
             b.update(mapObstacles);
+            BoundingShape bulletBoundingShape = b.getBoundingShape();
             if (b.isPlayer()) {
                 enemyIterator = enemies.listIterator();
                 while (enemyIterator.hasNext()) {
                     Enemy e = enemyIterator.next();
-                    if (e.checkIfInside(b)) {
+                    BoundingShape enemyBoundingShape = e.getBoundingShape();
+                    if (BoundingShape.intersect(enemyBoundingShape, bulletBoundingShape)) {
                         e.getHit(b);
                         b.die();
                     }
+                    enemyBoundingShape.free();
                 }
             } else {
-                if (player.checkIfInside(b)) {
+                if (BoundingShape.intersect(playerBoundingShape, bulletBoundingShape)) {
                     player.getHit(b);
                     b.die();
                 }
             }
-
+            bulletBoundingShape.free();
             if (!b.isAlive()) bulletIterator.remove();
         }
 

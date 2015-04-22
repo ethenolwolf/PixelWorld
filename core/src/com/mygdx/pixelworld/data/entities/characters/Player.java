@@ -7,7 +7,6 @@ import com.badlogic.gdx.math.Vector2;
 import com.mygdx.pixelworld.GUI.Logger;
 import com.mygdx.pixelworld.data.World;
 import com.mygdx.pixelworld.data.draw.AnimationDrawData;
-import com.mygdx.pixelworld.data.draw.Bullet;
 import com.mygdx.pixelworld.data.entities.Entity;
 import com.mygdx.pixelworld.data.entities.enemies.Enemy;
 import com.mygdx.pixelworld.data.items.Inventory;
@@ -120,7 +119,7 @@ public class Player extends Entity implements Debuggable{
     }
 
     public void draw(SpriteBatch batch) {
-        img.draw(batch, pos, 1.0f, stats.isVisible() ? 1f : 0.5f);
+        img.draw(batch, pos, stats.isVisible() ? 1f : 0.5f);
         equipped.getManaSigil().draw(batch);
     }
 
@@ -135,10 +134,6 @@ public class Player extends Entity implements Debuggable{
         if (stats.get(StatType.MANA) < stats.getInit(StatType.MANA))
             stats.addStat(StatType.MANA, Gdx.graphics.getDeltaTime() * stats.get(StatType.WIS));
         if (stats.get(StatType.MANA) > stats.getInit(StatType.MANA)) stats.setAsInit(StatType.MANA);
-    }
-
-    public boolean checkIfInside(Bullet b) {
-        return BoundingShape.intersect(b.getBoundingShape(), img.getBoundingShape(pos));
     }
 
     @Override

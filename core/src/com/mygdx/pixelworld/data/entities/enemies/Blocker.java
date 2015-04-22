@@ -22,6 +22,7 @@ public class Blocker extends Enemy {
 
     public Blocker(float x, float y) {
         super(x, y);
+        img.setScaleFactor(0.75f);
         fireManager = new FireManager();
         weaponStats = Config.getWeapon(Blocker.class);
         new StaticDrawData(AssetType.BULLET, weaponStats.getName());

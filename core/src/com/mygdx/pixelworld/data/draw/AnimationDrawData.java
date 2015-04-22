@@ -38,7 +38,7 @@ public class AnimationDrawData extends DrawData {
         this.baseFilePath = baseFilePath;
         for (Object value : values)
             Game.assetManager.load(baseFilePath + value.toString().toLowerCase() + ".png", Texture.class);
-        setScaleFactor(new Vector2(1, 1));
+        setScaleFactor(1);
         setRotationAngle(0);
         this.boundingType = boundingType;
     }
@@ -96,9 +96,9 @@ public class AnimationDrawData extends DrawData {
      * Draws current texture on screen.
      * @param batch SpriteBatch for drawing
      * @param absolutePosition Absolute position of the sprite
-     * @param scaleFactor Scale factor
      */
-    public void draw(SpriteBatch batch, Vector2 absolutePosition, float scaleFactor) {
+    @Override
+    public void draw(SpriteBatch batch, Vector2 absolutePosition) {
         batch.draw(getTexture(), absolutePosition.x, absolutePosition.y, getOriginCenter().x, getOriginCenter().y, getTexture().getRegionWidth(), getTexture().getRegionHeight(), scaleFactor, scaleFactor, 0);
     }
 }

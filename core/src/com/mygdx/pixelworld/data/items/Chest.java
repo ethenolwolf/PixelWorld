@@ -3,7 +3,6 @@ package com.mygdx.pixelworld.data.items;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.mygdx.pixelworld.data.draw.StaticDrawData;
-import com.mygdx.pixelworld.data.entities.characters.Player;
 import com.mygdx.pixelworld.data.utilities.bounding.BoundingRect;
 import com.mygdx.pixelworld.data.utilities.bounding.BoundingShape;
 
@@ -23,7 +22,7 @@ public class Chest extends Item {
     public Chest(List<Item> items, Vector2 pos) {
         inventory.fill(items);
         this.pos = pos;
-        img = new StaticDrawData("core/assets/chest/chest.png", BoundingRect.class);
+        img = new StaticDrawData("core/assets/background/chest/chest.png", BoundingRect.class);
     }
 
     /**
@@ -51,10 +50,6 @@ public class Chest extends Item {
 
     public void draw(SpriteBatch batch) {
         img.draw(batch, pos);
-    }
-
-    public boolean checkIfInside(Player player) {
-        return BoundingShape.intersect(img.getBoundingShape(pos), player.getBoundingShape());
     }
 
     public boolean isEmpty() {

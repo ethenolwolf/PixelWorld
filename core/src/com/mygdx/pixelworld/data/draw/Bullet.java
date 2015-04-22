@@ -56,8 +56,10 @@ public class Bullet implements Damaging, Disposable {
      */
     public void update(List<BoundingRect> mapObstacles) {
         move();
-        for (BoundingRect b : mapObstacles) if (BoundingShape.intersect(b, getBoundingShape())) alive = false;
+        BoundingShape boundingShape = getBoundingShape();
+        for (BoundingRect b : mapObstacles) if (BoundingShape.intersect(b, boundingShape)) alive = false;
         if (pos.dst(startPoint) > range) alive = false;
+        boundingShape.free();
     }
 
     public boolean isAlive() {

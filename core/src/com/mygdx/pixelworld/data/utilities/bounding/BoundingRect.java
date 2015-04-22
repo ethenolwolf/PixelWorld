@@ -3,6 +3,7 @@ package com.mygdx.pixelworld.data.utilities.bounding;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.Pools;
 import com.mygdx.pixelworld.data.World;
 
 /**
@@ -12,7 +13,11 @@ public class BoundingRect extends BoundingShape {
     private Rectangle rectangle;
 
     public BoundingRect(Vector2 pos, Vector2 dimensions) {
-        rectangle = new Rectangle((int) pos.x, (int) pos.y, (int) dimensions.x, (int) dimensions.y);
+        rectangle = Pools.get(Rectangle.class).obtain();
+        rectangle.x = (int) pos.x;
+        rectangle.y = (int) pos.y;
+        rectangle.width = (int) dimensions.x;
+        rectangle.height = (int) dimensions.y;
     }
 
     public BoundingRect(Rectangle rectangle) {
@@ -46,6 +51,11 @@ public class BoundingRect extends BoundingShape {
     @Override
     public boolean isValid() {
         return rectangle.width > 0 && rectangle.height > 0;
+    }
+
+    @Override
+    public void free() {
+        Pools.get(Rectangle.class).free(rectangle);
     }
 
     @Override

@@ -17,7 +17,7 @@ import com.mygdx.pixelworld.data.utilities.bounding.BoundingShape;
  * map offset and bounding shapes.
  */
 public abstract class DrawData implements Disposable {
-    Vector2 scaleFactor;
+    float scaleFactor;
     float rotationAngle;
     Class<? extends BoundingShape> boundingType;
 
@@ -32,7 +32,7 @@ public abstract class DrawData implements Disposable {
      * @return width of texture with scale factor
      */
     public float getWidth() {
-        return getOriginalWidth() * scaleFactor.x;
+        return getOriginalWidth() * scaleFactor;
     }
 
     /**
@@ -46,7 +46,7 @@ public abstract class DrawData implements Disposable {
      * @return height of texture with scale factor
      */
     public float getHeight() {
-        return getOriginalHeight() * scaleFactor.y;
+        return getOriginalHeight() * scaleFactor;
     }
 
     /**
@@ -77,24 +77,18 @@ public abstract class DrawData implements Disposable {
     void setRotationAngle(float angle) {
         rotationAngle = angle;
     }
-
-    public void draw(SpriteBatch batch, Vector2 absolutePosition) {
-        draw(batch, absolutePosition, 1.0f);
-    }
-
     /**
      * Draws from absolute coordinates to screen.
      *
      * @param batch            SpriteBatch for drawing
      * @param absolutePosition Absolute position of the sprite
-     * @param scaleFactor      Scale factor
      */
-    public abstract void draw(SpriteBatch batch, Vector2 absolutePosition, float scaleFactor);
+    public abstract void draw(SpriteBatch batch, Vector2 absolutePosition);
 
-    public void draw(SpriteBatch batch, Vector2 absolutePosition, float scaleFactor, float alpha) {
+    public void draw(SpriteBatch batch, Vector2 absolutePosition, float alpha) {
         Color c = batch.getColor();
         batch.setColor(c.r, c.g, c.b, alpha);
-        draw(batch, absolutePosition, scaleFactor);
+        draw(batch, absolutePosition);
         batch.setColor(c.r, c.g, c.b, 1.0f);
     }
 
@@ -114,7 +108,7 @@ public abstract class DrawData implements Disposable {
      */
     public void drawOnScreen(SpriteBatch batch, Vector2 screenPosition) {
         batch.draw(getTexture(), screenPosition.x + World.getCameraOffset().x, screenPosition.y + World.getCameraOffset().y, getOriginCenter().x,
-                getOriginCenter().y, getWidth(), getHeight(), scaleFactor.x, scaleFactor.y, rotationAngle);
+                getOriginCenter().y, getWidth(), getHeight(), scaleFactor, scaleFactor, rotationAngle);
     }
 
     /**
@@ -122,14 +116,13 @@ public abstract class DrawData implements Disposable {
      * @return Bounding shape
      */
     public BoundingShape getBoundingShape(Vector2 pos) {
-        Vector2 position = new Vector2(pos);
-        TextureRegion textureRegion = getTexture();
+        Vector2 position = getOriginalPosition(pos);
         BoundingShape out = new BoundingCircle(new Vector2(), -1);
 
         if (boundingType == BoundingCircle.class)
-            out = new BoundingCircle(position.add(textureRegion.getRegionWidth() / 2, textureRegion.getRegionHeight() / 2), (int) Math.max(textureRegion.getRegionWidth() * scaleFactor.x, textureRegion.getRegionHeight() * scaleFactor.y) / 2);
+            out = new BoundingCircle(position.add(getOriginalWidth() / 2, getOriginalHeight() / 2), (int) Math.max(getWidth(), getHeight()) / 2);
         else if (boundingType == BoundingRect.class)
-            out = new BoundingRect(position, new Vector2(textureRegion.getRegionWidth() * scaleFactor.x, textureRegion.getRegionHeight() * scaleFactor.y));
+            out = new BoundingRect(position.add(getOriginalWidth() - getWidth(), getOriginalHeight() - getHeight()), new Vector2(getWidth(), getHeight()));
         if (out.isValid()) return out;
         Logger.log("DrawData.getBoundingShape()", "Error constructing " + boundingType.toString() + ": bounding is invalid.");
         return null;
@@ -149,7 +142,7 @@ public abstract class DrawData implements Disposable {
         return out;
     }
 
-    public void setScaleFactor(Vector2 scaleFactor) {
+    public void setScaleFactor(float scaleFactor) {
         this.scaleFactor = scaleFactor;
     }
 

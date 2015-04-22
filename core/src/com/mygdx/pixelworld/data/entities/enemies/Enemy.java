@@ -5,7 +5,6 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Disposable;
 import com.mygdx.pixelworld.data.World;
 import com.mygdx.pixelworld.data.draw.AnimationDrawData;
-import com.mygdx.pixelworld.data.draw.Bullet;
 import com.mygdx.pixelworld.data.entities.Entity;
 import com.mygdx.pixelworld.data.entities.characters.GameClasses;
 import com.mygdx.pixelworld.data.entities.characters.Player;
@@ -74,13 +73,10 @@ public abstract class Enemy extends Entity implements Debuggable, Disposable {
     abstract void passiveAIUpdate(Player player, World world);
 
     public void draw(SpriteBatch batch) {
-        img.draw(batch, pos, 1);
+        img.draw(batch, pos);
     }
     public boolean isAlive() {
         return stats.isAlive();
-    }
-    public boolean checkIfInside(Bullet b) {
-        return BoundingShape.intersect(getBoundingShape(), b.getBoundingShape());
     }
     public BoundingShape getBoundingShape() {
         return img.getBoundingShape(pos);

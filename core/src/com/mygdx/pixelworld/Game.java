@@ -36,7 +36,7 @@ public class Game extends ApplicationAdapter implements InputProcessor {
     public void create() {
         assetManager = new AssetManager();
         loadingImage = new StaticDrawData("core/assets/gui/loadingImage.png", BoundingRect.class);
-        loadingImage.setScaleFactor(new Vector2(4, 4));
+        loadingImage.setScaleFactor(4);
         assetManager.finishLoading();
         batch = new SpriteBatch();
         Debug.init();
