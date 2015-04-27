@@ -5,19 +5,19 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.assets.AssetManager;
-import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.math.Vector2;
 import com.mygdx.pixelworld.GUI.GUI;
 import com.mygdx.pixelworld.data.World;
-import com.mygdx.pixelworld.data.draw.StaticDrawData;
+import com.mygdx.pixelworld.data.draw.ScreenWriter;
 import com.mygdx.pixelworld.data.entities.characters.GameClasses;
 import com.mygdx.pixelworld.data.entities.characters.Player;
 import com.mygdx.pixelworld.data.utilities.Constants;
-import com.mygdx.pixelworld.data.utilities.bounding.BoundingRect;
+import com.mygdx.pixelworld.data.utilities.Direction;
 import com.mygdx.pixelworld.debug.Debug;
+
+//TODO Saving / loading from map save points (or everywhere?)
 
 /**
  * Class containing main game loop and init.
@@ -26,30 +26,31 @@ public class Game extends ApplicationAdapter implements InputProcessor {
 
     public static OrthographicCamera camera;
     public static AssetManager assetManager;
+    public static GameStates gameState = GameStates.MENU;
     private SpriteBatch batch;
     private World world;
     private Player player;
     private ShapeRenderer shapeRenderer;
-    private StaticDrawData loadingImage;
 
     @Override
     public void create() {
         assetManager = new AssetManager();
-        loadingImage = new StaticDrawData("core/assets/gui/loadingImage.png", BoundingRect.class);
-        loadingImage.setScaleFactor(4);
+        GUI.loadImage();
         assetManager.finishLoading();
         batch = new SpriteBatch();
         Debug.init();
+        ScreenWriter.init();
         player = new Player(GameClasses.CLERIC);
         world = new World(player);
 
         camera = new OrthographicCamera();
-        camera.setToOrtho(false, Constants.gameWidth+Constants.panelWidth, Constants.gameHeight);
+        camera.setToOrtho(false, Constants.gameWidth + Constants.panelWidth, Constants.gameHeight);
         camera.update();
 
         Gdx.input.setInputProcessor(this);
         shapeRenderer = new ShapeRenderer();
         GUI.init(batch, player, world);
+        System.out.println("GameState : " + gameState.toString());
     }
 
     /**
@@ -57,21 +58,21 @@ public class Game extends ApplicationAdapter implements InputProcessor {
      */
     @Override
     public void render() {
-        if (assetManager.update()) gameLoop();
-        else {
-            Gdx.gl.glClearColor(0, 0, 0, 1);
-            Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
-            Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-            batch.begin();
-            Vector2 loadingImagePos = new Vector2(Constants.totalWidth / 2 - 50, Constants.gameHeight / 2);
-            loadingImage.draw(batch, loadingImagePos);
-            batch.end();
-            shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
-            shapeRenderer.setColor(0.0f, 0.0f, 0.392f, 1.0f);
-            shapeRenderer.rect(50, 50, Constants.totalWidth - 100, 30);
-            shapeRenderer.setColor(0.0f, 0.05f, 0.95f, 1.0f);
-            shapeRenderer.rect(50, 50, (Constants.totalWidth - 100) * assetManager.getProgress(), 30);
-            shapeRenderer.end();
+        GUI.clearScreen();
+        if (assetManager.update()) {
+            switch (gameState) {
+                case MENU:
+                    GUI.menuLoop();
+                    break;
+                case GAME:
+                    gameLoop();
+                    break;
+                case PAUSE:
+                    GUI.pauseLoop();
+                    break;
+            }
+        } else {
+            GUI.splashScreen(shapeRenderer, assetManager.getProgress());
         }
     }
 
@@ -83,18 +84,15 @@ public class Game extends ApplicationAdapter implements InputProcessor {
         player.update(world);
         world.update();
 
-        //Clear screen
-        Gdx.gl.glClearColor(0.5f, 0, 0, 1);
-        Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-
         //Draw
         world.drawBottom(batch, camera);
         player.draw(batch);
-        GUI.draw();
         Debug.draw(batch);
         batch.end();
         world.drawTop();
+        batch.begin();
+        GUI.draw();
+        batch.end();
         world.shapeDraw(shapeRenderer, player);
     }
 
@@ -110,7 +108,20 @@ public class Game extends ApplicationAdapter implements InputProcessor {
 
     @Override
     public boolean keyDown(int keycode) {
-        if (keycode == Input.Keys.SPACE) player.manaTrigger();
+        switch (gameState) {
+            case MENU:
+                if (keycode == Input.Keys.DOWN || keycode == Input.Keys.S) GUI.cursorEvent(Direction.DOWN);
+                else if (keycode == Input.Keys.UP || keycode == Input.Keys.W) GUI.cursorEvent(Direction.UP);
+                if (keycode == Input.Keys.ENTER || keycode == Input.Keys.D || keycode == Input.Keys.RIGHT)
+                    GUI.cursorEvent(Direction.RIGHT);
+                break;
+            case GAME:
+                if (keycode == Input.Keys.SPACE) player.manaTrigger();
+                break;
+            case PAUSE:
+                break;
+        }
+
         return false;
     }
 
@@ -159,6 +170,10 @@ public class Game extends ApplicationAdapter implements InputProcessor {
     @Override
     public boolean scrolled(int amount) {
         return false;
+    }
+
+    public enum GameStates {
+        MENU, GAME, PAUSE
     }
 
 }

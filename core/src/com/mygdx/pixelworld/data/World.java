@@ -340,7 +340,7 @@ public class World implements Disposable {
         shapeRenderer.rect(Constants.gameWidth + 10, 270, 140 * player.getExpPercentage(), 20);
         shapeRenderer.end();
 
-        if (Debug.valueOf("SHOW_BOUNDING")) {
+        if (Debug.isTrue("SHOW_BOUNDING")) {
             shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
             //Player
             shapeRenderer.setColor(1, 0, 1, 1);
@@ -366,7 +366,7 @@ public class World implements Disposable {
 
         }
 
-        if (Debug.valueOf("SHOW_OFFSET_TRIGGERS")) {
+        if (Debug.isTrue("SHOW_OFFSET_TRIGGERS")) {
             shapeRenderer.end();
             shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
             shapeRenderer.setColor(Color.BLUE);
@@ -397,7 +397,7 @@ public class World implements Disposable {
 
     @Override
     public void dispose() {
-        tiledMap.dispose();
+        if (tiledMap != null) tiledMap.dispose();
         for (Enemy e : enemies) e.dispose();
         for (Bullet b : bullets) b.dispose();
         for (Chest c : chests) c.dispose();

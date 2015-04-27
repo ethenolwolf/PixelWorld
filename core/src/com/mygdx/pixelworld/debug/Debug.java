@@ -1,12 +1,9 @@
 package com.mygdx.pixelworld.debug;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.mygdx.pixelworld.GUI.Logger;
 import com.mygdx.pixelworld.Game;
+import com.mygdx.pixelworld.data.draw.ScreenWriter;
 import com.mygdx.pixelworld.data.utilities.Constants;
 
 import java.io.FileInputStream;
@@ -23,7 +20,6 @@ public class Debug {
 
     private static final Properties props = new Properties();
     private static final List<Debuggable> debuggable = new ArrayList<>();
-    private static BitmapFont font;
 
     /**
      * Load values and init font.
@@ -34,20 +30,18 @@ public class Debug {
         } catch (IOException e) {
             Logger.log("Debug.init()", "File debug.properties not found.");
         }
-
-        FreeTypeFontGenerator ft = new FreeTypeFontGenerator(Gdx.files.internal("core/assets/various/Ubuntu.ttf"));
-        FreeTypeFontGenerator.FreeTypeFontParameter p = new FreeTypeFontGenerator.FreeTypeFontParameter();
-        p.size = 16;
-        p.color = Color.RED;
-        font = ft.generateFont(p);
+        if (isTrue("SKIP_MAIN_MENU")) Game.gameState = Game.GameStates.GAME;
     }
 
     /**
      * @param propertyName Name of the property to read from debug.properties
      * @return Boolean value of the property
      */
-    public static boolean valueOf(String propertyName) {
-        return Boolean.parseBoolean(props.getProperty(propertyName));
+    public static boolean isTrue(String propertyName) {
+        if (props.getProperty(propertyName) == null) {
+            Logger.log("Debug.isTrue()", " Error: Could not find property " + propertyName);
+            return false;
+        } else return Boolean.parseBoolean(props.getProperty(propertyName));
     }
 
     /**
@@ -60,11 +54,11 @@ public class Debug {
     }
 
     /**
-     * Print every debuggable with its informations.
+     * Print every debuggable with its information.
      * @param batch SpriteBatch for writing.
      */
     public static void draw(SpriteBatch batch){
-        if (!valueOf("SHOW_DEBUG_VALUES")) return;
+        if (!isTrue("SHOW_DEBUG_VALUES")) return;
         float y = Constants.gameHeight - 20 + Game.camera.position.y;
         ListIterator<Debuggable> li = debuggable.listIterator();
         while(li.hasNext()) {
@@ -73,20 +67,10 @@ public class Debug {
                 li.remove();
                 continue;
             }
-            write(batch, d.getWatch(), 10 + Game.camera.position.x, y);
+            ScreenWriter.write(batch, d.getWatch(), 10 + Game.camera.position.x, y);
             y -= 20;
         }
     }
 
-    /**
-     * Write on screen.
-     * @param batch SpriteBatch for drawing
-     * @param message Message to write
-     * @param x X of the message
-     * @param y Y of the message
-     */
-    private static void write(SpriteBatch batch, String message, float x, float y) {
-        font.draw(batch, message, x, y);
-    }
 
 }
