@@ -19,12 +19,13 @@ import com.badlogic.gdx.utils.Disposable;
 import com.mygdx.pixelworld.GUI.GUI;
 import com.mygdx.pixelworld.GUI.Logger;
 import com.mygdx.pixelworld.Game;
+import com.mygdx.pixelworld.data.background.Chest;
+import com.mygdx.pixelworld.data.background.SavePillar;
 import com.mygdx.pixelworld.data.draw.Bullet;
 import com.mygdx.pixelworld.data.draw.DrawHitValue;
 import com.mygdx.pixelworld.data.entities.characters.Player;
 import com.mygdx.pixelworld.data.entities.enemies.Blocker;
 import com.mygdx.pixelworld.data.entities.enemies.Enemy;
-import com.mygdx.pixelworld.data.items.Chest;
 import com.mygdx.pixelworld.data.items.Item;
 import com.mygdx.pixelworld.data.items.weapons.WeaponStats;
 import com.mygdx.pixelworld.data.utilities.Constants;
@@ -53,6 +54,7 @@ public class World implements Disposable {
     private final List<BoundingRect> mapObstacles = new ArrayList<>();
     private final List<ExitBoundingRect> exits = new ArrayList<>();
     private final List<BoundingRect> spawnPoints = new ArrayList<>();
+    private final List<SavePillar> savePillars = new ArrayList<>();
     private final int[] backgroundLayers = {0, 1};
     private final int[] foregroundLayers = {2};
     private String currentMap;
@@ -63,6 +65,7 @@ public class World implements Disposable {
         Game.assetManager.setLoader(TiledMap.class, new TmxMapLoader(new InternalFileHandleResolver()));
         loadNewMap("core/assets/maps/start.tmx");
         new Blocker(0, 0);
+        new SavePillar(new Rectangle());
     }
 
     /**
@@ -105,6 +108,7 @@ public class World implements Disposable {
         chests.clear();
         mapObstacles.clear();
         exits.clear();
+        savePillars.clear();
         if (tiledMap != null) {
             Game.assetManager.unload(currentMap);
             tiledMap.dispose();
@@ -141,8 +145,19 @@ public class World implements Disposable {
             generateEnemies(((RectangleMapObject) object).getRectangle(), type, number);
             spawnPoints.add(new BoundingRect(((RectangleMapObject) object).getRectangle()));
         }
-        Logger.log("World.initMap()", String.format("Loaded %d layers, %d obstacles, %d exits, %d spawn points (%d total enemies).",
-                tiledMap.getLayers().getCount(), mapObstacles.size(), exits.size(), spawnPoints.size(), enemies.size()));
+        for (MapObject object : tiledMap.getLayers().get("Interactions").getObjects()) {
+            if (!(object instanceof RectangleMapObject)) continue;
+            switch (object.getProperties().get("type", String.class)) {
+                case "savePillar":
+                    savePillars.add(new SavePillar(((RectangleMapObject) object).getRectangle()));
+                    mapObstacles.add(new BoundingRect(((RectangleMapObject) object).getRectangle()));
+                    break;
+                default:
+                    Logger.log("World.initMap()", "Interaction of type " + object.getProperties().get("type") + " not yet implemented.");
+            }
+        }
+        Logger.log("World.initMap()", String.format("Loaded %d layers, %d obstacles, %d exits, %d pillars, %d spawn points (%d total enemies).",
+                tiledMap.getLayers().getCount(), mapObstacles.size(), exits.size(), savePillars.size(), spawnPoints.size(), enemies.size()));
     }
 
     /**
@@ -189,6 +204,13 @@ public class World implements Disposable {
             if (BoundingShape.intersect(playerBoundingShape, e)) {
                 loadNewMap(e.getNextMap());
                 return;
+            }
+        }
+
+        for (SavePillar savePillar : savePillars) {
+            savePillar.update();
+            if (BoundingShape.intersect(playerBoundingShape, savePillar.getBoundingShape())) {
+                SavePillar.save();
             }
         }
 
@@ -300,7 +322,9 @@ public class World implements Disposable {
     /**
      * Draws layers after entities
      */
-    public void drawTop(){
+    public void drawTop(SpriteBatch batch) {
+        for (SavePillar savePillar : savePillars) savePillar.draw(batch);
+        batch.end();
         tiledMapRenderer.render(foregroundLayers);
     }
 

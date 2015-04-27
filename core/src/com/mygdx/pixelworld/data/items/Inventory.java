@@ -81,11 +81,11 @@ public class Inventory implements Disposable {
         set(new EmptyItem(), slot);
     }
 
-    Item get(int slot) {
+    public Item get(int slot) {
         return inv[slot];
     }
 
-    void set(Item item, int slot) {
+    public void set(Item item, int slot) {
         inv[slot] = item;
     }
 

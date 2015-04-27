@@ -44,4 +44,8 @@
    </properties>
   </object>
  </objectgroup>
+ <objectgroup name="Interactions" width="30" height="30">
+  <object type="savePillar" x="800" y="416" width="32" height="64"/>
+  <object type="savePillar" x="128" y="416" width="32" height="64"/>
+ </objectgroup>
 </map>

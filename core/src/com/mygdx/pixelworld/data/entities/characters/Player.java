@@ -45,7 +45,9 @@ public class Player extends Entity implements Debuggable{
         String name = NameExtractor.extract();
         this.pos = new Vector2();
         this.gameClass = gameClass;
-        img = new AnimationDrawData("core/assets/characters/" + gameClass.toString().toLowerCase() + "/", States.class, 8, 8, BoundingRect.class);
+        String[] actions = new String[States.values().length];
+        for (int i = 0; i < actions.length; i++) actions[i] = States.values()[i].name().toLowerCase();
+        img = new AnimationDrawData("core/assets/characters/" + gameClass.toString().toLowerCase() + "/", actions, 8, 8, BoundingRect.class);
         stats = new EntityStats(gameClass);
         fireManager = new FireManager();
         equipped = new LockedInventory(this);
@@ -78,7 +80,7 @@ public class Player extends Entity implements Debuggable{
             fireManager.updateFire(pos, stats, world, equipped.getWeapon().getStats());
         regen();
         if (!equipped.getManaSigil().isEmpty()) equipped.getManaSigil().update();
-        ((AnimationDrawData) img).setCurrentAction(currentState.ordinal());
+        ((AnimationDrawData) img).setCurrentAction(currentState.name().toLowerCase());
         img.update();
     }
 

@@ -88,8 +88,7 @@ public class Game extends ApplicationAdapter implements InputProcessor {
         world.drawBottom(batch, camera);
         player.draw(batch);
         Debug.draw(batch);
-        batch.end();
-        world.drawTop();
+        world.drawTop(batch);
         batch.begin();
         GUI.draw();
         batch.end();

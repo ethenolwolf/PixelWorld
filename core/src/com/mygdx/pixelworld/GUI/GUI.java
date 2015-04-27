@@ -10,10 +10,10 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.mygdx.pixelworld.Game;
 import com.mygdx.pixelworld.data.World;
+import com.mygdx.pixelworld.data.background.Chest;
 import com.mygdx.pixelworld.data.draw.AnimationDrawData;
 import com.mygdx.pixelworld.data.draw.ScreenWriter;
 import com.mygdx.pixelworld.data.entities.characters.Player;
-import com.mygdx.pixelworld.data.items.Chest;
 import com.mygdx.pixelworld.data.items.EmptyItem;
 import com.mygdx.pixelworld.data.items.Inventory;
 import com.mygdx.pixelworld.data.items.Item;
@@ -60,7 +60,7 @@ public class GUI {
     private static AnimationDrawData loadingImage;
 
     public static void loadImage() {
-        loadingImage = new AnimationDrawData("core/assets/characters/cleric/", menuAnimation.class, 8, 8, BoundingRect.class);
+        loadingImage = new AnimationDrawData("core/assets/characters/cleric/", new String[]{"walk"}, 8, 8, BoundingRect.class);
         loadingImage.setScaleFactor(4);
     }
 
@@ -252,9 +252,5 @@ public class GUI {
                         Gdx.app.exit();
                 }
         }
-    }
-
-    private enum menuAnimation {
-        WALK
     }
 }

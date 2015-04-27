@@ -32,7 +32,9 @@ public abstract class Enemy extends Entity implements Debuggable, Disposable {
     Enemy(float x, float y) {
         pos = new Vector2(x, y);
         stats = new EntityStats(this.getClass());
-        img = new AnimationDrawData("core/assets/enemies/" + this.getClass().getSimpleName().toLowerCase() + "/", States.class, 8, 8, BoundingRect.class);
+        String[] actions = new String[States.values().length];
+        for (int i = 0; i < actions.length; i++) actions[i] = States.values()[i].name().toLowerCase();
+        img = new AnimationDrawData("core/assets/enemies/" + this.getClass().getSimpleName().toLowerCase() + "/", actions, 8, 8, BoundingRect.class);
         calculateDropItems();
     }
 
@@ -59,7 +61,7 @@ public abstract class Enemy extends Entity implements Debuggable, Disposable {
         if (player.getPos().dst(pos) < ATTACK_RANGE) activeAIUpdate(player, world);
         else passiveAIUpdate(player, world);
         if (!(img instanceof AnimationDrawData)) return;
-        ((AnimationDrawData) img).setCurrentAction(currentState.ordinal());
+        ((AnimationDrawData) img).setCurrentAction(currentState.name().toLowerCase());
     }
 
     /**
