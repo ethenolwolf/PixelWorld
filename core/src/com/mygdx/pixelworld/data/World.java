@@ -28,6 +28,8 @@ import com.mygdx.pixelworld.data.entities.enemies.Blocker;
 import com.mygdx.pixelworld.data.entities.enemies.Enemy;
 import com.mygdx.pixelworld.data.items.Item;
 import com.mygdx.pixelworld.data.items.weapons.WeaponStats;
+import com.mygdx.pixelworld.data.story.Story;
+import com.mygdx.pixelworld.data.story.StoryAction;
 import com.mygdx.pixelworld.data.utilities.Constants;
 import com.mygdx.pixelworld.data.utilities.EntityStats;
 import com.mygdx.pixelworld.data.utilities.StatType;
@@ -48,6 +50,10 @@ public class World implements Disposable {
 
     private static TiledMapRenderer tiledMapRenderer;
     private static TiledMap tiledMap;
+    private static boolean cameraFollow = true;
+    private static Vector2 cameraTarget;
+    private static float cameraSpeed = 10;
+    private static StoryAction cameraAction;
     private final List<Enemy> enemies = new ArrayList<>();
     private final List<Bullet> bullets = new ArrayList<>();
     private final List<Chest> chests = new ArrayList<>();
@@ -59,11 +65,12 @@ public class World implements Disposable {
     private final int[] foregroundLayers = {2};
     private String currentMap;
     private Player player;
+    private Story story;
 
     public World(Player player) {
         this.player = player;
         Game.assetManager.setLoader(TiledMap.class, new TmxMapLoader(new InternalFileHandleResolver()));
-        loadNewMap("core/assets/maps/start.tmx");
+        loadNewMap("core/assets/maps/story.tmx");
         new Blocker(0, 0);
         new SavePillar(new Rectangle());
     }
@@ -73,14 +80,14 @@ public class World implements Disposable {
      */
     public static Vector2 getCameraOffset() {
         Vector3 tmp = Game.camera.position;
-        return new Vector2(tmp.x - (Constants.panelWidth + Constants.gameWidth)/2, tmp.y - Constants.gameHeight/2);
+        return new Vector2(tmp.x - Constants.gameWidth / 2, tmp.y - Constants.gameHeight / 2);
     }
 
     /**
      * @return Width of current map.
      */
     public static int getWidth() {
-        if (tiledMap == null) return (int) Constants.totalWidth;
+        if (tiledMap == null) return (int) Constants.gameWidth;
         int tileNumber = tiledMap.getProperties().get("width", Integer.class);
         int tileWidth = tiledMap.getProperties().get("tilewidth", Integer.class);
         return tileNumber * tileWidth;
@@ -94,6 +101,55 @@ public class World implements Disposable {
         int tileNumber = tiledMap.getProperties().get("height", Integer.class);
         int tileHeight = tiledMap.getProperties().get("tileheight", Integer.class);
         return tileNumber * tileHeight;
+    }
+
+    public static void setCameraAction(StoryAction cameraAction) {
+        World.cameraAction = cameraAction;
+        cameraTarget = null;
+        cameraFollow = false;
+        //TODO
+        switch (cameraAction.action) {
+            case IDLE:
+                cameraFollow = true;
+                break;
+            case SET:
+                setOffset(Story.parseCoordinates(cameraAction.param));
+                World.cameraAction.action = Story.ActionTypes.IDLE;
+                break;
+            case MOVE:
+                Vector2 pureTarget = Story.parseCoordinates(cameraAction.param).add(Constants.gameWidth / 2, Constants.gameHeight / 2);
+                limitPosition(pureTarget);
+                cameraTarget = new Vector2(pureTarget);
+                break;
+            case SPD:
+                World.cameraAction.action = Story.ActionTypes.IDLE;
+                cameraSpeed = Float.parseFloat(cameraAction.param);
+                break;
+        }
+    }
+
+    public static boolean isCameraIdle() {
+        return cameraAction == null || cameraAction.action == Story.ActionTypes.IDLE;
+    }
+
+    public static void limitPosition(Vector2 in) {
+        float t = Constants.gameWidth;
+        float h = Constants.gameHeight;
+        //Limit offset
+        if (in.x < t / 2) in.x = t / 2;
+        if (in.x > getWidth() - t / 2) in.x = getWidth() - t / 2;
+        if (in.y < h / 2) in.y = h / 2;
+        if (in.y > getHeight() - h / 2) in.y = getHeight() - h / 2;
+    }
+
+    /**
+     * Sets camera offset
+     * @param offset New offset
+     */
+    private static void setOffset(Vector2 offset) {
+        limitPosition(offset);
+        Game.camera.position.set(offset.x, offset.y, 0);
+        Game.camera.update();
     }
 
     /**
@@ -145,6 +201,7 @@ public class World implements Disposable {
             generateEnemies(((RectangleMapObject) object).getRectangle(), type, number);
             spawnPoints.add(new BoundingRect(((RectangleMapObject) object).getRectangle()));
         }
+        story = new Story(tiledMap.getLayers().get("NPC"), "core/assets/maps/" + tiledMap.getProperties().get("Story", String.class));
         for (MapObject object : tiledMap.getLayers().get("Interactions").getObjects()) {
             if (!(object instanceof RectangleMapObject)) continue;
             switch (object.getProperties().get("type", String.class)) {
@@ -158,6 +215,8 @@ public class World implements Disposable {
         }
         Logger.log("World.initMap()", String.format("Loaded %d layers, %d obstacles, %d exits, %d pillars, %d spawn points (%d total enemies).",
                 tiledMap.getLayers().getCount(), mapObstacles.size(), exits.size(), savePillars.size(), spawnPoints.size(), enemies.size()));
+
+
     }
 
     /**
@@ -213,6 +272,8 @@ public class World implements Disposable {
                 SavePillar.save();
             }
         }
+
+        story.update();
 
         ListIterator<Enemy> enemyIterator = enemies.listIterator();
         while (enemyIterator.hasNext()) {
@@ -275,34 +336,30 @@ public class World implements Disposable {
      * @param stats Stats of the player
      */
     private void updateOffset(Vector2 playerPos, EntityStats stats) {
-        float of = Gdx.graphics.getDeltaTime() * stats.get(StatType.SPD) * 5; //Move with player's same speed
+        float movement = Gdx.graphics.getDeltaTime() * stats.get(StatType.SPD) * 5; //Move with player's same speed
         Vector2 newPos = new Vector2(Game.camera.position.x, Game.camera.position.y);
-
-        float t = Constants.gameWidth + Constants.panelWidth;
+        float t = Constants.gameWidth;
         float h = Constants.gameHeight;
 
-        if      (playerPos.x - Game.camera.position.x + t/2 < Constants.X_LIMIT_MIN) newPos.add(-of, 0);
-        else if (playerPos.x - Game.camera.position.x + t/2 > Constants.X_LIMIT_MAX) newPos.add(of, 0);
-
-        if      (playerPos.y - Game.camera.position.y + h/2 < Constants.Y_LIMIT_MIN) newPos.add(0, -of);
-        else if (playerPos.y - Game.camera.position.y + h/2 > Constants.Y_LIMIT_MAX) newPos.add(0, of);
-
-        //Limit offset
-        if(newPos.x < t/2) newPos.x = t/2;
-        if(newPos.x > getWidth() + Constants.panelWidth - t/2) newPos.x = getWidth() + Constants.panelWidth - t/2;
-        if(newPos.y < h/2) newPos.y = h/2;
-        if(newPos.y > getHeight() - h/2) newPos.y = getHeight() - h/2;
-
+        if (cameraFollow) {
+            if (playerPos.x - Game.camera.position.x + t / 2 < Constants.X_LIMIT_MIN) newPos.add(-movement, 0);
+            else if (playerPos.x - Game.camera.position.x + t / 2 > Constants.X_LIMIT_MAX) newPos.add(movement, 0);
+            if (playerPos.y - Game.camera.position.y + h / 2 < Constants.Y_LIMIT_MIN) newPos.add(0, -movement);
+            else if (playerPos.y - Game.camera.position.y + h / 2 > Constants.Y_LIMIT_MAX) newPos.add(0, movement);
+        } else {
+            movement = Gdx.graphics.getDeltaTime() * cameraSpeed * 5;
+            if (cameraTarget != null && cameraAction.action == Story.ActionTypes.MOVE) {
+                if (cameraTarget.dst(new Vector2(Game.camera.position.x, Game.camera.position.y)) > movement) {
+                    Vector2 direction = new Vector2(cameraTarget.x - Game.camera.position.x, cameraTarget.y - Game.camera.position.y).nor();
+                    newPos.add(direction.x * movement, direction.y * movement);
+                } else {
+                    newPos = new Vector2(cameraTarget);
+                    cameraTarget = null;
+                    cameraAction.action = Story.ActionTypes.IDLE;
+                }
+            }
+        }
         setOffset(newPos);
-    }
-
-    /**
-     * Sets camera offset
-     * @param offset New offset
-     */
-    private void setOffset(Vector2 offset) {
-        Game.camera.position.set(offset.x, offset.y, 0);
-        Game.camera.update();
     }
 
     /**
@@ -313,9 +370,11 @@ public class World implements Disposable {
         tiledMapRenderer.render(backgroundLayers);
         batch.setProjectionMatrix(camera.combined);
         batch.begin();
+        if (!Game.assetManager.update()) return;
         for (Enemy e : enemies) e.draw(batch);
         for (Bullet b : bullets) b.draw(batch);
         for (Chest c : chests) c.draw(batch);
+        story.draw(batch);
         DrawHitValue.draw(batch);
     }
 
@@ -343,7 +402,7 @@ public class World implements Disposable {
      * Draws shapes for GUI.
      */
     public void shapeDraw(ShapeRenderer shapeRenderer, Player player) {
-        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+        /*shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
         //Health bar background
         shapeRenderer.setColor(0.678f, 0.074f, 0.074f, 1.0f);
         shapeRenderer.rect(Constants.gameWidth + 10, 330, 140, 20);
@@ -362,7 +421,7 @@ public class World implements Disposable {
         //Exp bar
         shapeRenderer.setColor(0.313f, 0.800f, 0.214f, 1.0f);
         shapeRenderer.rect(Constants.gameWidth + 10, 270, 140 * player.getExpPercentage(), 20);
-        shapeRenderer.end();
+        shapeRenderer.end();*/
 
         if (Debug.isTrue("SHOW_BOUNDING")) {
             shapeRenderer.begin(ShapeRenderer.ShapeType.Line);

@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
+import com.mygdx.pixelworld.data.World;
 import com.mygdx.pixelworld.data.utilities.Constants;
 
 public class ScreenWriter {
@@ -23,7 +24,7 @@ public class ScreenWriter {
      * Write on screen.
      *
      * @param batch   SpriteBatch for drawing
-     * @param message Message to write
+     * @param message Message to write + World.getCameraOffset().x
      * @param x       X of the message
      * @param y       Y of the message
      */
@@ -34,11 +35,11 @@ public class ScreenWriter {
     public static void write(SpriteBatch batch, String message, float x, float y, Color color) {
         font.setColor(Color.CLEAR);
         font.setColor(color);
-        font.draw(batch, message, x, y);
+        font.draw(batch, message, x + World.getCameraOffset().x, y + World.getCameraOffset().y);
     }
 
     public static void writeOnCenter(SpriteBatch batch, String message, float y, Color color) {
-        float x = (Constants.totalWidth - font.getBounds(message).width) / 2;
+        float x = (Constants.gameWidth - font.getBounds(message).width) / 2;
         write(batch, message, x, y, color);
     }
 

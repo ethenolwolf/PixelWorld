@@ -17,7 +17,9 @@ import com.mygdx.pixelworld.data.utilities.Constants;
 import com.mygdx.pixelworld.data.utilities.Direction;
 import com.mygdx.pixelworld.debug.Debug;
 
-//TODO Saving / loading from map save points (or everywhere?)
+//TODO Saving / loading from map save points
+//TODO Better camera gesture (limit)
+//TODO Change texture command
 
 /**
  * Class containing main game loop and init.
@@ -44,13 +46,12 @@ public class Game extends ApplicationAdapter implements InputProcessor {
         world = new World(player);
 
         camera = new OrthographicCamera();
-        camera.setToOrtho(false, Constants.gameWidth + Constants.panelWidth, Constants.gameHeight);
+        camera.setToOrtho(false, Constants.gameWidth, Constants.gameHeight);
         camera.update();
 
         Gdx.input.setInputProcessor(this);
         shapeRenderer = new ShapeRenderer();
         GUI.init(batch, player, world);
-        System.out.println("GameState : " + gameState.toString());
     }
 
     /**

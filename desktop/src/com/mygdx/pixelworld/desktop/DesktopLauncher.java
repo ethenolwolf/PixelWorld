@@ -14,7 +14,7 @@ class DesktopLauncher {
         LwjglApplicationConfiguration cfg = new LwjglApplicationConfiguration();
         cfg.title = "PixelWorld";
         cfg.height = (int) Constants.gameHeight;
-        cfg.width = (int) (Constants.gameWidth + Constants.panelWidth);
+        cfg.width = (int) (Constants.gameWidth);
         new LwjglApplication(new Game(), cfg);
     }
 }

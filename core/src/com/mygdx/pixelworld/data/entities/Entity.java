@@ -37,11 +37,11 @@ public abstract class Entity implements Disposable {
     /**
      * Checks whenever the next movement will be possible, and act consequently
      *
-     * @param boundingRects Obstacles around the map
+     * @param boundingRectangles Obstacles around the map
      * @param currentMove   Move to be done
      */
-    protected void bound(List<BoundingRect> boundingRects, Vector2 currentMove) {
-        for (BoundingRect b : boundingRects) {
+    protected void bound(List<BoundingRect> boundingRectangles, Vector2 currentMove) {
+        for (BoundingRect b : boundingRectangles) {
             if (currentMove.x > 0) {
                 if (BoundingShape.intersect(new BoundingRect(pos, new Vector2(img.getWidth() + currentMove.x, img.getHeight())), b)) {
                     pos.x = b.get().x - img.getWidth();

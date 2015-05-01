@@ -39,7 +39,8 @@ public class GUI {
     private final static int LEFT_BORDER = 20;
     private final static int ITEMS_SIZE = 20;
     private final static int SLOT_SIZE = 30;
-    private static final Vector2 loadingImagePos = new Vector2(Constants.totalWidth / 2, Constants.gameHeight / 2);
+    private static final Vector2 loadingImagePos = new Vector2(Constants.gameWidth / 2, Constants.gameHeight / 2);
+    private static String dialogName = "", dialogSpeech = "";
     //External references
     private static SpriteBatch batch;
     private static Player player;
@@ -64,6 +65,11 @@ public class GUI {
         loadingImage.setScaleFactor(4);
     }
 
+    public static void updateDialog(String owner, String dialog) {
+        dialogName = owner;
+        dialogSpeech = dialog;
+    }
+
     public static void init(SpriteBatch batch, Player player, World world) {
         GUI.batch = batch;
         GUI.player = player;
@@ -79,6 +85,7 @@ public class GUI {
         clearSelected();
         Game.assetManager.load("core/assets/gui/panel.png", Texture.class);
         Game.assetManager.load("core/assets/background/chest/chest.png", Texture.class);
+        Game.assetManager.load("core/assets/gui/dialogPane.png", Texture.class);
     }
 
     public static void menuLoop() {
@@ -106,9 +113,9 @@ public class GUI {
         batch.end();
         shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
         shapeRenderer.setColor(0.0f, 0.0f, 0.392f, 1.0f);
-        shapeRenderer.rect(50, 50, Constants.totalWidth - 100, 30);
+        shapeRenderer.rect(50, 50, Constants.gameWidth - 100, 30);
         shapeRenderer.setColor(0.0f, 0.05f, 0.95f, 1.0f);
-        shapeRenderer.rect(50, 50, (Constants.totalWidth - 100) * progress, 30);
+        shapeRenderer.rect(50, 50, (Constants.gameWidth - 100) * progress, 30);
         shapeRenderer.end();
     }
 
@@ -119,10 +126,15 @@ public class GUI {
     }
 
     public static void draw() {
-        batch.draw(Game.assetManager.get("core/assets/gui/panel.png", Texture.class), Constants.gameWidth + World.getCameraOffset().x, World.getCameraOffset().y);
-        drawEquipped();
-        drawInventory();
-        if (chest != null) drawChest();
+        //batch.draw(Game.assetManager.get("core/assets/gui/panel.png", Texture.class), Constants.gameWidth + World.getCameraOffset().x, World.getCameraOffset().y);
+        //drawEquipped();
+        //drawInventory();
+        //if (chest != null) drawChest();
+        if (dialogSpeech != null && dialogName != null) {
+            batch.draw(Game.assetManager.get("core/assets/gui/dialogPane.png", Texture.class), 50 + World.getCameraOffset().x, 50 + World.getCameraOffset().y);
+            ScreenWriter.write(batch, dialogName, 70, 120, Color.RED);
+            ScreenWriter.write(batch, dialogSpeech, 160, 100, Color.BLACK);
+        }
     }
 
     /**
