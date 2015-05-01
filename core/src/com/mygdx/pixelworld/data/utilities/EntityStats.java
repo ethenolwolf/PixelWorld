@@ -3,8 +3,6 @@ package com.mygdx.pixelworld.data.utilities;
 
 import com.mygdx.pixelworld.data.draw.DrawHitValue;
 import com.mygdx.pixelworld.data.entities.Entity;
-import com.mygdx.pixelworld.data.entities.characters.GameClasses;
-import com.mygdx.pixelworld.data.entities.enemies.Enemy;
 
 import java.util.EnumMap;
 import java.util.Map;
@@ -16,17 +14,9 @@ public class EntityStats {
 
     private final Map<StatType, Float> stats = new EnumMap<>(StatType.class);
     private Class type;
-    private GameClasses gameClass;
     private boolean alive = true;
     private Map<StatType, Float> maxStats;
     private boolean visible = true;
-
-    public EntityStats(GameClasses type) {
-        this(Config.getStats(true, type.toString()));
-        maxStats = new EnumMap<>(stats);
-        this.gameClass = type;
-        this.type = null;
-    }
 
     /**
      * @param health    Health
@@ -50,21 +40,18 @@ public class EntityStats {
         maxStats = new EnumMap<>(stats);
         stats.get(StatType.HEALTH);
         maxStats.get(StatType.HEALTH);
-        gameClass = null;
         type = null;
     }
 
     private EntityStats(EntityStats ps) {
         for (StatType st : StatType.values()) stats.put(st, ps.get(st));
-        gameClass = null;
         type = null;
     }
 
-    public EntityStats(Class<? extends Enemy> enemyClass) {
-        this(Config.getStats(false, enemyClass.getSimpleName()));
+    public EntityStats(Class<? extends Entity> entity) {
+        this(Config.getStats(entity.getSimpleName()));
         maxStats = new EnumMap<>(stats);
-        this.type = enemyClass;
-        this.gameClass = null;
+        this.type = entity;
     }
 
     private void setStat(StatType statType, float value) {
@@ -77,11 +64,7 @@ public class EntityStats {
         return stats.get(statType);
     }
     public float getInit(StatType statType) {
-        if (gameClass == null) return Config.getStats(false, type.getSimpleName()).get(statType);
-        else return Config.getStats(true, gameClass.toString()).get(statType);
-    }
-    public float getMax(StatType statType) {
-        return maxStats.get(statType);
+        return Config.getStats(type.getSimpleName()).get(statType);
     }
     public void setAsInit(StatType statType) {
         setStat(statType, getInit(statType));

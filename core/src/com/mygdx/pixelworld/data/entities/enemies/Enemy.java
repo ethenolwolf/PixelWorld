@@ -6,10 +6,10 @@ import com.badlogic.gdx.utils.Disposable;
 import com.mygdx.pixelworld.data.World;
 import com.mygdx.pixelworld.data.draw.AnimationDrawData;
 import com.mygdx.pixelworld.data.entities.Entity;
-import com.mygdx.pixelworld.data.entities.characters.GameClasses;
 import com.mygdx.pixelworld.data.entities.characters.Player;
 import com.mygdx.pixelworld.data.items.Item;
 import com.mygdx.pixelworld.data.items.weapons.Weapon;
+import com.mygdx.pixelworld.data.items.weapons.WeaponType;
 import com.mygdx.pixelworld.data.utilities.EntityStats;
 import com.mygdx.pixelworld.data.utilities.bounding.BoundingRect;
 import com.mygdx.pixelworld.data.utilities.bounding.BoundingShape;
@@ -44,9 +44,9 @@ public abstract class Enemy extends Entity implements Debuggable, Disposable {
     private void calculateDropItems() {
         Random rand = new Random();
         int k = rand.nextInt(10);
-        if (k > 3) dropItems.add(new Weapon(GameClasses.NINJA, 1));
-        if (k > 5) dropItems.add(new Weapon(GameClasses.WIZARD, 1));
-        if (k > 8) dropItems.add(new Weapon(GameClasses.WIZARD, 2));
+        if (k > 3) dropItems.add(new Weapon(WeaponType.values()[rand.nextInt(WeaponType.values().length)], 1));
+        if (k > 5) dropItems.add(new Weapon(WeaponType.values()[rand.nextInt(WeaponType.values().length)], 2));
+        if (k > 8) dropItems.add(new Weapon(WeaponType.values()[rand.nextInt(WeaponType.values().length)], 2));
 
     }
 

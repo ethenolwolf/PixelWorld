@@ -7,7 +7,6 @@ import com.badlogic.gdx.math.Vector2;
 import com.mygdx.pixelworld.GUI.Logger;
 import com.mygdx.pixelworld.Game;
 import com.mygdx.pixelworld.data.draw.StaticDrawData;
-import com.mygdx.pixelworld.data.entities.characters.GameClasses;
 import com.mygdx.pixelworld.data.entities.characters.Player;
 import com.mygdx.pixelworld.data.entities.enemies.Enemy;
 import com.mygdx.pixelworld.data.utilities.AssetType;
@@ -33,7 +32,6 @@ public class PowerShock extends ManaSigil {
         img = new StaticDrawData(AssetType.SIGIL, "powerShock");
         name = SigilName.powerShock;
         empty = false;
-        gameClass = player.getGameClass();
     }
 
     @Override
@@ -75,11 +73,6 @@ public class PowerShock extends ManaSigil {
         for (BoundingShape boundingShape : getBoundingShape())
             if (BoundingShape.intersect(boundingShape, e.getBoundingShape())) return true;
         return false;
-    }
-
-    @Override
-    public boolean isSuitable(GameClasses gameClass) {
-        return gameClass == GameClasses.WIZARD;
     }
 
     private class PowerShockBlast {

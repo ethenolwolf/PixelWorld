@@ -49,11 +49,11 @@ public class Config {
     /**
      * Loads stats for an entity.
      *
-     * @param isPlayer   Is entity a player
      * @param entityName Name of entity
      * @return Loaded EntityStats.
      */
-    public static EntityStats getStats(boolean isPlayer, String entityName) {
+    public static EntityStats getStats(String entityName) {
+        boolean isPlayer = entityName.toLowerCase().equals("player");
         Properties p = loadFrom("core/config/stats/" + (isPlayer ? "characters/" : "enemies/") + entityName.toLowerCase());
         return new EntityStats(
                 Float.parseFloat(p.getProperty("health")),
@@ -90,6 +90,7 @@ public class Config {
      * @return WeaponStats of the player.
      */
     public static PlayerWeaponStats getWeapon(WeaponType weaponType, int rank) {
+        System.out.println("Loading " + weaponType.name() + " of rank " + rank + "...");
         Properties p = loadFrom("core/config/weapons/characters/" + weaponType.toString().toLowerCase());
         String prefix = String.valueOf(rank) + ".";
         return new PlayerWeaponStats(

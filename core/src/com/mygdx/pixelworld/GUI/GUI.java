@@ -61,7 +61,7 @@ public class GUI {
     private static AnimationDrawData loadingImage;
 
     public static void loadImage() {
-        loadingImage = new AnimationDrawData("core/assets/characters/cleric/", new String[]{"walk"}, 8, 8, BoundingRect.class);
+        loadingImage = new AnimationDrawData("core/assets/characters/player/", new String[]{"walk"}, 8, 8, BoundingRect.class);
         loadingImage.setScaleFactor(4);
     }
 

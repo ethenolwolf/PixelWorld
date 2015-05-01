@@ -1,24 +1,22 @@
 package com.mygdx.pixelworld.data.items;
 
-import com.mygdx.pixelworld.data.entities.characters.GameClasses;
 import com.mygdx.pixelworld.data.entities.characters.Player;
 import com.mygdx.pixelworld.data.items.armors.Armor;
+import com.mygdx.pixelworld.data.items.armors.ArmorType;
 import com.mygdx.pixelworld.data.items.sigils.ManaSigil;
 import com.mygdx.pixelworld.data.items.weapons.Weapon;
+import com.mygdx.pixelworld.data.items.weapons.WeaponType;
 
 /**
  * Inventory for player where every slot can be only of a certain kind.
  */
 public class LockedInventory extends Inventory {
 
-    private final GameClasses playerClass;
-
     public LockedInventory(Player player) {
         super(4);
-        playerClass = player.getGameClass();
-        set(new Weapon(playerClass), 0);
+        set(new Weapon(WeaponType.SWORD, 1), 0);
         set(ManaSigil.getInitial(player), 1);
-        set(new Armor(playerClass), 2);
+        set(new Armor(ArmorType.LEATHER, 1), 2);
     }
 
     public Weapon getWeapon() {
@@ -64,7 +62,6 @@ public class LockedInventory extends Inventory {
         }
 
         if (!(item instanceof EquipItem)) return null;
-        if (!(((EquipItem) item).isSuitable(playerClass))) return null;
         if (item instanceof Weapon) return replace(item, 0);
         if (item instanceof ManaSigil) return replace(item, 1);
         if (item instanceof Armor) return replace(item, 2);

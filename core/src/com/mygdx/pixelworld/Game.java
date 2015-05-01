@@ -11,15 +11,12 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.mygdx.pixelworld.GUI.GUI;
 import com.mygdx.pixelworld.data.World;
 import com.mygdx.pixelworld.data.draw.ScreenWriter;
-import com.mygdx.pixelworld.data.entities.characters.GameClasses;
 import com.mygdx.pixelworld.data.entities.characters.Player;
 import com.mygdx.pixelworld.data.utilities.Constants;
 import com.mygdx.pixelworld.data.utilities.Direction;
 import com.mygdx.pixelworld.debug.Debug;
 
 //TODO Saving / loading from map save points
-//TODO Better camera gesture (limit)
-//TODO Change texture command
 
 /**
  * Class containing main game loop and init.
@@ -42,13 +39,11 @@ public class Game extends ApplicationAdapter implements InputProcessor {
         batch = new SpriteBatch();
         Debug.init();
         ScreenWriter.init();
-        player = new Player(GameClasses.CLERIC);
+        player = new Player();
         world = new World(player);
-
         camera = new OrthographicCamera();
         camera.setToOrtho(false, Constants.gameWidth, Constants.gameHeight);
         camera.update();
-
         Gdx.input.setInputProcessor(this);
         shapeRenderer = new ShapeRenderer();
         GUI.init(batch, player, world);

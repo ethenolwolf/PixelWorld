@@ -32,27 +32,21 @@ public class Player extends Entity implements Debuggable{
     private final FireManager fireManager;
     private final LockedInventory equipped;
     private final Inventory inventory;
-    private final GameClasses gameClass;
     private int experience = 0;
     private int level = 1;
 
     /**
      * Initializes a new player.
-     *
-     * @param gameClass Class of new player
      */
-    public Player(GameClasses gameClass) {
-        String name = NameExtractor.extract();
+    public Player() {
         this.pos = new Vector2();
-        this.gameClass = gameClass;
         String[] actions = new String[States.values().length];
         for (int i = 0; i < actions.length; i++) actions[i] = States.values()[i].name().toLowerCase();
-        img = new AnimationDrawData("core/assets/characters/" + gameClass.toString().toLowerCase() + "/", actions, 8, 8, BoundingRect.class);
-        stats = new EntityStats(gameClass);
+        img = new AnimationDrawData("core/assets/characters/player/", actions, 8, 8, BoundingRect.class);
+        stats = new EntityStats(this.getClass());
         fireManager = new FireManager();
         equipped = new LockedInventory(this);
         inventory = new Inventory(8);
-
         //Debug
         Debug.addDebuggable(this);
     }
@@ -155,14 +149,6 @@ public class Player extends Entity implements Debuggable{
         inventory.dispose();
     }
 
-    public float getHealthPercentage() {
-        return stats.get(StatType.HEALTH) / stats.getMax(StatType.HEALTH);
-    }
-
-    public float getManaPercentage() {
-        return stats.get(StatType.MANA) / stats.getMax(StatType.MANA);
-    }
-
     public FireManager getFireManager() {
         return fireManager;
     }
@@ -233,10 +219,6 @@ public class Player extends Entity implements Debuggable{
 
     public LockedInventory getEquipped() {
         return equipped;
-    }
-
-    public GameClasses getGameClass() {
-        return gameClass;
     }
 
     @Override
