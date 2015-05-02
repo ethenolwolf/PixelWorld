@@ -9,4 +9,9 @@ public class EmptyItem extends Item {
     public EmptyItem() {
         img = new StaticDrawData();
     }
+
+    @Override
+    public String toString() {
+        return "EMPTY";
+    }
 }

@@ -50,6 +50,11 @@ public class BoundingCircle extends BoundingShape {
     }
 
     @Override
+    public void drawOnScreen(ShapeRenderer shapeRenderer, Vector2 cameraOffset) {
+        shapeRenderer.circle(circle.x - cameraOffset.x, circle.y - cameraOffset.y, circle.radius);
+    }
+
+    @Override
     public String toString() {
         return String.format("X = %.2f, Y = %.2f, R = %.2f", circle.x, circle.y, circle.radius);
     }

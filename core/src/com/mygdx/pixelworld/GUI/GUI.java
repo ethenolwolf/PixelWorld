@@ -51,8 +51,8 @@ public class GUI {
     //Menu
     private static int currentMenuIndex = 0;
     private static String[] menuOptions = new String[]{
-            "PLAY",
-            "OPTIONS",
+            "NEW GAME",
+            "LOAD GAME",
             "HIGH SCORES",
             "SAVE ONLINE",
             "EXIT"
@@ -255,6 +255,11 @@ public class GUI {
                 switch (currentMenuIndex) {
                     case 0:
                         Game.gameState = Game.GameStates.GAME;
+                        menuMusic.stop();
+                        menuMusic.dispose();
+                        break;
+                    case 1:
+                        Game.gameState = Game.GameStates.LOAD;
                         menuMusic.stop();
                         menuMusic.dispose();
                         break;

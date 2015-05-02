@@ -1,9 +1,14 @@
 package com.mygdx.pixelworld.data.items;
 
 import com.badlogic.gdx.utils.Disposable;
+import com.mygdx.pixelworld.GUI.Logger;
+import com.mygdx.pixelworld.data.entities.characters.Player;
 import com.mygdx.pixelworld.data.items.armors.Armor;
+import com.mygdx.pixelworld.data.items.armors.ArmorType;
 import com.mygdx.pixelworld.data.items.sigils.ManaSigil;
+import com.mygdx.pixelworld.data.items.sigils.SigilName;
 import com.mygdx.pixelworld.data.items.weapons.Weapon;
+import com.mygdx.pixelworld.data.items.weapons.WeaponType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -156,5 +161,55 @@ public class Inventory implements Disposable {
         List<Item> out = new ArrayList<>();
         for (Item i : inv) if (!(i instanceof EmptyItem)) out.add(i);
         return out;
+    }
+
+    @Override
+    public String toString() {
+        if (getFilledItems().size() == 0) return "EMPTY";
+        String out = "";
+        for (Item item : getFilledItems()) {
+            if (item == null) continue;
+            out += item.toString() + " ";
+        }
+        return out;
+    }
+
+    public void load(String saveLine, Player player) {
+        if (saveLine.equals("EMPTY")) return;
+        String[] itemStrings = saveLine.split(" ");
+        for (int i = 0; i < itemStrings.length; i++) {
+            String itemString = itemStrings[i];
+            String[] split = itemString.split(":");
+            if (split.length < 2) {
+                Logger.log("Inventory.load()", "Error: item " + itemString + " not valid. Skipping.");
+                continue;
+            }
+            switch (split[0]) {
+                case "WEAPON":
+                    if (split.length != 3) {
+                        Logger.log("Inventory.load()", "Error: weapon " + itemString + " not valid. Skipping.");
+                        break;
+                    }
+                    set(new Weapon(WeaponType.valueOf(split[1]), Integer.parseInt(split[2])), i);
+                    break;
+                case "SIGIL":
+                    if (split.length != 2) {
+                        Logger.log("Inventory.load()", "Error: sigil " + itemString + " not valid. Skipping.");
+                        break;
+                    }
+                    set(ManaSigil.getFromName(SigilName.valueOf(split[1]), player), i);
+                    break;
+                case "ARMOR":
+                    if (split.length != 3) {
+                        Logger.log("Inventory.load()", "Error: armor " + itemString + " not valid. Skipping.");
+                        break;
+                    }
+                    set(new Armor(ArmorType.valueOf(split[1]), Integer.parseInt(split[2])), i);
+                    break;
+                default:
+                    Logger.log("Inventory.load()", "Error: item " + itemString + " unknown. Skipping.");
+                    break;
+            }
+        }
     }
 }

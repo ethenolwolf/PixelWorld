@@ -28,6 +28,19 @@ public class ManaSigil extends Item implements Damaging, EquipItem {
         return new HealingCross(player);
     }
 
+    public static ManaSigil getFromName(SigilName name, Player player) {
+        switch (name) {
+            case powerShock:
+                return new PowerShock(player);
+            case healingCross:
+                return new HealingCross(player);
+            case invisibleCloack:
+                return new InvisibleCloak(player);
+            default:
+                return null;
+        }
+    }
+
     public void update() {
     }
 
@@ -52,5 +65,10 @@ public class ManaSigil extends Item implements Damaging, EquipItem {
 
     public boolean isEmpty() {
         return empty;
+    }
+
+    @Override
+    public String toString() {
+        return "SIGIL:" + name.name();
     }
 }

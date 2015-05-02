@@ -33,6 +33,7 @@ public class BoundingRect extends BoundingShape {
         shapeRenderer.rect(rectangle.x - World.getCameraOffset().x, rectangle.y - World.getCameraOffset().y, rectangle.width, rectangle.height);
     }
 
+    @Override
     public void drawOnScreen(ShapeRenderer shapeRenderer, Vector2 offset) {
         shapeRenderer.rect(rectangle.x - offset.x, rectangle.y - offset.y, rectangle.width, rectangle.height);
     }

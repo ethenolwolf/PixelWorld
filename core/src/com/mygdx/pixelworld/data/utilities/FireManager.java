@@ -43,7 +43,7 @@ public class FireManager {
         fireDelay -= Gdx.graphics.getDeltaTime();
         if (fireDelay <= 0) {
             world.fire(pos, new Vector2(target), entityStats, stats);
-            fireDelay += 1 / Algorithms.map(entityStats.get(StatType.DEX), 1, 100, 1, 8);
+            fireDelay += 1 / Utils.map(entityStats.get(StatType.DEX), 1, 100, 1, 8);
         }
     }
 

@@ -9,11 +9,9 @@ import com.mygdx.pixelworld.GUI.GUI;
 import com.mygdx.pixelworld.GUI.Logger;
 import com.mygdx.pixelworld.data.World;
 import com.mygdx.pixelworld.data.entities.NPC;
+import com.mygdx.pixelworld.data.utilities.Utils;
 
 import java.io.IOException;
-import java.nio.charset.Charset;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -47,12 +45,6 @@ public class Story {
         );
     }
 
-    private static String[] readFile(String path, Charset encoding) throws IOException {
-        byte[] encoded = Files.readAllBytes(Paths.get(path));
-        String tmp = new String(encoded, encoding);
-        return tmp.split("\n");
-    }
-
     public void update() {
         boolean canGoForward = true;
         if (!World.isCameraIdle()) canGoForward = false;
@@ -79,7 +71,7 @@ public class Story {
     private void parse(String path) {
         String[] fileLines;
         try {
-            fileLines = readFile(path, Charset.defaultCharset());
+            fileLines = Utils.readFile(path);
         } catch (IOException e) {
             Logger.log("Story.parse()", "Error: Could not read file " + path);
             return;
@@ -124,8 +116,8 @@ public class Story {
                         continue;
                     }
                     try {
-                        float tmp = Float.parseFloat(coordinates[0]);
-                        tmp = Float.parseFloat(coordinates[1]);
+                        Float tmp = Float.parseFloat(coordinates[0]);
+                        Float tmp2 = Float.parseFloat(coordinates[1]);
                     } catch (Exception e) {
                         Logger.log("Story.parse()", "Error: Line " + line + " malformed (coordinates not float). Skipping");
                         continue;

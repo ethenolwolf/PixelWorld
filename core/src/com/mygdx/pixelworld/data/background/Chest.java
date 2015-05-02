@@ -62,4 +62,9 @@ public class Chest extends Item {
     public BoundingShape getBoundingShape() {
         return img.getBoundingShape(pos);
     }
+
+    @Override
+    public String toString() {
+        return "";
+    }
 }

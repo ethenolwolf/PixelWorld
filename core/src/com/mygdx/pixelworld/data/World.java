@@ -23,6 +23,7 @@ import com.mygdx.pixelworld.data.background.Chest;
 import com.mygdx.pixelworld.data.background.SavePillar;
 import com.mygdx.pixelworld.data.draw.Bullet;
 import com.mygdx.pixelworld.data.draw.DrawHitValue;
+import com.mygdx.pixelworld.data.draw.ScreenWriter;
 import com.mygdx.pixelworld.data.entities.characters.Player;
 import com.mygdx.pixelworld.data.entities.enemies.Blocker;
 import com.mygdx.pixelworld.data.entities.enemies.Enemy;
@@ -33,6 +34,7 @@ import com.mygdx.pixelworld.data.story.StoryAction;
 import com.mygdx.pixelworld.data.utilities.Constants;
 import com.mygdx.pixelworld.data.utilities.EntityStats;
 import com.mygdx.pixelworld.data.utilities.StatType;
+import com.mygdx.pixelworld.data.utilities.Utils;
 import com.mygdx.pixelworld.data.utilities.bounding.BoundingRect;
 import com.mygdx.pixelworld.data.utilities.bounding.BoundingShape;
 import com.mygdx.pixelworld.data.utilities.bounding.ExitBoundingRect;
@@ -54,6 +56,7 @@ public class World implements Disposable {
     private static Vector2 cameraTarget;
     private static float cameraSpeed = 10;
     private static StoryAction cameraAction;
+    private static String currentMap;
     private final List<Enemy> enemies = new ArrayList<>();
     private final List<Bullet> bullets = new ArrayList<>();
     private final List<Chest> chests = new ArrayList<>();
@@ -63,14 +66,13 @@ public class World implements Disposable {
     private final List<SavePillar> savePillars = new ArrayList<>();
     private final int[] backgroundLayers = {0, 1};
     private final int[] foregroundLayers = {2};
-    private String currentMap;
     private Player player;
     private Story story;
 
     public World(Player player) {
         this.player = player;
         Game.assetManager.setLoader(TiledMap.class, new TmxMapLoader(new InternalFileHandleResolver()));
-        loadNewMap("core/assets/maps/story.tmx");
+        loadNewMap("core/assets/maps/dungeon.tmx");
         new Blocker(0, 0);
         new SavePillar(new Rectangle());
     }
@@ -152,6 +154,10 @@ public class World implements Disposable {
         Game.camera.update();
     }
 
+    public static String getCurrentMap() {
+        return currentMap;
+    }
+
     /**
      * Loads new map's obstacles, exits, spawn monsters etc.
      *
@@ -165,6 +171,8 @@ public class World implements Disposable {
         mapObstacles.clear();
         exits.clear();
         savePillars.clear();
+        spawnPoints.clear();
+        story = null;
         if (tiledMap != null) {
             Game.assetManager.unload(currentMap);
             tiledMap.dispose();
@@ -266,12 +274,7 @@ public class World implements Disposable {
             }
         }
 
-        for (SavePillar savePillar : savePillars) {
-            savePillar.update();
-            if (BoundingShape.intersect(playerBoundingShape, savePillar.getBoundingShape())) {
-                SavePillar.save();
-            }
-        }
+        for (SavePillar savePillar : savePillars) savePillar.update();
 
         story.update();
 
@@ -382,7 +385,11 @@ public class World implements Disposable {
      * Draws layers after entities
      */
     public void drawTop(SpriteBatch batch) {
-        for (SavePillar savePillar : savePillars) savePillar.draw(batch);
+        for (SavePillar savePillar : savePillars) {
+            savePillar.draw(batch);
+            if (BoundingShape.intersect(player.getBoundingShape(), savePillar.getBoundingShape()))
+                ScreenWriter.write(batch, "Press " + Constants.INTERACTION_KEY + " to save...", 10, 30, Color.GREEN);
+        }
         batch.end();
         tiledMapRenderer.render(foregroundLayers);
     }
@@ -446,6 +453,10 @@ public class World implements Disposable {
             //SpawnPoints
             shapeRenderer.setColor(0.5f, 1, 0, 1);
             for (BoundingRect rect : spawnPoints) rect.drawOnScreen(shapeRenderer, getCameraOffset());
+            //SavePillars
+            shapeRenderer.setColor(1f, 0.5f, 0, 1);
+            for (SavePillar savePillar : savePillars)
+                savePillar.getBoundingShape().drawOnScreen(shapeRenderer, getCameraOffset());
 
         }
 
@@ -488,5 +499,24 @@ public class World implements Disposable {
 
     public List<BoundingRect> getMapObstacles() {
         return mapObstacles;
+    }
+
+    public void interaction() {
+        for (SavePillar savePillar : savePillars)
+            if (BoundingShape.intersect(player.getBoundingShape(), savePillar.getBoundingShape()))
+                SavePillar.save(player);
+    }
+
+    public void load() {
+        String[] saves = Utils.readSave();
+        if (saves == null) {
+            Logger.log("World.load()", "Save file is null.");
+            return;
+        }
+        if (saves[0] == null || saves[0].equals("")) {
+            Logger.log("World.load()", "Save file corrupted! Map is not valid.");
+            return;
+        }
+        loadNewMap(saves[0]);
     }
 }

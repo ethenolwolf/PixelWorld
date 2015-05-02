@@ -46,4 +46,6 @@ public abstract class BoundingShape {
     public abstract boolean isValid();
 
     public abstract void free();
+
+    public abstract void drawOnScreen(ShapeRenderer shapeRenderer, Vector2 cameraOffset);
 }

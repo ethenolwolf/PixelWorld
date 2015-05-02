@@ -226,6 +226,35 @@ public class Player extends Entity implements Debuggable{
         return String.format("Player -> X = %f\tY = %f", pos.x, pos.y);
     }
 
+    public String getSaveParameters() {
+        String params = "";
+        params += stats.toString() + "\n";
+        params += experience + "\n";
+        params += equipped.toString() + "\n";
+        params += inventory.toString();
+        return params;
+    }
+
+    public void load() {
+        String[] save = Utils.readSave();
+        if (save == null) return;
+        for (String saveLine : save)
+            if (saveLine == null || saveLine.equals("")) {
+                Logger.log("Player.load()", "Save file corrupted.");
+                return;
+            }
+        stats = new EntityStats(save[1]);
+        try {
+            experience = Integer.parseInt(save[2]);
+        } catch (Exception e) {
+            Logger.log("Player.load()", "Exp malformed! Not integer value.");
+            return;
+        }
+
+        equipped.load(save[3], this);
+        inventory.load(save[4], this);
+    }
+
     private enum States {
         IDLE, WALK, FIRE
     }

@@ -16,4 +16,7 @@ public abstract class Item implements Disposable {
     public void dispose() {
         img.dispose();
     }
+
+    @Override
+    public abstract String toString();
 }

@@ -10,4 +10,5 @@ public class Constants {
     public static final float X_LIMIT_MAX = 0.75f * gameWidth;
     public static final float Y_LIMIT_MIN = 0.15f * gameHeight;
     public static final float Y_LIMIT_MAX = 0.50f * gameHeight;
+    public static final String INTERACTION_KEY = "E";
 }

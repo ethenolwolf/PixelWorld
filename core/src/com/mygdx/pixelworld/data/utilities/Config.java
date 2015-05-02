@@ -90,7 +90,6 @@ public class Config {
      * @return WeaponStats of the player.
      */
     public static PlayerWeaponStats getWeapon(WeaponType weaponType, int rank) {
-        System.out.println("Loading " + weaponType.name() + " of rank " + rank + "...");
         Properties p = loadFrom("core/config/weapons/characters/" + weaponType.toString().toLowerCase());
         String prefix = String.valueOf(rank) + ".";
         return new PlayerWeaponStats(

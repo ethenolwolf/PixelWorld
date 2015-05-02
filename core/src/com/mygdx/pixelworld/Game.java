@@ -16,8 +16,6 @@ import com.mygdx.pixelworld.data.utilities.Constants;
 import com.mygdx.pixelworld.data.utilities.Direction;
 import com.mygdx.pixelworld.debug.Debug;
 
-//TODO Saving / loading from map save points
-
 /**
  * Class containing main game loop and init.
  */
@@ -62,6 +60,11 @@ public class Game extends ApplicationAdapter implements InputProcessor {
                     break;
                 case GAME:
                     gameLoop();
+                    break;
+                case LOAD:
+                    world.load();
+                    player.load();
+                    gameState = GameStates.GAME;
                     break;
                 case PAUSE:
                     GUI.pauseLoop();
@@ -112,6 +115,7 @@ public class Game extends ApplicationAdapter implements InputProcessor {
                 break;
             case GAME:
                 if (keycode == Input.Keys.SPACE) player.manaTrigger();
+                if (keycode == Input.Keys.valueOf(Constants.INTERACTION_KEY)) world.interaction();
                 break;
             case PAUSE:
                 break;
@@ -168,7 +172,7 @@ public class Game extends ApplicationAdapter implements InputProcessor {
     }
 
     public enum GameStates {
-        MENU, GAME, PAUSE
+        MENU, GAME, LOAD, PAUSE
     }
 
 }

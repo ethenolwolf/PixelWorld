@@ -3,6 +3,7 @@ package com.mygdx.pixelworld.data.utilities;
 
 import com.mygdx.pixelworld.data.draw.DrawHitValue;
 import com.mygdx.pixelworld.data.entities.Entity;
+import com.mygdx.pixelworld.data.entities.characters.Player;
 
 import java.util.EnumMap;
 import java.util.Map;
@@ -18,6 +19,22 @@ public class EntityStats {
     private Map<StatType, Float> maxStats;
     private boolean visible = true;
 
+    public EntityStats(String statsLine) {
+        type = Player.class;
+        String[] split = statsLine.split(" ");
+        if (split.length != 8) return;
+        StatType[] statTypes = StatType.values();
+        for (String aSplit : split) {
+            String[] parts = aSplit.split(":");
+            if (parts.length != 2) return;
+            for (StatType statType : statTypes) {
+                if (statType.name().equalsIgnoreCase(parts[0])) {
+                    stats.put(StatType.valueOf(statType.name()), Float.parseFloat(parts[1]));
+                }
+            }
+        }
+        maxStats = new EnumMap<>(stats);
+    }
     /**
      * @param health    Health
      * @param mana      Mana
@@ -38,8 +55,8 @@ public class EntityStats {
         stats.put(StatType.ATK, (float) attack);
         stats.put(StatType.DEF, (float) defense);
         maxStats = new EnumMap<>(stats);
-        stats.get(StatType.HEALTH);
-        maxStats.get(StatType.HEALTH);
+        //stats.get(StatType.HEALTH);
+        //maxStats.get(StatType.HEALTH);
         type = null;
     }
 
@@ -52,6 +69,10 @@ public class EntityStats {
         this(Config.getStats(entity.getSimpleName()));
         maxStats = new EnumMap<>(stats);
         this.type = entity;
+    }
+
+    public Map<StatType, Float> getStats() {
+        return stats;
     }
 
     private void setStat(StatType statType, float value) {
@@ -82,5 +103,14 @@ public class EntityStats {
     }
     public void setIsVisible(boolean isVisible) {
         this.visible = isVisible;
+    }
+
+    @Override
+    public String toString() {
+        String out = "";
+        for (Map.Entry<StatType, Float> entry : stats.entrySet()) {
+            out += String.format("%s:%d ", entry.getKey().name(), Math.round(entry.getValue()));
+        }
+        return out;
     }
 }
