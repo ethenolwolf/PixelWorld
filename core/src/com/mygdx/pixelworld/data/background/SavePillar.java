@@ -12,9 +12,7 @@ import com.mygdx.pixelworld.data.utilities.bounding.BoundingCircle;
 import com.mygdx.pixelworld.data.utilities.bounding.BoundingRect;
 import com.mygdx.pixelworld.data.utilities.bounding.BoundingShape;
 
-import java.io.FileNotFoundException;
-import java.io.PrintWriter;
-import java.io.UnsupportedEncodingException;
+import java.io.*;
 
 public class SavePillar extends Item {
 
@@ -31,14 +29,21 @@ public class SavePillar extends Item {
     }
 
     public static void save(Player player) {
-        try (PrintWriter writer = new PrintWriter("core/assets/saves/save.save", "UTF-8")) {
-            writer.println(World.getCurrentMap());
-            writer.print(player.getSaveParameters());
+        try {
+            File yourFile = new File("core/assets/saves/save.save");
+            if(!yourFile.exists()) //noinspection ResultOfMethodCallIgnored
+                yourFile.createNewFile();
+            FileOutputStream oFile = new FileOutputStream(yourFile, false);
+            oFile.write(World.getCurrentMap().getBytes());
+            oFile.write(player.getSaveParameters().getBytes());
         } catch (FileNotFoundException e) {
             Logger.log("SavePillar.save()", "Saves file not found!");
             return;
         } catch (UnsupportedEncodingException e) {
             Logger.log("SavePillar.save()", "Encoding not supported!");
+            return;
+        } catch (IOException e) {
+            Logger.log("SavePillar.save()", "Could not create file.");
             return;
         }
         System.out.println("Saved!");
