@@ -58,6 +58,7 @@ public class Game extends ApplicationAdapter implements InputProcessor {
                 case MENU:
                     GUI.menuLoop();
                     break;
+                case PAUSE:
                 case GAME:
                     gameLoop();
                     break;
@@ -65,9 +66,6 @@ public class Game extends ApplicationAdapter implements InputProcessor {
                     world.load();
                     player.load();
                     gameState = GameStates.GAME;
-                    break;
-                case PAUSE:
-                    GUI.pauseLoop();
                     break;
             }
         } else {
@@ -80,8 +78,13 @@ public class Game extends ApplicationAdapter implements InputProcessor {
      */
     private void gameLoop() {
         //Logic update
-        player.update(world);
-        world.update();
+        if (gameState == GameStates.GAME) {
+            player.update(world);
+            world.update(batch);
+            batch.setColor(1.0f, 1.0f, 1.0f, 1.0f);
+        } else {
+            batch.setColor(0.5f, 0.5f, 0.5f, 1);
+        }
 
         //Draw
         world.drawBottom(batch, camera);
@@ -116,8 +119,10 @@ public class Game extends ApplicationAdapter implements InputProcessor {
             case GAME:
                 if (keycode == Input.Keys.SPACE) player.manaTrigger();
                 if (keycode == Input.Keys.valueOf(Constants.INTERACTION_KEY)) world.interaction();
+                if (keycode == Input.Keys.P) gameState = GameStates.PAUSE;
                 break;
             case PAUSE:
+                if (keycode == Input.Keys.P) gameState = GameStates.GAME;
                 break;
         }
 

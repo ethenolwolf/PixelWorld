@@ -32,6 +32,7 @@ public class Player extends Entity implements Debuggable{
     private final FireManager fireManager;
     private final LockedInventory equipped;
     private final Inventory inventory;
+    States currentState;
     private int experience = 0;
     private int level = 1;
 
@@ -60,9 +61,7 @@ public class Player extends Entity implements Debuggable{
      */
     public void update(World world) {
         //Keyboard events
-        States currentState;
-        if (Gdx.input.isKeyPressed(Keys.ANY_KEY)) currentState = States.WALK;
-        else currentState = States.IDLE;
+        currentState = States.IDLE;
         if (Gdx.input.isKeyPressed(Keys.A)) move(LEFT, world.getMapObstacles());
         else if (Gdx.input.isKeyPressed(Keys.D)) move(RIGHT, world.getMapObstacles());
         if (Gdx.input.isKeyPressed(Keys.S)) move(DOWN, world.getMapObstacles());
@@ -96,6 +95,7 @@ public class Player extends Entity implements Debuggable{
      * @param boundingRectangles Obstacles around the map
      */
     private void move(Direction direction, List<BoundingRect> boundingRectangles) {
+        currentState = States.WALK;
         float movement = Gdx.graphics.getDeltaTime() * stats.get(StatType.SPD) * 5;
         switch (direction) {
             case UP:

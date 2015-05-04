@@ -185,9 +185,9 @@ public class World implements Disposable {
     /**
      * When map is loaded reads all data and initializes the map.
      */
-    private void initMap() {
+    private void initMap(SpriteBatch batch) {
         tiledMap = Game.assetManager.get(currentMap);
-        tiledMapRenderer = new OrthogonalTiledMapRenderer(tiledMap);
+        tiledMapRenderer = new OrthogonalTiledMapRenderer(tiledMap, batch);
 
         int x = Integer.parseInt(tiledMap.getProperties().get("PlayerPositionX", String.class)) * tiledMap.getProperties().get("tilewidth", Integer.class);
         int y = Integer.parseInt(tiledMap.getProperties().get("PlayerPositionY", String.class)) * tiledMap.getProperties().get("tileheight", Integer.class);
@@ -262,8 +262,8 @@ public class World implements Disposable {
     /**
      * Updates all map component and checks collisions.
      */
-    public void update() {
-        if (tiledMap == null) initMap();
+    public void update(SpriteBatch batch) {
+        if (tiledMap == null) initMap(batch);
 
         BoundingShape playerBoundingShape = player.getBoundingShape();
 
@@ -409,27 +409,6 @@ public class World implements Disposable {
      * Draws shapes for GUI.
      */
     public void shapeDraw(ShapeRenderer shapeRenderer, Player player) {
-        /*shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
-        //Health bar background
-        shapeRenderer.setColor(0.678f, 0.074f, 0.074f, 1.0f);
-        shapeRenderer.rect(Constants.gameWidth + 10, 330, 140, 20);
-        //Health bar
-        shapeRenderer.setColor(0.95f, 0.05f, 0.05f, 1.0f);
-        shapeRenderer.rect(Constants.gameWidth + 10, 330, 140 * player.getHealthPercentage(), 20);
-        //Mana bar background
-        shapeRenderer.setColor(0.0f, 0.0f, 0.392f, 1.0f);
-        shapeRenderer.rect(Constants.gameWidth + 10, 300, 140, 20);
-        //Mana bar
-        shapeRenderer.setColor(0.0f, 0.05f, 0.95f, 1.0f);
-        shapeRenderer.rect(Constants.gameWidth + 10, 300, 140 * player.getManaPercentage(), 20);
-        //Exp bar background
-        shapeRenderer.setColor(0.125f, 0.321f, 0.095f, 1.0f);
-        shapeRenderer.rect(Constants.gameWidth + 10, 270, 140, 20);
-        //Exp bar
-        shapeRenderer.setColor(0.313f, 0.800f, 0.214f, 1.0f);
-        shapeRenderer.rect(Constants.gameWidth + 10, 270, 140 * player.getExpPercentage(), 20);
-        shapeRenderer.end();*/
-
         if (Debug.isTrue("SHOW_BOUNDING")) {
             shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
             //Player

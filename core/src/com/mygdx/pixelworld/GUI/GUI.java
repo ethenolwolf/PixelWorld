@@ -102,10 +102,6 @@ public class GUI {
         batch.end();
     }
 
-    public static void pauseLoop() {
-
-    }
-
     public static void splashScreen(ShapeRenderer shapeRenderer, float progress) {
         loadingImage.update();
         batch.begin();
@@ -135,6 +131,8 @@ public class GUI {
             ScreenWriter.write(batch, dialogName, 70, 120, Color.RED);
             ScreenWriter.write(batch, dialogSpeech, 160, 100, Color.BLACK);
         }
+        if (Game.gameState == Game.GameStates.PAUSE)
+            ScreenWriter.writeOnCenter(batch, "PAUSED", Constants.gameHeight / 2, Color.RED);
     }
 
     /**
