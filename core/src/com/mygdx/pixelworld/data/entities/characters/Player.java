@@ -11,14 +11,9 @@ import com.mygdx.pixelworld.data.entities.Entity;
 import com.mygdx.pixelworld.data.entities.enemies.Enemy;
 import com.mygdx.pixelworld.data.items.Inventory;
 import com.mygdx.pixelworld.data.items.LockedInventory;
-import com.mygdx.pixelworld.data.items.armors.Armor;
-import com.mygdx.pixelworld.data.items.sigils.ManaSigil;
-import com.mygdx.pixelworld.data.items.weapons.Weapon;
 import com.mygdx.pixelworld.data.utilities.*;
 import com.mygdx.pixelworld.data.utilities.bounding.BoundingRect;
 import com.mygdx.pixelworld.data.utilities.bounding.BoundingShape;
-import com.mygdx.pixelworld.debug.Debug;
-import com.mygdx.pixelworld.debug.Debuggable;
 
 import java.util.List;
 
@@ -27,12 +22,12 @@ import static com.mygdx.pixelworld.data.utilities.Direction.*;
 /**
  * Main player class.
  */
-public class Player extends Entity implements Debuggable{
+public class Player extends Entity {
 
     private final FireManager fireManager;
     private final LockedInventory equipped;
     private final Inventory inventory;
-    States currentState;
+    private States currentState;
     private int experience = 0;
     private int level = 1;
 
@@ -43,17 +38,11 @@ public class Player extends Entity implements Debuggable{
         this.pos = new Vector2();
         String[] actions = new String[States.values().length];
         for (int i = 0; i < actions.length; i++) actions[i] = States.values()[i].name().toLowerCase();
-        img = new AnimationDrawData("core/assets/characters/player/", actions, 8, 8, BoundingRect.class);
+        img = new AnimationDrawData("core/assets/characters/player/", actions, BoundingRect.class);
         stats = new EntityStats(this.getClass());
         fireManager = new FireManager();
         equipped = new LockedInventory(this);
         inventory = new Inventory(8);
-        //Debug
-        Debug.addDebuggable(this);
-    }
-
-    public Inventory getInventory() {
-        return inventory;
     }
 
     /**
@@ -153,10 +142,6 @@ public class Player extends Entity implements Debuggable{
         return fireManager;
     }
 
-    public ManaSigil getManaSigil() {
-        return equipped.getManaSigil();
-    }
-
     public BoundingShape getBoundingShape() {
         return img.getBoundingShape(pos);
     }
@@ -164,14 +149,6 @@ public class Player extends Entity implements Debuggable{
     public void checkMana(List<Enemy> e) {
         for (Enemy enemy : e)
             if (equipped.getManaSigil().checkIfInside(enemy)) enemy.getHit(equipped.getManaSigil());
-    }
-
-    public Weapon getWeapon() {
-        return equipped.getWeapon();
-    }
-
-    public Armor getArmor() {
-        return equipped.getArmor();
     }
 
     /**
@@ -187,43 +164,6 @@ public class Player extends Entity implements Debuggable{
         }
         if (level != this.level) Logger.log("Player.addExperience()", "Level UP! Level=" + level);
         this.level = level;
-    }
-
-    public float getExpPercentage() {
-        for (Integer threshold : Config.getExperienceThresholds()) {
-            if (experience < threshold) return (float) experience / (float) threshold;
-        }
-        return 1.0f;
-    }
-
-    /**
-     * Equips item
-     * @param inv Item's inventory
-     * @param slot Item's slot
-     */
-    public void equip(Inventory inv, int slot) {
-        Inventory.swap(equipped, inv, slot);
-    }
-
-    /**
-     * Removes an Item from locked inv.
-     * @param equipSlot Slot of item
-     * @param inv New Inventory
-     * @param inventorySlot New slot
-     */
-    public void unequip(int equipSlot, Inventory inv, int inventorySlot) {
-        if (equipped.isCompatible(inv, inventorySlot, equipSlot)) {
-            Inventory.swap(equipped, equipSlot, inv, inventorySlot);
-        }
-    }
-
-    public LockedInventory getEquipped() {
-        return equipped;
-    }
-
-    @Override
-    public String getWatch() {
-        return String.format("Player -> X = %f\tY = %f", pos.x, pos.y);
     }
 
     public String getSaveParameters() {

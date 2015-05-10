@@ -2,7 +2,6 @@ package com.mygdx.pixelworld.data.entities.enemies;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.utils.Disposable;
 import com.mygdx.pixelworld.data.World;
 import com.mygdx.pixelworld.data.draw.AnimationDrawData;
 import com.mygdx.pixelworld.data.entities.Entity;
@@ -13,7 +12,6 @@ import com.mygdx.pixelworld.data.items.weapons.WeaponType;
 import com.mygdx.pixelworld.data.utilities.EntityStats;
 import com.mygdx.pixelworld.data.utilities.bounding.BoundingRect;
 import com.mygdx.pixelworld.data.utilities.bounding.BoundingShape;
-import com.mygdx.pixelworld.debug.Debuggable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,7 +20,7 @@ import java.util.Random;
 /**
  * Class used to generify enemies of the game.
  */
-public abstract class Enemy extends Entity implements Debuggable, Disposable {
+public abstract class Enemy extends Entity {
 
     private final List<Item> dropItems = new ArrayList<>();
     States currentState = States.IDLE;
@@ -34,7 +32,7 @@ public abstract class Enemy extends Entity implements Debuggable, Disposable {
         stats = new EntityStats(this.getClass());
         String[] actions = new String[States.values().length];
         for (int i = 0; i < actions.length; i++) actions[i] = States.values()[i].name().toLowerCase();
-        img = new AnimationDrawData("core/assets/enemies/" + this.getClass().getSimpleName().toLowerCase() + "/", actions, 8, 8, BoundingRect.class);
+        img = new AnimationDrawData("core/assets/enemies/" + this.getClass().getSimpleName().toLowerCase() + "/", actions, BoundingRect.class);
         calculateDropItems();
     }
 

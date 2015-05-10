@@ -29,49 +29,6 @@ public class Inventory implements Disposable {
     }
 
     /**
-     * Swaps items between non-locked inventories
-     *
-     * @param inv1  First inventory
-     * @param slot1 Slot of first inventory
-     * @param inv2  Second inventory
-     * @param slot2 Slot of second inventory
-     */
-    public static void swap(Inventory inv1, int slot1, Inventory inv2, int slot2) {
-        inv1.set(inv2.replace(inv1.get(slot1), slot2), slot1);
-    }
-
-    /**
-     * Swaps items between Locked and Free inventory (if possible)
-     * @param lockedInv Locked inventory
-     * @param lockedSlot Slot of locked inventory
-     * @param freeInv Free inventory
-     * @param freeSlot Slot of free inventory
-     */
-    public static void swap(LockedInventory lockedInv, int lockedSlot, Inventory freeInv, int freeSlot) {
-        Item invItem = freeInv.get(freeSlot);
-        Item eqItem = lockedInv.tryReplace(invItem, lockedSlot);
-        if (eqItem == null) return;//Can't equip
-        //Equipped! Now swap in inventory
-        if (eqItem instanceof EquipItem) if (((EquipItem) eqItem).isEmpty()) freeInv.set(new EmptyItem(), freeSlot);
-        else freeInv.set(eqItem, freeSlot);
-    }
-
-    /**
-     * Tries to equip from free inventory into locked inventory.
-     * @param lockedInv Locked inventory
-     * @param freeInv Free inventory
-     * @param freeSlot Slot of free inventory
-     */
-    public static void swap(LockedInventory lockedInv, Inventory freeInv, int freeSlot) {
-        int lockedSlot = 3;
-        Item invItem = freeInv.get(freeSlot);
-        if (invItem instanceof Weapon) lockedSlot = 0;
-        if (invItem instanceof ManaSigil) lockedSlot = 1;
-        if (invItem instanceof Armor) lockedSlot = 2;
-        swap(lockedInv, lockedSlot, freeInv, freeSlot);
-    }
-
-    /**
      * Clears inventory.
      */
     private void empty() {
@@ -104,19 +61,6 @@ public class Inventory implements Disposable {
     }
 
     /**
-     * Puts new item and returns old one.
-     * @param newItem New item to insert
-     * @param slot Slot to insert it
-     * @return Old item
-     */
-    public Item replace(Item newItem, int slot) {
-        Item oldItem = get(slot);
-        empty(slot);
-        set(newItem, slot);
-        return oldItem;
-    }
-
-    /**
      * Fills inventory with list of items.
      * @param items Items to fill with
      */
@@ -125,15 +69,6 @@ public class Inventory implements Disposable {
         for (int i = 0; i < items.size(); i++) {
             set(items.get(i), i);
         }
-    }
-
-    /**
-     * swaps 2 items of the same inventory
-     * @param startSlot First slot
-     * @param endSlot Second slot
-     */
-    public void swap(int startSlot, int endSlot) {
-        set(replace(get(startSlot), endSlot), startSlot);
     }
 
     public Item[] getItems() {

@@ -15,7 +15,7 @@ import com.mygdx.pixelworld.data.utilities.bounding.BoundingShape;
  */
 public class StaticDrawData extends DrawData {
 
-    private String path;
+    private final String path;
 
     /**
      * @param path         Path of image

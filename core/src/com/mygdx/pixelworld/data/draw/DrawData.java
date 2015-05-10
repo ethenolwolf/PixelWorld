@@ -102,16 +102,6 @@ public abstract class DrawData implements Disposable {
     }
 
     /**
-     * Draws sprite directly on screen, without taking care of map offset
-     * @param batch SpriteBatch for drawing
-     * @param screenPosition Screen coordinates
-     */
-    public void drawOnScreen(SpriteBatch batch, Vector2 screenPosition) {
-        batch.draw(getTexture(), screenPosition.x + World.getCameraOffset().x, screenPosition.y + World.getCameraOffset().y, getOriginCenter().x,
-                getOriginCenter().y, getWidth(), getHeight(), scaleFactor, scaleFactor, rotationAngle);
-    }
-
-    /**
      * @param pos Position of the texture
      * @return Bounding shape
      */

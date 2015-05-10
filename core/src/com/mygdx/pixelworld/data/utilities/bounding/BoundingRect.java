@@ -4,13 +4,13 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Pools;
-import com.mygdx.pixelworld.data.World;
+import com.mygdx.pixelworld.data.CameraManager;
 
 /**
  * BoundingShape of type Rectangle.
  */
 public class BoundingRect extends BoundingShape {
-    private Rectangle rectangle;
+    private final Rectangle rectangle;
 
     public BoundingRect(Vector2 pos, Vector2 dimensions) {
         rectangle = Pools.get(Rectangle.class).obtain();
@@ -30,23 +30,14 @@ public class BoundingRect extends BoundingShape {
 
     @Override
     public void draw(ShapeRenderer shapeRenderer) {
-        shapeRenderer.rect(rectangle.x - World.getCameraOffset().x, rectangle.y - World.getCameraOffset().y, rectangle.width, rectangle.height);
+        Vector2 offset = CameraManager.getCameraOffset();
+        if (offset == null) return;
+        shapeRenderer.rect(rectangle.x - offset.x, rectangle.y - offset.y, rectangle.width, rectangle.height);
     }
 
     @Override
     public void drawOnScreen(ShapeRenderer shapeRenderer, Vector2 offset) {
         shapeRenderer.rect(rectangle.x - offset.x, rectangle.y - offset.y, rectangle.width, rectangle.height);
-    }
-
-    @Override
-    public void update(Vector2 pos) {
-        rectangle.x = pos.x;
-        rectangle.y = pos.y;
-    }
-
-    @Override
-    public Vector2 getPos() {
-        return new Vector2(rectangle.x, rectangle.y);
     }
 
     @Override

@@ -5,12 +5,12 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
-import com.mygdx.pixelworld.data.World;
+import com.badlogic.gdx.math.Vector2;
+import com.mygdx.pixelworld.data.CameraManager;
 import com.mygdx.pixelworld.data.utilities.Constants;
 
 public class ScreenWriter {
 
-    private static final Color DEFAULT_COLOR = Color.WHITE;
     private static BitmapFont font;
 
     public static void init() {
@@ -20,22 +20,12 @@ public class ScreenWriter {
         font = ft.generateFont(p);
     }
 
-    /**
-     * Write on screen.
-     *
-     * @param batch   SpriteBatch for drawing
-     * @param message Message to write + World.getCameraOffset().x
-     * @param x       X of the message
-     * @param y       Y of the message
-     */
-    public static void write(SpriteBatch batch, String message, float x, float y) {
-        write(batch, message, x, y, DEFAULT_COLOR);
-    }
-
     public static void write(SpriteBatch batch, String message, float x, float y, Color color) {
         font.setColor(Color.CLEAR);
         font.setColor(color);
-        font.draw(batch, message, x + World.getCameraOffset().x, y + World.getCameraOffset().y);
+        Vector2 offset = CameraManager.getCameraOffset();
+        if (offset == null) return;
+        font.draw(batch, message, x + offset.x, y + offset.y);
     }
 
     public static void writeOnCenter(SpriteBatch batch, String message, float y, Color color) {

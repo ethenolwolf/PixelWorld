@@ -18,13 +18,13 @@ public class SavePillar extends Item {
 
     private final Vector2 pos;
     private final AnimationDrawData aura;
+    private final BoundingCircle interactionBounding;
     private Vector2 auraPos;
-    private BoundingCircle interactionBounding;
 
     public SavePillar(Rectangle position) {
         pos = new Vector2(position.x, position.y);
-        img = new AnimationDrawData("core/assets/background/savePillar/", new String[]{"pillar"}, 8, 8, BoundingRect.class);
-        aura = new AnimationDrawData("core/assets/background/savePillar/", new String[]{"aura"}, 8, 8, BoundingCircle.class);
+        img = new AnimationDrawData("core/assets/background/savePillar/", new String[]{"pillar"}, BoundingRect.class);
+        aura = new AnimationDrawData("core/assets/background/savePillar/", new String[]{"aura"}, BoundingCircle.class);
         interactionBounding = new BoundingCircle(new Vector2(pos).add(20, 0), 80);
     }
 
@@ -34,7 +34,7 @@ public class SavePillar extends Item {
             if(!yourFile.exists()) //noinspection ResultOfMethodCallIgnored
                 yourFile.createNewFile();
             FileOutputStream oFile = new FileOutputStream(yourFile, false);
-            oFile.write(World.getCurrentMap().getBytes());
+            oFile.write((World.getCurrentMap() + "\n").getBytes());
             oFile.write(player.getSaveParameters().getBytes());
         } catch (FileNotFoundException e) {
             Logger.log("SavePillar.save()", "Saves file not found!");

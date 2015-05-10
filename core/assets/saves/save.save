@@ -1,4 +1,5 @@
-core/assets/maps/dungeon.tmxSPD:50 DEX:95 WIS:80 VIT:3 ATK:2 HEALTH:100 MANA:100 DEF:0 
+core/assets/maps/dungeon.tmx
+SPD:50 DEX:95 WIS:80 VIT:3 ATK:2 HEALTH:100 MANA:100 DEF:0 
 0
 WEAPON:SWORD:1 SIGIL:healingCross ARMOR:LEATHER:1 
 EMPTY

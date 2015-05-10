@@ -27,13 +27,11 @@ public class AnimationDrawData extends DrawData {
     /**
      * @param baseFilePath Base relative path for loading an image
      * @param actions      Actions of the sprite
-     * @param sheetCols    Column count of spritesheet file
-     * @param sheetRows    Rows count of spritesheet file
      * @param boundingType Class file of desired bounding type
      */
-    public AnimationDrawData(String baseFilePath, String[] actions, int sheetCols, int sheetRows, Class<? extends BoundingShape> boundingType) {
-        this.sheetCols = sheetCols;
-        this.sheetRows = sheetRows;
+    public AnimationDrawData(String baseFilePath, String[] actions, Class<? extends BoundingShape> boundingType) {
+        this.sheetCols = 8;
+        this.sheetRows = 8;
         this.baseFilePath = baseFilePath;
         this.actions = actions;
         for (String action : actions)

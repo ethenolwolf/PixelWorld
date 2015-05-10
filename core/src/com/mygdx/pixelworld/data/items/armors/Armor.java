@@ -10,7 +10,6 @@ import com.mygdx.pixelworld.data.utilities.Config;
  * Armor item protects the owner and raise its defense.
  */
 public class Armor extends Item implements EquipItem {
-    private final boolean empty;
     private final ArmorStats armorStats;
     private final int rank;
 
@@ -23,7 +22,6 @@ public class Armor extends Item implements EquipItem {
         armorStats = Config.getArmor(type, rank);
         assert armorStats != null;
         img = new StaticDrawData(AssetType.ARMOR, armorStats.getName());
-        empty = false;
     }
 
     /**
@@ -33,15 +31,10 @@ public class Armor extends Item implements EquipItem {
         this.rank = 0;
         armorStats = new ArmorStats(null, "", 0);
         img = new StaticDrawData();
-        empty = true;
     }
 
     public int getDefense() {
         return armorStats.getDefense();
-    }
-
-    public boolean isEmpty() {
-        return empty;
     }
 
     @Override

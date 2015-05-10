@@ -7,7 +7,7 @@ import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.math.Vector2;
 import com.mygdx.pixelworld.GUI.GUI;
 import com.mygdx.pixelworld.GUI.Logger;
-import com.mygdx.pixelworld.data.World;
+import com.mygdx.pixelworld.data.CameraManager;
 import com.mygdx.pixelworld.data.entities.NPC;
 import com.mygdx.pixelworld.data.utilities.Utils;
 
@@ -19,22 +19,22 @@ import java.util.Map;
 
 public class Story {
 
-    private final Map<String, NPC> npcs = new HashMap<>();
+    private final Map<String, NPC> NPCs = new HashMap<>();
     private final List<StoryAction> storyActions = new ArrayList<>();
     private int storyIndex = 0;
 
     public Story(MapLayer npcLayer, String storyPath) {
         if (npcLayer == null) {
-            Logger.log("Story.parse()", "Error: Layer NPC is null.");
+            Logger.log("Story()", "Layer NPC is null, assuming there is no story.");
             return;
         }
         for (MapObject object : npcLayer.getObjects()) {
             if (!(object instanceof RectangleMapObject)) continue;
             if (object.getName() == null) continue;
-            npcs.put(object.getName(), new NPC(object));
+            NPCs.put(object.getName(), new NPC(object));
         }
         parse(storyPath + ".story");
-        Logger.log("Story()", "Loaded " + npcs.size() + " NPCs and " + storyActions.size() + " story actions.");
+        Logger.log("Story()", "Loaded " + NPCs.size() + " NPCs and " + storyActions.size() + " story actions.");
     }
 
     public static Vector2 parseCoordinates(String param) {
@@ -47,8 +47,8 @@ public class Story {
 
     public void update() {
         boolean canGoForward = true;
-        if (!World.isCameraIdle()) canGoForward = false;
-        for (NPC npc : npcs.values()) {
+        if (!CameraManager.isCameraIdle()) canGoForward = false;
+        for (NPC npc : NPCs.values()) {
             npc.update();
             if (!npc.isIdle()) canGoForward = false;
         }
@@ -56,15 +56,15 @@ public class Story {
     }
 
     public void draw(SpriteBatch batch) {
-        for (NPC npc : npcs.values()) npc.draw(batch);
+        for (NPC npc : NPCs.values()) npc.draw(batch);
     }
 
     private void deploy() {
         GUI.updateDialog(null, null);
         if (storyIndex >= storyActions.size()) return;
         StoryAction action = storyActions.get(storyIndex);
-        if (!action.name.equals("Camera")) npcs.get(action.name).startNewAction(action);
-        else World.setCameraAction(action);
+        if (!action.name.equals("Camera")) NPCs.get(action.name).startNewAction(action);
+        else CameraManager.setCameraAction(action);
         storyIndex++;
     }
 
@@ -83,7 +83,7 @@ public class Story {
                 continue;
             }
             boolean isNameValid = false;
-            if (npcs.containsKey(lineParts[0]) || lineParts[0].equals("Camera")) isNameValid = true;
+            if (NPCs.containsKey(lineParts[0]) || lineParts[0].equals("Camera")) isNameValid = true;
             if (!isNameValid) {
                 Logger.log("Story.parse()", "Error: Line " + line + " malformed (NPC " + lineParts[0] + " not found). Skipping");
                 continue;
@@ -102,7 +102,7 @@ public class Story {
                     break;
                 case SPD:
                     try {
-                        float tmp = Float.parseFloat(lineParts[2]);
+                        @SuppressWarnings("UnusedAssignment") float tmp = Float.parseFloat(lineParts[2]);
                     } catch (Exception e) {
                         Logger.log("Story.parse()", "Error: Line " + line + " malformed (speed not float). Skipping");
                         continue;
@@ -116,8 +116,8 @@ public class Story {
                         continue;
                     }
                     try {
-                        Float tmp = Float.parseFloat(coordinates[0]);
-                        Float tmp2 = Float.parseFloat(coordinates[1]);
+                        @SuppressWarnings("UnusedAssignment") Float tmp = Float.parseFloat(coordinates[0]);
+                        @SuppressWarnings("UnusedAssignment") Float tmp2 = Float.parseFloat(coordinates[1]);
                     } catch (Exception e) {
                         Logger.log("Story.parse()", "Error: Line " + line + " malformed (coordinates not float). Skipping");
                         continue;

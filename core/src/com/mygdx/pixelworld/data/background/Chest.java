@@ -47,7 +47,7 @@ public class Chest extends Item {
         return true;
     }
 
-    public Inventory getInventory() {
+    private Inventory getInventory() {
         return inventory;
     }
 

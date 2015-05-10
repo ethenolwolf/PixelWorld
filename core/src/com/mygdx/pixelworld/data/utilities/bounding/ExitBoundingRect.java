@@ -7,7 +7,7 @@ import com.badlogic.gdx.math.Rectangle;
  */
 public class ExitBoundingRect extends BoundingRect {
 
-    private String nextMap;
+    private final String nextMap;
 
     public ExitBoundingRect(Rectangle rectangle, String nextMap) {
         super(rectangle);

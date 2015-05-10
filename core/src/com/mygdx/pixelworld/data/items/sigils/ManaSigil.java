@@ -31,10 +31,10 @@ public class ManaSigil extends Item implements Damaging, EquipItem {
     public static ManaSigil getFromName(SigilName name, Player player) {
         switch (name) {
             case powerShock:
-                return new PowerShock(player);
+                return new PowerShock();
             case healingCross:
                 return new HealingCross(player);
-            case invisibleCloack:
+            case invisibleCloak:
                 return new InvisibleCloak(player);
             default:
                 return null;

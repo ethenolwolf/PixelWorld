@@ -35,10 +35,6 @@ public abstract class BoundingShape {
      */
     public abstract void draw(ShapeRenderer shapeRenderer);
 
-    public abstract void update(Vector2 pos);
-
-    public abstract Vector2 getPos();
-
     /**
      * Method used to check if the shape is valid
      * @return is valid

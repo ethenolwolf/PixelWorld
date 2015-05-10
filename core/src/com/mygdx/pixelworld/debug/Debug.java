@@ -1,16 +1,10 @@
 package com.mygdx.pixelworld.debug;
 
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.mygdx.pixelworld.GUI.Logger;
 import com.mygdx.pixelworld.Game;
-import com.mygdx.pixelworld.data.draw.ScreenWriter;
-import com.mygdx.pixelworld.data.utilities.Constants;
 
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.ListIterator;
 import java.util.Properties;
 
 /**
@@ -19,7 +13,6 @@ import java.util.Properties;
 public class Debug {
 
     private static final Properties props = new Properties();
-    private static final List<Debuggable> debuggable = new ArrayList<>();
 
     /**
      * Load values and init font.
@@ -42,34 +35,6 @@ public class Debug {
             Logger.log("Debug.isTrue()", " Error: Could not find property " + propertyName);
             return false;
         } else return Boolean.parseBoolean(props.getProperty(propertyName));
-    }
-
-    /**
-     * Adds a debuggable item ready to watch.
-     *
-     * @param debuggable Debuggable item
-     */
-    public static void addDebuggable(Debuggable debuggable){
-        Debug.debuggable.add(debuggable);
-    }
-
-    /**
-     * Print every debuggable with its information.
-     * @param batch SpriteBatch for writing.
-     */
-    public static void draw(SpriteBatch batch){
-        if (!isTrue("SHOW_DEBUG_VALUES")) return;
-        float y = Constants.gameHeight - 20 + Game.camera.position.y;
-        ListIterator<Debuggable> li = debuggable.listIterator();
-        while(li.hasNext()) {
-            Debuggable d = li.next();
-            if(d == null) {
-                li.remove();
-                continue;
-            }
-            ScreenWriter.write(batch, d.getWatch(), 10 + Game.camera.position.x, y);
-            y -= 20;
-        }
     }
 
 

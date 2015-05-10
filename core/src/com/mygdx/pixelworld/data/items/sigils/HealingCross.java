@@ -13,7 +13,7 @@ import com.mygdx.pixelworld.data.utilities.StatType;
  */
 public class HealingCross extends ManaSigil {
 
-    private Player player;
+    private final Player player;
 
     public HealingCross(Player player) {
         damage = 0;

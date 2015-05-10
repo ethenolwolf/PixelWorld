@@ -8,9 +8,6 @@ import com.mygdx.pixelworld.data.draw.DrawData;
  */
 public abstract class Item implements Disposable {
     protected DrawData img;
-    public DrawData getImg() {
-        return img;
-    }
 
     @Override
     public void dispose() {

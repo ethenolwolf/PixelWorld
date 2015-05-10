@@ -7,7 +7,6 @@ import com.badlogic.gdx.math.Vector2;
 import com.mygdx.pixelworld.GUI.Logger;
 import com.mygdx.pixelworld.Game;
 import com.mygdx.pixelworld.data.draw.StaticDrawData;
-import com.mygdx.pixelworld.data.entities.characters.Player;
 import com.mygdx.pixelworld.data.entities.enemies.Enemy;
 import com.mygdx.pixelworld.data.utilities.AssetType;
 import com.mygdx.pixelworld.data.utilities.bounding.BoundingCircle;
@@ -25,7 +24,7 @@ public class PowerShock extends ManaSigil {
     private final List<PowerShockBlast> blasts = new ArrayList<>();
     private TextureRegion texture;
 
-    public PowerShock(Player player) {
+    public PowerShock() {
         damage = 100;
         price = 40;
         Game.assetManager.load("core/assets/mana/powerShock.png", Texture.class);

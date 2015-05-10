@@ -16,7 +16,6 @@ public class EntityStats {
     private final Map<StatType, Float> stats = new EnumMap<>(StatType.class);
     private Class type;
     private boolean alive = true;
-    private Map<StatType, Float> maxStats;
     private boolean visible = true;
 
     public EntityStats(String statsLine) {
@@ -33,7 +32,6 @@ public class EntityStats {
                 }
             }
         }
-        maxStats = new EnumMap<>(stats);
     }
     /**
      * @param health    Health
@@ -54,9 +52,6 @@ public class EntityStats {
         stats.put(StatType.VIT, (float) vitality);
         stats.put(StatType.ATK, (float) attack);
         stats.put(StatType.DEF, (float) defense);
-        maxStats = new EnumMap<>(stats);
-        //stats.get(StatType.HEALTH);
-        //maxStats.get(StatType.HEALTH);
         type = null;
     }
 
@@ -67,12 +62,7 @@ public class EntityStats {
 
     public EntityStats(Class<? extends Entity> entity) {
         this(Config.getStats(entity.getSimpleName()));
-        maxStats = new EnumMap<>(stats);
         this.type = entity;
-    }
-
-    public Map<StatType, Float> getStats() {
-        return stats;
     }
 
     private void setStat(StatType statType, float value) {

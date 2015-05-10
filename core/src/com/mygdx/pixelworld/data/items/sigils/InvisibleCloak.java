@@ -21,7 +21,7 @@ public class InvisibleCloak extends ManaSigil {
         damage = 0;
         price = 70;
         playerStats = player.getStats();
-        name = SigilName.invisibleCloack;
+        name = SigilName.invisibleCloak;
         img = new StaticDrawData(AssetType.SIGIL, "invisibleCloak");
         empty = false;
     }

@@ -90,11 +90,4 @@ public class Blocker extends Enemy {
         fireManager.updateFire(pos, stats, world, weaponStats);
         img.update();
     }
-
-    @Override
-    public String getWatch() {
-        return "";//String.format("Blocker@%x -> X = %.2f\t Y = %.2f", this.hashCode(), pos.x, pos.y);
-    }
-
-
 }

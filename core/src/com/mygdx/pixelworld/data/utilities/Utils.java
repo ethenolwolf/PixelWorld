@@ -10,6 +10,7 @@ import java.nio.file.Paths;
 /**
  * Abstract class used to contain utility methods.
  */
+@SuppressWarnings("SameParameterValue")
 public abstract class Utils {
     private static final String SAVE_PATH = "core/assets/saves/save.save";
 

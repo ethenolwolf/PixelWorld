@@ -30,9 +30,6 @@ public abstract class Entity implements Disposable {
     public void getHit(Damaging d) {
         stats.getHit(this, d.getDamage());
     }
-    public DrawData getImg() {
-        return img;
-    }
 
     /**
      * Checks whenever the next movement will be possible, and act consequently

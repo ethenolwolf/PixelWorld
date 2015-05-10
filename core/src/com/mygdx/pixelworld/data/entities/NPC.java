@@ -14,8 +14,8 @@ import com.mygdx.pixelworld.data.utilities.StatType;
 import com.mygdx.pixelworld.data.utilities.bounding.BoundingRect;
 
 public class NPC extends Entity {
+    private final String name;
     private String speech;
-    private String name;
     private Vector2 moveTarget, direction;
     private float speechTimer = 0;
     private int speechIndex = 1;
@@ -29,7 +29,7 @@ public class NPC extends Entity {
         String[] actions = actionsString.split(",");
         pos = new Vector2(rect.x, rect.y);
         stats = new EntityStats(0, 0, speed, 0, 0, 0, 0, 0);
-        img = new AnimationDrawData("core/assets/characters/npc/" + relativePath + "/", actions, 8, 8, BoundingRect.class);
+        img = new AnimationDrawData("core/assets/characters/npc/" + relativePath + "/", actions, BoundingRect.class);
     }
 
     public void draw(SpriteBatch batch) {
@@ -73,8 +73,8 @@ public class NPC extends Entity {
                 speechIndex = 1;
                 break;
             case MOVE:
-                String[] coords = action.param.split(":");
-                moveTarget = new Vector2(Float.parseFloat(coords[0]), Float.parseFloat(coords[1]));
+                String[] coordinates = action.param.split(":");
+                moveTarget = new Vector2(Float.parseFloat(coordinates[0]), Float.parseFloat(coordinates[1]));
                 direction = new Vector2(moveTarget.x - pos.x, moveTarget.y - pos.y).nor();
                 break;
         }
