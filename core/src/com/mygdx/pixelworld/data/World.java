@@ -62,7 +62,7 @@ public class World implements Disposable {
     public World() {
         player = new Player();
         Game.assetManager.setLoader(TiledMap.class, new TmxMapLoader(new InternalFileHandleResolver()));
-        loadNewMap("core/assets/maps/dungeon.tmx");
+        loadNewMap("core/assets/maps/marco/castello.tmx");
         new Blocker(0, 0);
         new SavePillar(new Rectangle());
     }
@@ -122,38 +122,57 @@ public class World implements Disposable {
         tiledMap = Game.assetManager.get(currentMap);
         tiledMapRenderer = new OrthogonalTiledMapRenderer(tiledMap, batch);
 
-        int x = Integer.parseInt(tiledMap.getProperties().get("PlayerPositionX", String.class)) * tiledMap.getProperties().get("tilewidth", Integer.class);
-        int y = Integer.parseInt(tiledMap.getProperties().get("PlayerPositionY", String.class)) * tiledMap.getProperties().get("tileheight", Integer.class);
+        int x = 100;
+        int y = 100;
+        try {
+            x = Integer.parseInt(tiledMap.getProperties().get("PlayerPositionX", String.class)) * tiledMap.getProperties().get("tilewidth", Integer.class);
+            y = Integer.parseInt(tiledMap.getProperties().get("PlayerPositionY", String.class)) * tiledMap.getProperties().get("tileheight", Integer.class);
+        } catch (NumberFormatException ignored) {
+            Logger.log("World.initMap()", "Player position not found.");
+        }
         player.setInitialPos(x, y);
         CameraManager.setOffset(player.getPos());
 
-        for (MapObject object : tiledMap.getLayers().get("Collisions").getObjects()) {
-            if (!(object instanceof RectangleMapObject)) continue;
-            mapObstacles.add(new BoundingRect(((RectangleMapObject) object).getRectangle()));
-        }
-        for (MapObject object : tiledMap.getLayers().get("Exits").getObjects()) {
-            if (!(object instanceof RectangleMapObject)) continue;
-            exits.add(new ExitBoundingRect(((RectangleMapObject) object).getRectangle(), (String) object.getProperties().get("NextMap")));
-        }
-        for (MapObject object : tiledMap.getLayers().get("Spawn").getObjects()) {
-            if (!(object instanceof RectangleMapObject)) continue;
-            String type = object.getProperties().get("type", String.class);
-            int number = Integer.parseInt(object.getProperties().get("Number", String.class));
-            generateEnemies(((RectangleMapObject) object).getRectangle(), type, number);
-            spawnPoints.add(new BoundingRect(((RectangleMapObject) object).getRectangle()));
-        }
-        story = new Story(tiledMap.getLayers().get("NPC"), "core/assets/maps/" + tiledMap.getProperties().get("Story", String.class));
-        for (MapObject object : tiledMap.getLayers().get("Interactions").getObjects()) {
-            if (!(object instanceof RectangleMapObject)) continue;
-            switch (object.getProperties().get("type", String.class)) {
-                case "savePillar":
-                    savePillars.add(new SavePillar(((RectangleMapObject) object).getRectangle()));
-                    mapObstacles.add(new BoundingRect(((RectangleMapObject) object).getRectangle()));
-                    break;
-                default:
-                    Logger.log("World.initMap()", "Interaction of type " + object.getProperties().get("type") + " not yet implemented.");
+        if (tiledMap.getLayers().get("Collisions") != null) {
+            for (MapObject object : tiledMap.getLayers().get("Collisions").getObjects()) {
+                if (!(object instanceof RectangleMapObject)) continue;
+                mapObstacles.add(new BoundingRect(((RectangleMapObject) object).getRectangle()));
             }
-        }
+        } else Logger.log("World.initMap()", "Collisions layer not found! Skipping.");
+
+        if (tiledMap.getLayers().get("Exits") != null) {
+            for (MapObject object : tiledMap.getLayers().get("Exits").getObjects()) {
+                if (!(object instanceof RectangleMapObject)) continue;
+                exits.add(new ExitBoundingRect(((RectangleMapObject) object).getRectangle(), (String) object.getProperties().get("NextMap")));
+            }
+        } else Logger.log("World.initMap()", "Exits layer not found! Skipping.");
+
+        if (tiledMap.getLayers().get("Spawn") != null) {
+            for (MapObject object : tiledMap.getLayers().get("Spawn").getObjects()) {
+                if (!(object instanceof RectangleMapObject)) continue;
+                String type = object.getProperties().get("type", String.class);
+                int number = Integer.parseInt(object.getProperties().get("Number", String.class));
+                generateEnemies(((RectangleMapObject) object).getRectangle(), type, number);
+                spawnPoints.add(new BoundingRect(((RectangleMapObject) object).getRectangle()));
+            }
+        } else Logger.log("World.initMap()", "Spawn layer not found! Skipping.");
+
+        story = new Story(tiledMap.getLayers().get("NPC"), "core/assets/maps/" + tiledMap.getProperties().get("Story", String.class));
+
+        if (tiledMap.getLayers().get("Interactions") != null) {
+            for (MapObject object : tiledMap.getLayers().get("Interactions").getObjects()) {
+                if (!(object instanceof RectangleMapObject)) continue;
+                switch (object.getProperties().get("type", String.class)) {
+                    case "savePillar":
+                        savePillars.add(new SavePillar(((RectangleMapObject) object).getRectangle()));
+                        mapObstacles.add(new BoundingRect(((RectangleMapObject) object).getRectangle()));
+                        break;
+                    default:
+                        Logger.log("World.initMap()", "Interaction of type " + object.getProperties().get("type") + " not yet implemented.");
+                }
+            }
+        } else Logger.log("World.initMap()", "Interactions layer not found! Skipping.");
+
         Logger.log("World.initMap()", String.format("Loaded %d layers, %d obstacles, %d exits, %d pillars, %d spawn points (%d total enemies).",
                 tiledMap.getLayers().getCount(), mapObstacles.size(), exits.size(), savePillars.size(), spawnPoints.size(), enemies.size()));
 
@@ -166,7 +185,7 @@ public class World implements Disposable {
      */
     private void addEnemy(String enemyType, float x, float y) {
         Enemy e;
-        switch (enemyType) {
+        switch (enemyType.toLowerCase()) {
             case "blocker":
                 e = new Blocker(x, y);
                 break;
