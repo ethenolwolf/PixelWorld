@@ -3,9 +3,9 @@ package com.mygdx.pixelworld.data.draw;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
+import com.mygdx.pixelworld.GUI.DrawManager;
 import com.mygdx.pixelworld.GUI.Logger;
 import com.mygdx.pixelworld.Game;
 import com.mygdx.pixelworld.data.utilities.bounding.BoundingShape;
@@ -96,11 +96,10 @@ public class AnimationDrawData extends DrawData {
 
     /**
      * Draws current texture on screen.
-     * @param batch SpriteBatch for drawing
      * @param absolutePosition Absolute position of the sprite
      */
     @Override
-    public void draw(SpriteBatch batch, Vector2 absolutePosition) {
-        batch.draw(getTexture(), absolutePosition.x, absolutePosition.y, getOriginCenter().x, getOriginCenter().y, getTexture().getRegionWidth(), getTexture().getRegionHeight(), scaleFactor, scaleFactor, 0);
+    public void draw(Vector2 absolutePosition) {
+        DrawManager.getBatch().draw(getTexture(), absolutePosition.x, absolutePosition.y, getOriginCenter().x, getOriginCenter().y, getTexture().getRegionWidth(), getTexture().getRegionHeight(), scaleFactor, scaleFactor, 0);
     }
 }
