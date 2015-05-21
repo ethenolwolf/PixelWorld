@@ -9,7 +9,6 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.mygdx.pixelworld.Game;
 import com.mygdx.pixelworld.data.CameraManager;
-import com.mygdx.pixelworld.data.World;
 import com.mygdx.pixelworld.data.draw.AnimationDrawData;
 import com.mygdx.pixelworld.data.utilities.Constants;
 import com.mygdx.pixelworld.data.utilities.Direction;
@@ -104,7 +103,6 @@ public class GUI {
                 switch (currentMenuIndex) {
                     case 0:
                         Game.gameState = Game.GameStates.GAME;
-                        World.init();
                         menuMusic.stop();
                         menuMusic.dispose();
                         break;

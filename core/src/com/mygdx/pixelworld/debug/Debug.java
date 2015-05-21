@@ -1,7 +1,6 @@
 package com.mygdx.pixelworld.debug;
 
 import com.mygdx.pixelworld.GUI.Logger;
-import com.mygdx.pixelworld.Game;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -23,7 +22,6 @@ public class Debug {
         } catch (IOException e) {
             Logger.log("Debug.init()", "File debug.properties not found.");
         }
-        if (isTrue("SKIP_MAIN_MENU")) Game.gameState = Game.GameStates.GAME;
     }
 
     /**
