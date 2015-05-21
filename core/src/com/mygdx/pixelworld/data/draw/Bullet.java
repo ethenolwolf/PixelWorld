@@ -1,7 +1,6 @@
 package com.mygdx.pixelworld.data.draw;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Disposable;
 import com.mygdx.pixelworld.data.items.weapons.PlayerWeaponStats;
@@ -75,8 +74,8 @@ public class Bullet implements Damaging, Disposable {
         img.addRotationAngle(rotationSpeed * Gdx.graphics.getDeltaTime());
     }
 
-    public void draw(SpriteBatch batch) {
-        img.draw(batch, pos);
+    public void draw() {
+        img.draw(pos);
     }
 
     public void die() {

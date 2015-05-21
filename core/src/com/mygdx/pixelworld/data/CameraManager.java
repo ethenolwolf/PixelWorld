@@ -2,9 +2,9 @@ package com.mygdx.pixelworld.data;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
+import com.mygdx.pixelworld.GUI.DrawManager;
 import com.mygdx.pixelworld.GUI.Logger;
 import com.mygdx.pixelworld.data.story.Story;
 import com.mygdx.pixelworld.data.story.StoryAction;
@@ -34,10 +34,10 @@ public class CameraManager {
     }
 
 
-    public static void update(SpriteBatch batch, TiledMapRenderer tiledMapRenderer) {
+    public static void update(TiledMapRenderer tiledMapRenderer) {
         if (mustBeInitialized()) return;
         tiledMapRenderer.setView(camera);
-        batch.setProjectionMatrix(camera.combined);
+        DrawManager.getBatch().setProjectionMatrix(camera.combined);
     }
 
     /**

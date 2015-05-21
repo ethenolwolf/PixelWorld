@@ -35,14 +35,13 @@ public class FireManager {
      *
      * @param pos         Position of entity
      * @param entityStats Stats of the shooting entity
-     * @param world       World
      * @param stats       WeaponStats of the weapon used to shoot
      */
-    public void updateFire(Vector2 pos, EntityStats entityStats, World world, WeaponStats stats) {
+    public void updateFire(Vector2 pos, EntityStats entityStats, WeaponStats stats) {
         if (!isFiring) return;
         fireDelay -= Gdx.graphics.getDeltaTime();
         if (fireDelay <= 0) {
-            world.fire(pos, new Vector2(target), entityStats, stats);
+            World.fire(pos, new Vector2(target), entityStats, stats);
             fireDelay += 1 / Utils.map(entityStats.get(StatType.DEX), 1, 100, 1, 8);
         }
     }

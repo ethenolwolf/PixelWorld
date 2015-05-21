@@ -1,9 +1,9 @@
 package com.mygdx.pixelworld.data.utilities.bounding;
 
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Pools;
+import com.mygdx.pixelworld.GUI.DrawManager;
 import com.mygdx.pixelworld.data.CameraManager;
 
 /**
@@ -29,15 +29,17 @@ public class BoundingRect extends BoundingShape {
     }
 
     @Override
-    public void draw(ShapeRenderer shapeRenderer) {
+    public void draw() {
         Vector2 offset = CameraManager.getCameraOffset();
         if (offset == null) return;
-        shapeRenderer.rect(rectangle.x - offset.x, rectangle.y - offset.y, rectangle.width, rectangle.height);
+        DrawManager.rect(rectangle.x - offset.x, rectangle.y - offset.y, rectangle.width, rectangle.height);
     }
 
     @Override
-    public void drawOnScreen(ShapeRenderer shapeRenderer, Vector2 offset) {
-        shapeRenderer.rect(rectangle.x - offset.x, rectangle.y - offset.y, rectangle.width, rectangle.height);
+    public void drawOnScreen() {
+        Vector2 offset = CameraManager.getCameraOffset();
+        if (offset == null) offset = new Vector2();
+        DrawManager.rect(rectangle.x - offset.x, rectangle.y - offset.y, rectangle.width, rectangle.height);
     }
 
     @Override

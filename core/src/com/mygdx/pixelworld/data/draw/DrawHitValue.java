@@ -3,8 +3,8 @@ package com.mygdx.pixelworld.data.draw;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
+import com.mygdx.pixelworld.GUI.DrawManager;
 import com.mygdx.pixelworld.data.entities.Entity;
 
 import java.util.ArrayList;
@@ -36,7 +36,7 @@ public class DrawHitValue {
         }
     }
 
-    public static void draw(SpriteBatch batch) {
+    public static void draw() {
         if (font == null) {
             FreeTypeFontGenerator ftFont = new FreeTypeFontGenerator(Gdx.files.internal("core/assets/various/Ubuntu.ttf"));
             FreeTypeFontGenerator.FreeTypeFontParameter p = new FreeTypeFontGenerator.FreeTypeFontParameter();
@@ -46,7 +46,7 @@ public class DrawHitValue {
         for (Hit hit : hits) {
             if (hit.damage > 0) font.setColor(new Color(1f, 0f, 0f, hit.shade));
             else font.setColor(new Color(0f, 1f, 0f, hit.shade));
-            font.draw(batch, String.format("%+d", -hit.damage), hit.x, hit.y);
+            font.draw(DrawManager.getBatch(), String.format("%+d", -hit.damage), hit.x, hit.y);
         }
     }
 

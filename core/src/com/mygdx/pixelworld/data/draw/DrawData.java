@@ -1,10 +1,10 @@
 package com.mygdx.pixelworld.data.draw;
 
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Disposable;
+import com.mygdx.pixelworld.GUI.DrawManager;
 import com.mygdx.pixelworld.GUI.Logger;
 import com.mygdx.pixelworld.data.World;
 import com.mygdx.pixelworld.data.utilities.bounding.BoundingCircle;
@@ -79,17 +79,15 @@ public abstract class DrawData implements Disposable {
     }
     /**
      * Draws from absolute coordinates to screen.
-     *
-     * @param batch            SpriteBatch for drawing
      * @param absolutePosition Absolute position of the sprite
      */
-    public abstract void draw(SpriteBatch batch, Vector2 absolutePosition);
+    public abstract void draw(Vector2 absolutePosition);
 
-    public void draw(SpriteBatch batch, Vector2 absolutePosition, float alpha) {
-        Color c = batch.getColor();
-        batch.setColor(c.r, c.g, c.b, alpha);
-        draw(batch, absolutePosition);
-        batch.setColor(c.r, c.g, c.b, 1.0f);
+    public void draw(Vector2 absolutePosition, float alpha) {
+        Color c = DrawManager.getColor(DrawManager.Type.BATCH);
+        DrawManager.setColor(DrawManager.Type.BATCH, c.r, c.g, c.b, alpha);
+        draw(absolutePosition);
+        DrawManager.setColor(DrawManager.Type.BATCH, c.r, c.g, c.b, 1.0f);
     }
 
     /**

@@ -2,7 +2,6 @@ package com.mygdx.pixelworld.data;
 
 import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
@@ -12,14 +11,13 @@ import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.utils.Disposable;
+import com.mygdx.pixelworld.GUI.DrawManager;
 import com.mygdx.pixelworld.GUI.Logger;
 import com.mygdx.pixelworld.Game;
 import com.mygdx.pixelworld.data.background.Chest;
 import com.mygdx.pixelworld.data.background.SavePillar;
 import com.mygdx.pixelworld.data.draw.Bullet;
 import com.mygdx.pixelworld.data.draw.DrawHitValue;
-import com.mygdx.pixelworld.data.draw.ScreenWriter;
 import com.mygdx.pixelworld.data.entities.characters.Player;
 import com.mygdx.pixelworld.data.entities.enemies.Blocker;
 import com.mygdx.pixelworld.data.entities.enemies.Enemy;
@@ -42,27 +40,26 @@ import java.util.Random;
 /**
  * Class for managing map loading / world update and draw.
  */
-public class World implements Disposable {
+public class World {
 
+    private static final List<Enemy> enemies = new ArrayList<>();
+    private static final List<Bullet> bullets = new ArrayList<>();
+    private static final List<Chest> chests = new ArrayList<>();
+    private static final List<BoundingRect> mapObstacles = new ArrayList<>();
+    private static final List<ExitBoundingRect> exits = new ArrayList<>();
+    private static final List<BoundingRect> spawnPoints = new ArrayList<>();
+    private static final List<SavePillar> savePillars = new ArrayList<>();
+    private static final int[] backgroundLayers = {0, 1};
+    private static final int[] foregroundLayers = {2, 3};
+    private static final Player player = new Player();
     private static TiledMapRenderer tiledMapRenderer;
     private static TiledMap tiledMap;
     private static String currentMap;
-    private final List<Enemy> enemies = new ArrayList<>();
-    private final List<Bullet> bullets = new ArrayList<>();
-    private final List<Chest> chests = new ArrayList<>();
-    private final List<BoundingRect> mapObstacles = new ArrayList<>();
-    private final List<ExitBoundingRect> exits = new ArrayList<>();
-    private final List<BoundingRect> spawnPoints = new ArrayList<>();
-    private final List<SavePillar> savePillars = new ArrayList<>();
-    private final int[] backgroundLayers = {0};
-    private final int[] foregroundLayers = {1};
-    private final Player player;
-    private Story story;
+    private static Story story;
 
-    public World() {
-        player = new Player();
+    public static void init() {
         Game.assetManager.setLoader(TiledMap.class, new TmxMapLoader(new InternalFileHandleResolver()));
-        loadNewMap("core/assets/maps/marco/castello.tmx");
+        loadNewMap("core/assets/maps/Marco/castello.tmx");
         new Blocker(0, 0);
         new SavePillar(new Rectangle());
     }
@@ -96,7 +93,7 @@ public class World implements Disposable {
      *
      * @param mapPath File path of map file
      */
-    private void loadNewMap(String mapPath) {
+    private static void loadNewMap(String mapPath) {
         Logger.log("World.loadNewMap()", "Loading " + mapPath + "...");
         enemies.clear();
         bullets.clear();
@@ -118,9 +115,9 @@ public class World implements Disposable {
     /**
      * When map is loaded reads all data and initializes the map.
      */
-    private void initMap(SpriteBatch batch) {
+    private static void initMap() {
         tiledMap = Game.assetManager.get(currentMap);
-        tiledMapRenderer = new OrthogonalTiledMapRenderer(tiledMap, batch);
+        tiledMapRenderer = new OrthogonalTiledMapRenderer(tiledMap, DrawManager.getBatch());
 
         int x = 100;
         int y = 100;
@@ -176,14 +173,13 @@ public class World implements Disposable {
         Logger.log("World.initMap()", String.format("Loaded %d layers, %d obstacles, %d exits, %d pillars, %d spawn points (%d total enemies).",
                 tiledMap.getLayers().getCount(), mapObstacles.size(), exits.size(), savePillars.size(), spawnPoints.size(), enemies.size()));
 
-
     }
 
     /**
      * Adds an enemy to the map.
      * @param enemyType Type of enemy
      */
-    private void addEnemy(String enemyType, float x, float y) {
+    private static void addEnemy(String enemyType, float x, float y) {
         Enemy e;
         switch (enemyType.toLowerCase()) {
             case "blocker":
@@ -201,7 +197,7 @@ public class World implements Disposable {
      * @param items Items inside the chest
      * @param pos Position of the chest
      */
-    private void addChest(List<Item> items, Vector2 pos) {
+    private static void addChest(List<Item> items, Vector2 pos) {
         Chest c = new Chest(items, pos);
         for (Chest old : chests)
             if (BoundingShape.intersect(c.getBoundingShape(), old.getBoundingShape())) {
@@ -213,17 +209,10 @@ public class World implements Disposable {
     /**
      * Updates all map component and checks collisions.
      */
-    public void update(SpriteBatch batch) {
-        player.update(this);
-        if (tiledMap == null) initMap(batch);
+    public static void update() {
+        player.update();
+        if (tiledMap == null) initMap();
         BoundingShape playerBoundingShape = player.getBoundingShape();
-
-        for (ExitBoundingRect e : exits)
-            if (BoundingShape.intersect(playerBoundingShape, e)) {
-                loadNewMap(e.getNextMap());
-                return;
-            }
-
         story.update();
         for (SavePillar savePillar : savePillars) savePillar.update();
         updateEnemies();
@@ -235,7 +224,7 @@ public class World implements Disposable {
         CameraManager.updateOffset(player.getPos(), player.getStats());
     }
 
-    private void updateBullets(BoundingShape playerBoundingShape) {
+    private static void updateBullets(BoundingShape playerBoundingShape) {
         ListIterator<Bullet> bulletIterator = bullets.listIterator();
         ListIterator<Enemy> enemyIterator;
         while (bulletIterator.hasNext()) {
@@ -264,7 +253,7 @@ public class World implements Disposable {
         }
     }
 
-    private void updateChests() {
+    private static void updateChests() {
         ListIterator<Chest> chestIterator = chests.listIterator();
         while (chestIterator.hasNext()) {
             Chest c = chestIterator.next();
@@ -276,11 +265,11 @@ public class World implements Disposable {
         }
     }
 
-    private void updateEnemies() {
+    private static void updateEnemies() {
         ListIterator<Enemy> enemyIterator = enemies.listIterator();
         while (enemyIterator.hasNext()) {
             Enemy e = enemyIterator.next();
-            e.update(player, this);
+            e.update();
             if (!e.isAlive()) {
                 player.addExperience(e.getExperience());
                 addChest(e.getDropItems(), e.getPos());
@@ -290,92 +279,59 @@ public class World implements Disposable {
     }
 
     /**
-     * Draws map layers before entities
-     */
-    public void drawBottom(SpriteBatch batch) {
-        tiledMapRenderer.render(backgroundLayers);
-        batch.begin();
-        if (!Game.assetManager.update()) return;
-        for (Enemy e : enemies) e.draw(batch);
-        for (Bullet b : bullets) b.draw(batch);
-        for (Chest c : chests) c.draw(batch);
-        player.draw(batch);
-        story.draw(batch);
-        DrawHitValue.draw(batch);
-        for (SavePillar savePillar : savePillars) {
-            savePillar.draw(batch);
-            if (BoundingShape.intersect(player.getBoundingShape(), savePillar.getBoundingShape()))
-                ScreenWriter.write(batch, "Press " + Constants.INTERACTION_KEY + " to save...", 10, 30, Color.GREEN);
-        }
-    }
-
-    public void cameraUpdate(SpriteBatch batch) {
-        CameraManager.update(batch, tiledMapRenderer);
-    }
-
-    /**
-     * Draws layers after entities
-     */
-    public void drawTop() {
-        tiledMapRenderer.render(foregroundLayers);
-    }
-
-    /**
      * Adds a bullet
      * @param startPos Bullet starting position
      * @param targetPos Bullet target
      * @param es Stats of firing entity
      * @param ws Stats of firing weapon
      */
-    public void fire(Vector2 startPos, Vector2 targetPos, EntityStats es, WeaponStats ws) {
+    public static void fire(Vector2 startPos, Vector2 targetPos, EntityStats es, WeaponStats ws) {
         bullets.add(new Bullet(startPos, targetPos, es, ws));
     }
 
     /**
      * Draws shapes for GUI.
      */
-    public void shapeDraw(ShapeRenderer shapeRenderer) {
+    public static void shapeDraw() {
         if (Debug.isTrue("SHOW_BOUNDING")) {
-            shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
+            DrawManager.changeType(ShapeRenderer.ShapeType.Line);
             //Player
-            shapeRenderer.setColor(1, 0, 1, 1);
-            player.getBoundingShape().draw(shapeRenderer);
+            DrawManager.setColor(DrawManager.Type.SHAPE, 1, 0, 1, 1);
+            player.getBoundingShape().draw();
             //Enemies
-            shapeRenderer.setColor(1, 0, 0, 1);
-            for (Enemy e : enemies) e.getBoundingShape().draw(shapeRenderer);
+            DrawManager.setColor(DrawManager.Type.SHAPE, 1, 0, 0, 1);
+            for (Enemy e : enemies) e.getBoundingShape().draw();
             //Bullets
-            shapeRenderer.setColor(0, 0, 1, 1);
-            for (Bullet b : bullets) b.getBoundingShape().draw(shapeRenderer);
+            DrawManager.setColor(DrawManager.Type.SHAPE, 0, 0, 1, 1);
+            for (Bullet b : bullets) b.getBoundingShape().draw();
             //Chests
-            shapeRenderer.setColor(0, 1, 1, 1);
-            for (Chest c : chests) c.getBoundingShape().draw(shapeRenderer);
+            DrawManager.setColor(DrawManager.Type.SHAPE, 0, 1, 1, 1);
+            for (Chest c : chests) c.getBoundingShape().draw();
             //Obstacles
-            shapeRenderer.setColor(1, 1, 0, 1);
-            for (BoundingRect rect : mapObstacles) rect.drawOnScreen(shapeRenderer, CameraManager.getCameraOffset());
+            DrawManager.setColor(DrawManager.Type.SHAPE, 1, 1, 0, 1);
+            for (BoundingRect rect : mapObstacles) rect.drawOnScreen();
             //Exits
-            shapeRenderer.setColor(0, 1, 0, 1);
-            for (ExitBoundingRect rect : exits) rect.drawOnScreen(shapeRenderer, CameraManager.getCameraOffset());
+            DrawManager.setColor(DrawManager.Type.SHAPE, 0, 1, 0, 1);
+            for (ExitBoundingRect rect : exits) rect.drawOnScreen();
             //SpawnPoints
-            shapeRenderer.setColor(0.5f, 1, 0, 1);
-            for (BoundingRect rect : spawnPoints) rect.drawOnScreen(shapeRenderer, CameraManager.getCameraOffset());
+            DrawManager.setColor(DrawManager.Type.SHAPE, 0.5f, 1, 0, 1);
+            for (BoundingRect rect : spawnPoints) rect.drawOnScreen();
             //SavePillars
-            shapeRenderer.setColor(1f, 0.5f, 0, 1);
+            DrawManager.setColor(DrawManager.Type.SHAPE, 1f, 0.5f, 0, 1);
             for (SavePillar savePillar : savePillars)
-                savePillar.getBoundingShape().drawOnScreen(shapeRenderer, CameraManager.getCameraOffset());
+                savePillar.getBoundingShape().drawOnScreen();
 
         }
 
         if (Debug.isTrue("SHOW_OFFSET_TRIGGERS")) {
-            shapeRenderer.end();
-            shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
-            shapeRenderer.setColor(Color.BLUE);
-            shapeRenderer.line(0, Constants.Y_LIMIT_MAX, Constants.gameWidth,Constants.Y_LIMIT_MAX);
-            shapeRenderer.line(0, Constants.Y_LIMIT_MIN, Constants.gameWidth,Constants.Y_LIMIT_MIN);
-            shapeRenderer.line(Constants.X_LIMIT_MAX, 0, Constants.X_LIMIT_MAX, Constants.gameHeight);
-            shapeRenderer.line(Constants.X_LIMIT_MIN, 0, Constants.X_LIMIT_MIN, Constants.gameHeight);
+            DrawManager.setColor(DrawManager.Type.SHAPE, 0, 0, 1, 1);
+            DrawManager.line(0, Constants.Y_LIMIT_MAX, Constants.gameWidth, Constants.Y_LIMIT_MAX);
+            DrawManager.line(0, Constants.Y_LIMIT_MIN, Constants.gameWidth, Constants.Y_LIMIT_MIN);
+            DrawManager.line(Constants.X_LIMIT_MAX, 0, Constants.X_LIMIT_MAX, Constants.gameHeight);
+            DrawManager.line(Constants.X_LIMIT_MIN, 0, Constants.X_LIMIT_MIN, Constants.gameHeight);
         }
 
-        shapeRenderer.end();
+        DrawManager.end();
     }
 
     /**
@@ -385,7 +341,7 @@ public class World implements Disposable {
      * @param type        Type of enemy
      * @param enemyNumber Number of enemies
      */
-    private void generateEnemies(Rectangle spawnArea, String type, int enemyNumber) {
+    private static void generateEnemies(Rectangle spawnArea, String type, int enemyNumber) {
         Random random = new Random();
         for (int i = 0; i < enemyNumber; i++) {
             int x = (int) (random.nextInt((int) (spawnArea.width)) + spawnArea.x);
@@ -394,8 +350,11 @@ public class World implements Disposable {
         }
     }
 
-    @Override
-    public void dispose() {
+    public static Player getPlayer() {
+        return player;
+    }
+
+    public static void dispose() {
         if (tiledMap != null) tiledMap.dispose();
         for (Enemy e : enemies) e.dispose();
         for (Bullet b : bullets) b.dispose();
@@ -403,17 +362,23 @@ public class World implements Disposable {
         player.dispose();
     }
 
-    public List<BoundingRect> getMapObstacles() {
+    public static List<BoundingRect> getMapObstacles() {
         return mapObstacles;
     }
 
-    public void interaction() {
+    public static void interaction() {
         for (SavePillar savePillar : savePillars)
             if (BoundingShape.intersect(player.getBoundingShape(), savePillar.getBoundingShape()))
-                SavePillar.save(player);
+                SavePillar.save();
+        for (ExitBoundingRect exit : exits) {
+            if (BoundingShape.intersect(player.getBoundingShape(), exit)) {
+                loadNewMap(exit.getNextMap());
+                return;
+            }
+        }
     }
 
-    public void load() {
+    public static void load() {
         String[] saves = Utils.readSave();
         if (saves == null) {
             Logger.log("World.load()", "Save file is null.");
@@ -427,22 +392,46 @@ public class World implements Disposable {
         player.load();
     }
 
-    public void manaTrigger() {
+    public static void manaTrigger() {
         player.manaTrigger();
     }
 
-    public void playerStartFire(int targetX, int targetY) {
+    public static void playerStartFire(int targetX, int targetY) {
         player.getFireManager().setIsFiring(true);
         playerUpdateTarget(targetX, targetY);
     }
 
-    public void playerStopFire() {
+    public static void playerStopFire() {
         player.getFireManager().setIsFiring(false);
     }
 
-    public void playerUpdateTarget(int targetX, int targetY) {
+    public static void playerUpdateTarget(int targetX, int targetY) {
         Vector2 offset = CameraManager.getCameraOffset();
         if (offset == null) return;
         player.getFireManager().setTarget(targetX + offset.x, targetY + offset.y);
+    }
+
+    public static void draw() {
+        CameraManager.update(tiledMapRenderer);
+        DrawManager.end();
+        tiledMapRenderer.render(backgroundLayers);
+        if (!Game.assetManager.update()) return;
+        for (Enemy e : enemies) e.draw();
+        for (Bullet b : bullets) b.draw();
+        for (Chest c : chests) c.draw();
+        player.draw();
+        story.draw();
+        DrawHitValue.draw();
+        DrawManager.end();
+        tiledMapRenderer.render(foregroundLayers);
+        for (SavePillar savePillar : savePillars) {
+            savePillar.draw();
+            if (BoundingShape.intersect(player.getBoundingShape(), savePillar.getBoundingShape()))
+                DrawManager.write("Press " + Constants.INTERACTION_KEY + " to save...", 10, 30, Color.GREEN);
+        }
+        for (ExitBoundingRect e : exits)
+            if (BoundingShape.intersect(player.getBoundingShape(), e)) {
+                DrawManager.write("Press " + Constants.INTERACTION_KEY + " to exit...", 10, 30, Color.GREEN);
+            }
     }
 }

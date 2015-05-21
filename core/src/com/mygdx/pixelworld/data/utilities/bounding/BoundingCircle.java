@@ -1,9 +1,9 @@
 package com.mygdx.pixelworld.data.utilities.bounding;
 
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Pools;
+import com.mygdx.pixelworld.GUI.DrawManager;
 import com.mygdx.pixelworld.data.CameraManager;
 
 /**
@@ -24,10 +24,10 @@ public class BoundingCircle extends BoundingShape {
     }
 
     @Override
-    public void draw(ShapeRenderer shapeRenderer) {
+    public void draw() {
         Vector2 offset = CameraManager.getCameraOffset();
         if (offset == null) return;
-        shapeRenderer.circle(circle.x - offset.x, circle.y - offset.y, circle.radius);
+        DrawManager.circle(circle.x - offset.x, circle.y - offset.y, circle.radius);
     }
 
     @Override
@@ -41,8 +41,10 @@ public class BoundingCircle extends BoundingShape {
     }
 
     @Override
-    public void drawOnScreen(ShapeRenderer shapeRenderer, Vector2 cameraOffset) {
-        shapeRenderer.circle(circle.x - cameraOffset.x, circle.y - cameraOffset.y, circle.radius);
+    public void drawOnScreen() {
+        Vector2 offset = CameraManager.getCameraOffset();
+        if (offset == null) offset = new Vector2();
+        DrawManager.circle(circle.x - offset.x, circle.y - offset.y, circle.radius);
     }
 
     @Override

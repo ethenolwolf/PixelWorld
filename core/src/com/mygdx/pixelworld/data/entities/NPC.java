@@ -1,7 +1,6 @@
 package com.mygdx.pixelworld.data.entities;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.math.Rectangle;
@@ -32,8 +31,8 @@ public class NPC extends Entity {
         img = new AnimationDrawData("core/assets/characters/npc/" + relativePath + "/", actions, BoundingRect.class);
     }
 
-    public void draw(SpriteBatch batch) {
-        img.draw(batch, pos);
+    public void draw() {
+        img.draw(pos);
     }
 
     public boolean isIdle() {

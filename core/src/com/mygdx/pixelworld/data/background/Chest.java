@@ -1,6 +1,5 @@
 package com.mygdx.pixelworld.data.background;
 
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.mygdx.pixelworld.data.draw.StaticDrawData;
 import com.mygdx.pixelworld.data.items.EmptyItem;
@@ -51,8 +50,8 @@ public class Chest extends Item {
         return inventory;
     }
 
-    public void draw(SpriteBatch batch) {
-        img.draw(batch, pos);
+    public void draw() {
+        img.draw(pos);
     }
 
     public boolean isEmpty() {

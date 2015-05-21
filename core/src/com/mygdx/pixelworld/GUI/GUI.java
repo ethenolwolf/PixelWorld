@@ -5,13 +5,12 @@ import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.mygdx.pixelworld.Game;
 import com.mygdx.pixelworld.data.CameraManager;
+import com.mygdx.pixelworld.data.World;
 import com.mygdx.pixelworld.data.draw.AnimationDrawData;
-import com.mygdx.pixelworld.data.draw.ScreenWriter;
 import com.mygdx.pixelworld.data.utilities.Constants;
 import com.mygdx.pixelworld.data.utilities.Direction;
 import com.mygdx.pixelworld.data.utilities.bounding.BoundingRect;
@@ -51,31 +50,28 @@ public class GUI {
         Game.assetManager.load("core/assets/gui/dialogPane.png", Texture.class);
     }
 
-    public static void menuLoop(SpriteBatch batch) {
+    public static void menuLoop() {
         if (menuMusic == null) {
             menuMusic = Gdx.audio.newMusic(Gdx.files.internal("core/assets/sounds/heartbeat.mp3"));
             menuMusic.setLooping(true);
             menuMusic.play();
         }
-        batch.begin();
         float step = Constants.gameHeight / (2 * (menuOptions.length - 1));
         for (int i = 0; i < menuOptions.length; i++) {
-            ScreenWriter.writeOnCenter(batch, menuOptions[i], Constants.gameHeight * 3 / 4 - i * step, i == currentMenuIndex ? Color.YELLOW : Color.WHITE);
+            DrawManager.writeOnCenter(menuOptions[i], Constants.gameHeight * 3 / 4 - i * step, i == currentMenuIndex ? Color.YELLOW : Color.WHITE);
         }
-        batch.end();
     }
 
-    public static void splashScreen(SpriteBatch batch, ShapeRenderer shapeRenderer, float progress) {
+    public static void splashScreen(float progress) {
         loadingImage.update();
-        batch.begin();
-        loadingImage.draw(batch, loadingImagePos);
-        batch.end();
-        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
-        shapeRenderer.setColor(0.0f, 0.0f, 0.392f, 1.0f);
-        shapeRenderer.rect(50, 50, Constants.gameWidth - 100, 30);
-        shapeRenderer.setColor(0.0f, 0.05f, 0.95f, 1.0f);
-        shapeRenderer.rect(50, 50, (Constants.gameWidth - 100) * progress, 30);
-        shapeRenderer.end();
+        loadingImage.draw(loadingImagePos);
+        DrawManager.changeType(ShapeRenderer.ShapeType.Filled);
+        DrawManager.begin(DrawManager.Type.SHAPE);
+        DrawManager.setColor(DrawManager.Type.SHAPE, 0.0f, 0.0f, 0.392f, 1.0f);
+        DrawManager.rect(50, 50, Constants.gameWidth - 100, 30);
+        DrawManager.setColor(DrawManager.Type.SHAPE, 0.0f, 0.05f, 0.95f, 1.0f);
+        DrawManager.rect(50, 50, (Constants.gameWidth - 100) * progress, 30);
+        DrawManager.end();
     }
 
     public static void clearScreen() {
@@ -84,16 +80,16 @@ public class GUI {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
     }
 
-    public static void draw(SpriteBatch batch) {
+    public static void draw() {
         if (dialogSpeech != null && dialogName != null) {
             Vector2 offset = CameraManager.getCameraOffset();
             if (offset == null) return;
-            batch.draw(Game.assetManager.get("core/assets/gui/dialogPane.png", Texture.class), 50 + offset.x, 50 + offset.y);
-            ScreenWriter.write(batch, dialogName, 70, 120, Color.RED);
-            ScreenWriter.write(batch, dialogSpeech, 160, 100, Color.BLACK);
+            DrawManager.getBatch().draw(Game.assetManager.get("core/assets/gui/dialogPane.png", Texture.class), 50 + offset.x, 50 + offset.y);
+            DrawManager.write(dialogName, 70, 120, Color.RED);
+            DrawManager.write(dialogSpeech, 160, 100, Color.BLACK);
         }
         if (Game.gameState == Game.GameStates.PAUSE)
-            ScreenWriter.writeOnCenter(batch, "PAUSED", Constants.gameHeight / 2, Color.RED);
+            DrawManager.writeOnCenter("PAUSED", Constants.gameHeight / 2, Color.RED);
     }
 
     public static void cursorEvent(Direction direction) {
@@ -108,6 +104,7 @@ public class GUI {
                 switch (currentMenuIndex) {
                     case 0:
                         Game.gameState = Game.GameStates.GAME;
+                        World.init();
                         menuMusic.stop();
                         menuMusic.dispose();
                         break;

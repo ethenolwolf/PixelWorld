@@ -1,9 +1,9 @@
 package com.mygdx.pixelworld.data.items.sigils;
 
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
+import com.mygdx.pixelworld.GUI.DrawManager;
 import com.mygdx.pixelworld.GUI.Logger;
 import com.mygdx.pixelworld.Game;
 import com.mygdx.pixelworld.data.draw.StaticDrawData;
@@ -40,9 +40,9 @@ public class PowerShock extends ManaSigil {
     }
 
     @Override
-    public void draw(SpriteBatch batch) {
+    public void draw() {
         for (PowerShockBlast blast : blasts) {
-            batch.draw(texture, blast.getCenter().x - (texture.getRegionWidth() / 2), blast.getCenter().y - texture.getRegionHeight() / 2, texture.getRegionWidth() / 2,
+            DrawManager.getBatch().draw(texture, blast.getCenter().x - (texture.getRegionWidth() / 2), blast.getCenter().y - texture.getRegionHeight() / 2, texture.getRegionWidth() / 2,
                     texture.getRegionHeight() / 2, texture.getRegionWidth(), texture.getRegionHeight(), blast.getCurrentDimension().x, blast.getCurrentDimension().y, 0);
         }
     }

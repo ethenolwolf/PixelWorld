@@ -2,7 +2,6 @@ package com.mygdx.pixelworld.data.entities.characters;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.mygdx.pixelworld.GUI.Logger;
 import com.mygdx.pixelworld.data.World;
@@ -48,18 +47,18 @@ public class Player extends Entity {
     /**
      * Updates moving.
      */
-    public void update(World world) {
+    public void update() {
         //Keyboard events
         currentState = States.IDLE;
-        if (Gdx.input.isKeyPressed(Keys.A)) move(LEFT, world.getMapObstacles());
-        else if (Gdx.input.isKeyPressed(Keys.D)) move(RIGHT, world.getMapObstacles());
-        if (Gdx.input.isKeyPressed(Keys.S)) move(DOWN, world.getMapObstacles());
-        else if (Gdx.input.isKeyPressed(Keys.W)) move(UP, world.getMapObstacles());
+        if (Gdx.input.isKeyPressed(Keys.A)) move(LEFT, World.getMapObstacles());
+        else if (Gdx.input.isKeyPressed(Keys.D)) move(RIGHT, World.getMapObstacles());
+        if (Gdx.input.isKeyPressed(Keys.S)) move(DOWN, World.getMapObstacles());
+        else if (Gdx.input.isKeyPressed(Keys.W)) move(UP, World.getMapObstacles());
 
         if (fireManager.isFiring()) currentState = States.FIRE;
 
         if (!equipped.getWeapon().isEmpty())
-            fireManager.updateFire(pos, stats, world, equipped.getWeapon().getStats());
+            fireManager.updateFire(pos, stats, equipped.getWeapon().getStats());
         regen();
         if (!equipped.getManaSigil().isEmpty()) equipped.getManaSigil().update();
         ((AnimationDrawData) img).setCurrentAction(currentState.name().toLowerCase());
@@ -103,9 +102,9 @@ public class Player extends Entity {
         pos = img.boundMap(pos);
     }
 
-    public void draw(SpriteBatch batch) {
-        img.draw(batch, pos, stats.isVisible() ? 1f : 0.5f);
-        equipped.getManaSigil().draw(batch);
+    public void draw() {
+        img.draw(pos, stats.isVisible() ? 1f : 0.5f);
+        equipped.getManaSigil().draw();
     }
 
     /**

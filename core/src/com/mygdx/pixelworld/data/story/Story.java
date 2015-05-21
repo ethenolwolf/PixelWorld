@@ -1,6 +1,5 @@
 package com.mygdx.pixelworld.data.story;
 
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
@@ -24,8 +23,8 @@ public class Story {
     private int storyIndex = 0;
 
     public Story(MapLayer npcLayer, String storyPath) {
-        if (npcLayer == null) {
-            Logger.log("Story()", "Layer NPC is null, assuming there is no story.");
+        if (npcLayer == null || storyPath == null) {
+            Logger.log("Story()", "Layer NPC or story file is null, assuming there is no story.");
             return;
         }
         for (MapObject object : npcLayer.getObjects()) {
@@ -55,8 +54,8 @@ public class Story {
         if (canGoForward) deploy();
     }
 
-    public void draw(SpriteBatch batch) {
-        for (NPC npc : NPCs.values()) npc.draw(batch);
+    public void draw() {
+        for (NPC npc : NPCs.values()) npc.draw();
     }
 
     private void deploy() {

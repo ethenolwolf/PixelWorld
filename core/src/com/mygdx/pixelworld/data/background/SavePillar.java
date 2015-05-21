@@ -1,12 +1,10 @@
 package com.mygdx.pixelworld.data.background;
 
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.mygdx.pixelworld.GUI.Logger;
 import com.mygdx.pixelworld.data.World;
 import com.mygdx.pixelworld.data.draw.AnimationDrawData;
-import com.mygdx.pixelworld.data.entities.characters.Player;
 import com.mygdx.pixelworld.data.items.Item;
 import com.mygdx.pixelworld.data.utilities.bounding.BoundingCircle;
 import com.mygdx.pixelworld.data.utilities.bounding.BoundingRect;
@@ -28,14 +26,14 @@ public class SavePillar extends Item {
         interactionBounding = new BoundingCircle(new Vector2(pos).add(20, 0), 80);
     }
 
-    public static void save(Player player) {
+    public static void save() {
         try {
             File yourFile = new File("core/assets/saves/save.save");
             if(!yourFile.exists()) //noinspection ResultOfMethodCallIgnored
                 yourFile.createNewFile();
             FileOutputStream oFile = new FileOutputStream(yourFile, false);
             oFile.write((World.getCurrentMap() + "\n").getBytes());
-            oFile.write(player.getSaveParameters().getBytes());
+            oFile.write(World.getPlayer().getSaveParameters().getBytes());
         } catch (FileNotFoundException e) {
             Logger.log("SavePillar.save()", "Saves file not found!");
             return;
@@ -63,9 +61,9 @@ public class SavePillar extends Item {
         auraPos = new Vector2(pos.x - aura.getWidth() / 2 + img.getWidth() / 2 - 5, pos.y - aura.getHeight() / 2 + 6);
     }
 
-    public void draw(SpriteBatch batch) {
-        aura.draw(batch, auraPos);
-        img.draw(batch, pos);
+    public void draw() {
+        aura.draw(auraPos);
+        img.draw(pos);
     }
 
     @Override

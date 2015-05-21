@@ -1,8 +1,6 @@
 package com.mygdx.pixelworld.data.utilities.bounding;
 
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Intersector;
-import com.badlogic.gdx.math.Vector2;
 
 /**
  * Bounding shape is an abstract class used to handle all types of collisions.
@@ -31,9 +29,8 @@ public abstract class BoundingShape {
 
     /**
      * Method used to draw shapes using a shape renderer.
-     * @param shapeRenderer shape renderer
      */
-    public abstract void draw(ShapeRenderer shapeRenderer);
+    public abstract void draw();
 
     /**
      * Method used to check if the shape is valid
@@ -43,5 +40,5 @@ public abstract class BoundingShape {
 
     public abstract void free();
 
-    public abstract void drawOnScreen(ShapeRenderer shapeRenderer, Vector2 cameraOffset);
+    public abstract void drawOnScreen();
 }

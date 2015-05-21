@@ -1,11 +1,9 @@
 package com.mygdx.pixelworld.data.entities.enemies;
 
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.mygdx.pixelworld.data.World;
 import com.mygdx.pixelworld.data.draw.AnimationDrawData;
 import com.mygdx.pixelworld.data.entities.Entity;
-import com.mygdx.pixelworld.data.entities.characters.Player;
 import com.mygdx.pixelworld.data.items.Item;
 import com.mygdx.pixelworld.data.items.weapons.Weapon;
 import com.mygdx.pixelworld.data.items.weapons.WeaponType;
@@ -50,14 +48,11 @@ public abstract class Enemy extends Entity {
 
     /**
      * Updates AI
-     *
-     * @param player Player
-     * @param world  World
      */
-    public void update(Player player, World world) {
+    public void update() {
         if (!stats.isAlive()) return;
-        if (player.getPos().dst(pos) < ATTACK_RANGE) activeAIUpdate(player, world);
-        else passiveAIUpdate(player, world);
+        if (World.getPlayer().getPos().dst(pos) < ATTACK_RANGE) activeAIUpdate();
+        else passiveAIUpdate();
         if (!(img instanceof AnimationDrawData)) return;
         ((AnimationDrawData) img).setCurrentAction(currentState.name().toLowerCase());
     }
@@ -65,15 +60,15 @@ public abstract class Enemy extends Entity {
     /**
      * AI when near player
      */
-    abstract void activeAIUpdate(Player player, World world);
+    abstract void activeAIUpdate();
 
     /**
      * AI when far from player
      */
-    abstract void passiveAIUpdate(Player player, World world);
+    abstract void passiveAIUpdate();
 
-    public void draw(SpriteBatch batch) {
-        img.draw(batch, pos);
+    public void draw() {
+        img.draw(pos);
     }
     public boolean isAlive() {
         return stats.isAlive();

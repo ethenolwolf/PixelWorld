@@ -1,6 +1,5 @@
 package com.mygdx.pixelworld.data.items.sigils;
 
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.mygdx.pixelworld.data.draw.StaticDrawData;
 import com.mygdx.pixelworld.data.entities.characters.Player;
@@ -51,7 +50,7 @@ public class ManaSigil extends Item implements Damaging, EquipItem {
     public void activate(Vector2 abs) {
     }
 
-    public void draw(SpriteBatch batch) {
+    public void draw() {
     }
 
     @Override

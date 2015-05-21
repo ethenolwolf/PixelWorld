@@ -5,12 +5,10 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.assets.AssetManager;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.mygdx.pixelworld.GUI.DrawManager;
 import com.mygdx.pixelworld.GUI.GUI;
 import com.mygdx.pixelworld.data.CameraManager;
 import com.mygdx.pixelworld.data.World;
-import com.mygdx.pixelworld.data.draw.ScreenWriter;
 import com.mygdx.pixelworld.data.utilities.Constants;
 import com.mygdx.pixelworld.data.utilities.Direction;
 import com.mygdx.pixelworld.debug.Debug;
@@ -22,9 +20,6 @@ public class Game extends ApplicationAdapter implements InputProcessor {
 
     public static AssetManager assetManager;
     public static GameStates gameState = GameStates.MENU;
-    private SpriteBatch batch;
-    private World world;
-    private ShapeRenderer shapeRenderer;
 
     @Override
     public void create() {
@@ -32,12 +27,9 @@ public class Game extends ApplicationAdapter implements InputProcessor {
         assetManager = new AssetManager();
         GUI.loadImage();
         assetManager.finishLoading();
-        batch = new SpriteBatch();
         Debug.init();
-        ScreenWriter.init();
-        world = new World();
+        DrawManager.init();
         Gdx.input.setInputProcessor(this);
-        shapeRenderer = new ShapeRenderer();
         GUI.init();
     }
 
@@ -50,20 +42,21 @@ public class Game extends ApplicationAdapter implements InputProcessor {
         if (assetManager.update()) {
             switch (gameState) {
                 case MENU:
-                    GUI.menuLoop(batch);
+                    GUI.menuLoop();
                     break;
                 case PAUSE:
                 case GAME:
                     gameLoop();
                     break;
                 case LOAD:
-                    world.load();
+                    World.load();
                     gameState = GameStates.GAME;
                     break;
             }
         } else {
-            GUI.splashScreen(batch, shapeRenderer, assetManager.getProgress());
+            GUI.splashScreen(assetManager.getProgress());
         }
+        DrawManager.end();
     }
 
     /**
@@ -72,29 +65,23 @@ public class Game extends ApplicationAdapter implements InputProcessor {
     private void gameLoop() {
         //Logic update
         if (gameState == GameStates.GAME) {
-            world.update(batch);
-            batch.setColor(1.0f, 1.0f, 1.0f, 1.0f);
+            World.update();
+            DrawManager.setColor(DrawManager.Type.BATCH, 1.0f, 1.0f, 1.0f, 1.0f);
         } else {
-            batch.setColor(0.5f, 0.5f, 0.5f, 1);
+            DrawManager.setColor(DrawManager.Type.BATCH, 0.5f, 0.5f, 0.5f, 1);
         }
 
         //Draw
-        world.cameraUpdate(batch);
-        world.drawBottom(batch);
-        batch.end();
-        world.drawTop();
-        batch.begin();
-        GUI.draw(batch);
-        batch.end();
-        world.shapeDraw(shapeRenderer);
+        World.draw();
+        GUI.draw();
+        World.shapeDraw();
     }
 
     @Override
     public void dispose() {
         super.dispose();
-        batch.dispose();
-        world.dispose();
-        shapeRenderer.dispose();
+        World.dispose();
+        DrawManager.dispose();
         assetManager.clear();
     }
 
@@ -108,8 +95,8 @@ public class Game extends ApplicationAdapter implements InputProcessor {
                     GUI.cursorEvent(Direction.RIGHT);
                 break;
             case GAME:
-                if (keycode == Input.Keys.SPACE) world.manaTrigger();
-                if (keycode == Input.Keys.valueOf(Constants.INTERACTION_KEY)) world.interaction();
+                if (keycode == Input.Keys.SPACE) World.manaTrigger();
+                if (keycode == Input.Keys.valueOf(Constants.INTERACTION_KEY)) World.interaction();
                 if (keycode == Input.Keys.P) gameState = GameStates.PAUSE;
                 break;
             case PAUSE:
@@ -133,20 +120,20 @@ public class Game extends ApplicationAdapter implements InputProcessor {
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
         if (button == Input.Buttons.LEFT) {
-            world.playerStartFire(screenX, Gdx.graphics.getHeight() - screenY);
+            World.playerStartFire(screenX, Gdx.graphics.getHeight() - screenY);
         }
         return true;
     }
 
     @Override
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-        world.playerStopFire();
+        World.playerStopFire();
         return true;
     }
 
     @Override
     public boolean touchDragged(int screenX, int screenY, int pointer) {
-        world.playerUpdateTarget(screenX, Gdx.graphics.getHeight() - screenY);
+        World.playerUpdateTarget(screenX, Gdx.graphics.getHeight() - screenY);
         return true;
     }
 
