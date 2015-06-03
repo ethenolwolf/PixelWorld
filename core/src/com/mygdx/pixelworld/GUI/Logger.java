@@ -1,12 +1,17 @@
 package com.mygdx.pixelworld.GUI;
 
-import com.mygdx.pixelworld.debug.Debug;
-
 /**
  * Utility class for debugging on console.
  */
 public class Logger {
+
+    private static boolean verbose = true;
+
     public static void log(String methodName, String message) {
-        if (Debug.isTrue("ENABLE_LOGGER")) System.out.println("[" + methodName + "] -> " + message);
+        if (verbose) System.out.println("[" + methodName + "] -> " + message);
+    }
+
+    public static void setVerbose(boolean verbose) {
+        Logger.verbose = verbose;
     }
 }

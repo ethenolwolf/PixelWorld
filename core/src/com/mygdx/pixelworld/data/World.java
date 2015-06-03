@@ -49,8 +49,8 @@ public class World {
     private static final List<ExitBoundingRect> exits = new ArrayList<>();
     private static final List<BoundingRect> spawnPoints = new ArrayList<>();
     private static final List<SavePillar> savePillars = new ArrayList<>();
-    private static final int[] backgroundLayers = {0, 1};
-    private static final int[] foregroundLayers = {2, 3};
+    private static final int[] backgroundLayers = {0, 1, 2};
+    private static final int[] foregroundLayers = {3};
     private static final Player player = new Player();
     private static TiledMapRenderer tiledMapRenderer;
     private static TiledMap tiledMap;
@@ -59,7 +59,7 @@ public class World {
 
     public static void init() {
         Game.assetManager.setLoader(TiledMap.class, new TmxMapLoader(new InternalFileHandleResolver()));
-        loadNewMap("core/assets/maps/Marco/castello.tmx");
+        loadNewMap("core/assets/maps/Trono/castello.tmx");
         new Blocker(0, 0);
         new SavePillar(new Rectangle());
     }

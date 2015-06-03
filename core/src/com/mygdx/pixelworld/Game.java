@@ -23,8 +23,8 @@ public class Game extends ApplicationAdapter implements InputProcessor {
 
     @Override
     public void create() {
-        Gdx.input.setInputProcessor(this);
         Debug.init();
+        Gdx.input.setInputProcessor(this);
         CameraManager.init();
         assetManager = new AssetManager();
         GUI.loadImage();

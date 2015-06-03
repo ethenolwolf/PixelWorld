@@ -1,5 +1,6 @@
 package com.mygdx.pixelworld.debug;
 
+import com.badlogic.gdx.Gdx;
 import com.mygdx.pixelworld.GUI.Logger;
 
 import java.io.FileInputStream;
@@ -18,9 +19,14 @@ public class Debug {
      */
     public static void init() {
         try {
-            props.load(new FileInputStream("core/config/debug.properties"));
+            FileInputStream stream = new FileInputStream(Gdx.files.internal("core/config/debug.properties").file());
+            props.load(stream);
+            if (props.getProperty("ENABLE_LOGGER") != null) {
+                Logger.setVerbose(isTrue("ENABLE_LOGGER"));
+            }
         } catch (IOException e) {
-            Logger.log("Debug.init()", "File debug.properties not found.");
+            Logger.log("Debug.init()", "File debug.properties not found: ");
+            e.printStackTrace();
         }
     }
 
