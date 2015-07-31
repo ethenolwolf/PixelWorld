@@ -5,11 +5,12 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Disposable;
 import com.mygdx.pixelworld.GUI.DrawManager;
-import com.mygdx.pixelworld.GUI.Logger;
 import com.mygdx.pixelworld.data.World;
 import com.mygdx.pixelworld.data.utilities.bounding.BoundingCircle;
 import com.mygdx.pixelworld.data.utilities.bounding.BoundingRect;
 import com.mygdx.pixelworld.data.utilities.bounding.BoundingShape;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * Class used to generify every sprite drawing process.
@@ -17,6 +18,7 @@ import com.mygdx.pixelworld.data.utilities.bounding.BoundingShape;
  * map offset and bounding shapes.
  */
 public abstract class DrawData implements Disposable {
+    protected static final Logger logger = LogManager.getLogger();
     float scaleFactor;
     float rotationAngle;
     Class<? extends BoundingShape> boundingType;
@@ -112,7 +114,7 @@ public abstract class DrawData implements Disposable {
         else if (boundingType == BoundingRect.class)
             out = new BoundingRect(position.add(getOriginalWidth() - getWidth(), getOriginalHeight() - getHeight()), new Vector2(getWidth(), getHeight()));
         if (out.isValid()) return out;
-        Logger.log("DrawData.getBoundingShape()", "Error constructing " + boundingType.toString() + ": bounding is invalid.");
+        logger.error("Error constructing " + boundingType.toString() + ": bounding is invalid.");
         return null;
     }
 

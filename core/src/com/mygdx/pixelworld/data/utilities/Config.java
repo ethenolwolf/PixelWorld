@@ -1,12 +1,13 @@
 package com.mygdx.pixelworld.data.utilities;
 
-import com.mygdx.pixelworld.GUI.Logger;
 import com.mygdx.pixelworld.data.entities.enemies.Enemy;
 import com.mygdx.pixelworld.data.items.armors.ArmorStats;
 import com.mygdx.pixelworld.data.items.armors.ArmorType;
 import com.mygdx.pixelworld.data.items.weapons.EnemyWeaponStats;
 import com.mygdx.pixelworld.data.items.weapons.PlayerWeaponStats;
 import com.mygdx.pixelworld.data.items.weapons.WeaponType;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -16,6 +17,8 @@ import java.util.Properties;
  * Utility class for loading data from .config files in /config folder.
  */
 public class Config {
+
+    private static final Logger logger = LogManager.getLogger();
 
     /**
      * Attempts to load config file.
@@ -29,7 +32,7 @@ public class Config {
         try {
             properties.load(new FileInputStream(fileName));
         } catch (IOException e) {
-            Logger.log("Config.load()", "File " + fileName + " not found.");
+            logger.error("File " + fileName + " not found.");
         }
         return properties;
     }

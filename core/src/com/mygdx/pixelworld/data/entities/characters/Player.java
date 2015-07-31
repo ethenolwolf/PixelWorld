@@ -3,7 +3,6 @@ package com.mygdx.pixelworld.data.entities.characters;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.math.Vector2;
-import com.mygdx.pixelworld.GUI.Logger;
 import com.mygdx.pixelworld.data.World;
 import com.mygdx.pixelworld.data.draw.AnimationDrawData;
 import com.mygdx.pixelworld.data.entities.Entity;
@@ -69,7 +68,7 @@ public class Player extends Entity {
      * Activates the mana sigil.
      */
     public void manaTrigger() {
-        if (equipped.getManaSigil().isEmpty()) Logger.log("Player.manaTrigger()", "You must equip a sigil first.");
+        if (equipped.getManaSigil().isEmpty()) logger.info("Not triggering mana, sigil slot empty");
         if (stats.get(StatType.MANA) >= equipped.getManaSigil().getPrice()) {
             stats.addStat(StatType.MANA, -equipped.getManaSigil().getPrice());
             equipped.getManaSigil().activate(new Vector2(pos));
@@ -125,7 +124,7 @@ public class Player extends Entity {
         if (equipped.getArmor().getDefense() + stats.get(StatType.DEF) >= d.getDamage()) return;
         super.getHit(d.getDamage() - equipped.getArmor().getDefense() - (int) stats.get(StatType.DEF));
         if (!stats.isAlive()) {
-            Logger.log("Player.getHit()", "Player died :(");
+            logger.info("Player died");
             Gdx.app.exit();
         }
     }
@@ -161,7 +160,7 @@ public class Player extends Entity {
         for (Integer threshold : Config.getExperienceThresholds()) {
             if (this.experience > threshold) level++;
         }
-        if (level != this.level) Logger.log("Player.addExperience()", "Level UP! Level=" + level);
+        if (level != this.level) logger.info("Player is now level " + level);
         this.level = level;
     }
 
@@ -179,14 +178,14 @@ public class Player extends Entity {
         if (save == null) return;
         for (String saveLine : save)
             if (saveLine == null || saveLine.equals("")) {
-                Logger.log("Player.load()", "Save file corrupted.");
+                logger.error("Save file corrupted");
                 return;
             }
         stats = new EntityStats(save[1]);
         try {
             experience = Integer.parseInt(save[2]);
         } catch (Exception e) {
-            Logger.log("Player.load()", "Exp malformed! Not integer value.");
+            logger.error("Experience malformed! Not integer value.");
             return;
         }
 

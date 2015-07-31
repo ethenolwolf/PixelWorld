@@ -87,7 +87,7 @@ public class GUI {
             DrawManager.write(dialogName, 70, 120, Color.RED);
             DrawManager.write(dialogSpeech, 160, 100, Color.BLACK);
         }
-        if (Game.gameState == Game.GameStates.PAUSE)
+        if (Game.gameState == Game.GameState.PAUSE)
             DrawManager.writeOnCenter("PAUSED", Constants.gameHeight / 2, Color.RED);
     }
 
@@ -102,12 +102,12 @@ public class GUI {
             case RIGHT:
                 switch (currentMenuIndex) {
                     case 0:
-                        Game.gameState = Game.GameStates.GAME;
+                        Game.gameState = Game.GameState.GAME;
                         menuMusic.stop();
                         menuMusic.dispose();
                         break;
                     case 1:
-                        Game.gameState = Game.GameStates.LOAD;
+                        Game.gameState = Game.GameState.LOAD;
                         menuMusic.stop();
                         menuMusic.dispose();
                         break;

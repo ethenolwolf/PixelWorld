@@ -3,9 +3,16 @@
 *.iml
 *.jar
 build/
+core/build/
+desktop/build
+classes/
 ## Gradle
 .gradle
 gradle/
+gradle.properties
+gradlew
+gradlew.bat
+settings.gradle
 ## Linux testing
 *.sh
 ## Windows

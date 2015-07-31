@@ -5,15 +5,17 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.mygdx.pixelworld.GUI.DrawManager;
-import com.mygdx.pixelworld.GUI.Logger;
 import com.mygdx.pixelworld.data.story.Story;
 import com.mygdx.pixelworld.data.story.StoryAction;
 import com.mygdx.pixelworld.data.utilities.Constants;
 import com.mygdx.pixelworld.data.utilities.EntityStats;
 import com.mygdx.pixelworld.data.utilities.StatType;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class CameraManager {
 
+    private static final Logger logger = LogManager.getLogger();
     private static OrthographicCamera camera;
     private static boolean cameraFollow = true;
     private static Vector2 cameraTarget;
@@ -29,7 +31,7 @@ public class CameraManager {
     }
 
     private static boolean mustBeInitialized() {
-        if (!isInitialized) Logger.log("CameraManager", "Error : camera not initialized!");
+        if (!isInitialized) logger.fatal("Camera not initialized!");
         return !isInitialized;
     }
 

@@ -38,6 +38,8 @@ project(":desktop") {
         compile "com.badlogicgames.gdx:gdx-box2d-platform:$gdxVersion:natives-desktop"
         compile "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-desktop"
         compile "com.badlogicgames.gdx:gdx-ai:1.5.0"
+        compile group: 'org.apache.logging.log4j', name: 'log4j-api', version: '2.3'
+        compile group: 'org.apache.logging.log4j', name: 'log4j-core', version: '2.3'
     }
 }
 

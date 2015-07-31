@@ -2,7 +2,7 @@ package com.mygdx.pixelworld.data.background;
 
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
-import com.mygdx.pixelworld.GUI.Logger;
+import com.mygdx.pixelworld.data.GameMap;
 import com.mygdx.pixelworld.data.World;
 import com.mygdx.pixelworld.data.draw.AnimationDrawData;
 import com.mygdx.pixelworld.data.items.Item;
@@ -32,19 +32,19 @@ public class SavePillar extends Item {
             if(!yourFile.exists()) //noinspection ResultOfMethodCallIgnored
                 yourFile.createNewFile();
             FileOutputStream oFile = new FileOutputStream(yourFile, false);
-            oFile.write((World.getCurrentMap() + "\n").getBytes());
+            oFile.write((GameMap.getCurrentMap() + "\n").getBytes());
             oFile.write(World.getPlayer().getSaveParameters().getBytes());
         } catch (FileNotFoundException e) {
-            Logger.log("SavePillar.save()", "Saves file not found!");
+            logger.error("Saves file not found.");
             return;
         } catch (UnsupportedEncodingException e) {
-            Logger.log("SavePillar.save()", "Encoding not supported!");
+            logger.error("Encoding not supported.");
             return;
         } catch (IOException e) {
-            Logger.log("SavePillar.save()", "Could not create file.");
+            logger.error("Could not create file.");
             return;
         }
-        System.out.println("Saved!");
+        logger.info("Save completed successfully");
     }
 
     public BoundingShape getBoundingShape() {

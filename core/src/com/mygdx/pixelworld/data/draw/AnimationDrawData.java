@@ -6,7 +6,6 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.mygdx.pixelworld.GUI.DrawManager;
-import com.mygdx.pixelworld.GUI.Logger;
 import com.mygdx.pixelworld.Game;
 import com.mygdx.pixelworld.data.utilities.bounding.BoundingShape;
 
@@ -16,6 +15,7 @@ import java.util.HashMap;
  * Class that handles moving sprites loaded from spreadsheets.
  */
 public class AnimationDrawData extends DrawData {
+
     private final int sheetCols;
     private final int sheetRows;
     private final String baseFilePath;
@@ -78,7 +78,7 @@ public class AnimationDrawData extends DrawData {
         if (animationMap == null) initAnimation();
         if (action == null || currentAction.equals(action)) return;
         if (!animationMap.containsKey(action)) {
-            Logger.log("AnimationDrawData.setCurrentAction()", "Error: action " + action + " not recognized. Maintaining old action instead.");
+            logger.error("Action " + action + " not recognized. Maintaining old action instead.");
             return;
         }
         this.currentAction = action;

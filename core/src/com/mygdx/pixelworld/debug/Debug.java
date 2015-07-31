@@ -1,7 +1,8 @@
 package com.mygdx.pixelworld.debug;
 
 import com.badlogic.gdx.Gdx;
-import com.mygdx.pixelworld.GUI.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -13,6 +14,7 @@ import java.util.Properties;
 public class Debug {
 
     private static final Properties props = new Properties();
+    private static final Logger logger = LogManager.getLogger();
 
     /**
      * Load values and init font.
@@ -21,12 +23,8 @@ public class Debug {
         try {
             FileInputStream stream = new FileInputStream(Gdx.files.internal("core/config/debug.properties").file());
             props.load(stream);
-            if (props.getProperty("ENABLE_LOGGER") != null) {
-                Logger.setVerbose(isTrue("ENABLE_LOGGER"));
-            }
         } catch (IOException e) {
-            Logger.log("Debug.init()", "File debug.properties not found: ");
-            e.printStackTrace();
+            logger.error("File debug.properties not found", e);
         }
     }
 
@@ -36,7 +34,7 @@ public class Debug {
      */
     public static boolean isTrue(String propertyName) {
         if (props.getProperty(propertyName) == null) {
-            Logger.log("Debug.isTrue()", " Error: Could not find property " + propertyName);
+            logger.warn("Could not find property " + propertyName);
             return false;
         } else return Boolean.parseBoolean(props.getProperty(propertyName));
     }

@@ -3,16 +3,12 @@ package com.mygdx.pixelworld.data;
 import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
-import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
-import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.mygdx.pixelworld.GUI.DrawManager;
-import com.mygdx.pixelworld.GUI.Logger;
 import com.mygdx.pixelworld.Game;
 import com.mygdx.pixelworld.data.background.Chest;
 import com.mygdx.pixelworld.data.background.SavePillar;
@@ -31,6 +27,8 @@ import com.mygdx.pixelworld.data.utilities.bounding.BoundingRect;
 import com.mygdx.pixelworld.data.utilities.bounding.BoundingShape;
 import com.mygdx.pixelworld.data.utilities.bounding.ExitBoundingRect;
 import com.mygdx.pixelworld.debug.Debug;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -52,40 +50,15 @@ public class World {
     private static final int[] backgroundLayers = {0, 1, 2};
     private static final int[] foregroundLayers = {3};
     private static final Player player = new Player();
-    private static TiledMapRenderer tiledMapRenderer;
-    private static TiledMap tiledMap;
-    private static String currentMap;
+    private static final Logger logger = LogManager.getLogger();
+    private static GameMap gameMap;
     private static Story story;
 
     public static void init() {
         Game.assetManager.setLoader(TiledMap.class, new TmxMapLoader(new InternalFileHandleResolver()));
-        loadNewMap("core/assets/maps/Trono/castello.tmx");
+        loadNewMap("core/assets/maps/start.tmx");
         new Blocker(0, 0);
         new SavePillar(new Rectangle());
-    }
-
-    /**
-     * @return Width of current map.
-     */
-    public static int getWidth() {
-        if (tiledMap == null) return (int) Constants.gameWidth;
-        int tileNumber = tiledMap.getProperties().get("width", Integer.class);
-        int tileWidth = tiledMap.getProperties().get("tilewidth", Integer.class);
-        return tileNumber * tileWidth;
-    }
-
-    /**
-     * @return Height of current map.
-     */
-    public static int getHeight() {
-        if (tiledMap == null) return (int) Constants.gameHeight;
-        int tileNumber = tiledMap.getProperties().get("height", Integer.class);
-        int tileHeight = tiledMap.getProperties().get("tileheight", Integer.class);
-        return tileNumber * tileHeight;
-    }
-
-    public static String getCurrentMap() {
-        return currentMap;
     }
 
     /**
@@ -94,7 +67,7 @@ public class World {
      * @param mapPath File path of map file
      */
     private static void loadNewMap(String mapPath) {
-        Logger.log("World.loadNewMap()", "Loading " + mapPath + "...");
+        logger.trace("Loading map " + mapPath);
         enemies.clear();
         bullets.clear();
         chests.clear();
@@ -103,75 +76,66 @@ public class World {
         savePillars.clear();
         spawnPoints.clear();
         story = null;
-        if (tiledMap != null) {
-            Game.assetManager.unload(currentMap);
-            tiledMap.dispose();
-        }
-        tiledMap = null;
-        currentMap = mapPath;
-        Game.assetManager.load(currentMap, TiledMap.class);
+        if (gameMap != null) gameMap.dispose();
+        gameMap = null;
+        GameMap.setCurrentMap(mapPath);
+        Game.assetManager.load(mapPath, TiledMap.class);
     }
 
     /**
      * When map is loaded reads all data and initializes the map.
      */
     private static void initMap() {
-        tiledMap = Game.assetManager.get(currentMap);
-        tiledMapRenderer = new OrthogonalTiledMapRenderer(tiledMap, DrawManager.getBatch());
-
+        logger.trace("Map loaded, initializing");
+        gameMap = new GameMap(Game.assetManager.get(GameMap.getCurrentMap(), TiledMap.class));
         int x = 100;
         int y = 100;
+
         try {
-            x = Integer.parseInt(tiledMap.getProperties().get("PlayerPositionX", String.class)) * tiledMap.getProperties().get("tilewidth", Integer.class);
-            y = Integer.parseInt(tiledMap.getProperties().get("PlayerPositionY", String.class)) * tiledMap.getProperties().get("tileheight", Integer.class);
-        } catch (NumberFormatException ignored) {
-            Logger.log("World.initMap()", "Player position not found.");
+            x = gameMap.getIntProperty("PlayerPositionX") * gameMap.getTileWidth();
+            y = gameMap.getIntProperty("PlayerPositionY") * gameMap.getTileHeight();
+        } catch (NumberFormatException e) {
+            logger.warn("Player position not found", e);
         }
         player.setInitialPos(x, y);
         CameraManager.setOffset(player.getPos());
 
-        if (tiledMap.getLayers().get("Collisions") != null) {
-            for (MapObject object : tiledMap.getLayers().get("Collisions").getObjects()) {
-                if (!(object instanceof RectangleMapObject)) continue;
-                mapObstacles.add(new BoundingRect(((RectangleMapObject) object).getRectangle()));
+        if (gameMap.getLayer("Collisions") != null)
+            for (RectangleMapObject rectangle : gameMap.getRectangularObjects("Collisions"))
+                mapObstacles.add(new BoundingRect(rectangle.getRectangle()));
+        else logger.warn("Collisions layer not found");
+
+        if (gameMap.getLayer("Exits") != null)
+            for (RectangleMapObject rectangle : gameMap.getRectangularObjects("Exits"))
+                exits.add(new ExitBoundingRect(rectangle.getRectangle(), (String) rectangle.getProperties().get("NextMap")));
+        else logger.warn("Exits layer not found");
+
+        if (gameMap.getLayer("Spawn") != null) {
+            for (RectangleMapObject rectangle : gameMap.getRectangularObjects("Spawn")) {
+                String type = rectangle.getProperties().get("type", String.class);
+                int number = Integer.parseInt(rectangle.getProperties().get("Number", String.class));
+                generateEnemies(rectangle.getRectangle(), type, number);
+                spawnPoints.add(new BoundingRect(rectangle.getRectangle()));
             }
-        } else Logger.log("World.initMap()", "Collisions layer not found! Skipping.");
+        } else logger.warn("Spawn layer not found");
 
-        if (tiledMap.getLayers().get("Exits") != null) {
-            for (MapObject object : tiledMap.getLayers().get("Exits").getObjects()) {
-                if (!(object instanceof RectangleMapObject)) continue;
-                exits.add(new ExitBoundingRect(((RectangleMapObject) object).getRectangle(), (String) object.getProperties().get("NextMap")));
-            }
-        } else Logger.log("World.initMap()", "Exits layer not found! Skipping.");
+        story = new Story(gameMap.getLayer("NPC"), "core/assets/maps/" + gameMap.getStringProperty("Story"));
 
-        if (tiledMap.getLayers().get("Spawn") != null) {
-            for (MapObject object : tiledMap.getLayers().get("Spawn").getObjects()) {
-                if (!(object instanceof RectangleMapObject)) continue;
-                String type = object.getProperties().get("type", String.class);
-                int number = Integer.parseInt(object.getProperties().get("Number", String.class));
-                generateEnemies(((RectangleMapObject) object).getRectangle(), type, number);
-                spawnPoints.add(new BoundingRect(((RectangleMapObject) object).getRectangle()));
-            }
-        } else Logger.log("World.initMap()", "Spawn layer not found! Skipping.");
-
-        story = new Story(tiledMap.getLayers().get("NPC"), "core/assets/maps/" + tiledMap.getProperties().get("Story", String.class));
-
-        if (tiledMap.getLayers().get("Interactions") != null) {
-            for (MapObject object : tiledMap.getLayers().get("Interactions").getObjects()) {
-                if (!(object instanceof RectangleMapObject)) continue;
-                switch (object.getProperties().get("type", String.class)) {
+        if (gameMap.getLayer("Interactions") != null) {
+            for (RectangleMapObject rectangle : gameMap.getRectangularObjects("Interactions")) {
+                switch (rectangle.getProperties().get("type", String.class)) {
                     case "savePillar":
-                        savePillars.add(new SavePillar(((RectangleMapObject) object).getRectangle()));
-                        mapObstacles.add(new BoundingRect(((RectangleMapObject) object).getRectangle()));
+                        savePillars.add(new SavePillar(rectangle.getRectangle()));
+                        mapObstacles.add(new BoundingRect(rectangle.getRectangle()));
                         break;
                     default:
-                        Logger.log("World.initMap()", "Interaction of type " + object.getProperties().get("type") + " not yet implemented.");
+                        logger.warn("Interaction of type " + rectangle.getProperties().get("type") + " not yet implemented.");
                 }
             }
-        } else Logger.log("World.initMap()", "Interactions layer not found! Skipping.");
+        } else logger.warn("Interactions layer not found");
 
-        Logger.log("World.initMap()", String.format("Loaded %d layers, %d obstacles, %d exits, %d pillars, %d spawn points (%d total enemies).",
-                tiledMap.getLayers().getCount(), mapObstacles.size(), exits.size(), savePillars.size(), spawnPoints.size(), enemies.size()));
+        logger.info("Loaded %d layers, %d obstacles, %d exits, %d pillars, %d spawn points (%d total enemies).",
+                gameMap.getLayerCount(), mapObstacles.size(), exits.size(), savePillars.size(), spawnPoints.size(), enemies.size());
 
     }
 
@@ -211,7 +175,7 @@ public class World {
      */
     public static void update() {
         player.update();
-        if (tiledMap == null) initMap();
+        if (gameMap == null) initMap();
         BoundingShape playerBoundingShape = player.getBoundingShape();
         story.update();
         for (SavePillar savePillar : savePillars) savePillar.update();
@@ -355,7 +319,7 @@ public class World {
     }
 
     public static void dispose() {
-        if (tiledMap != null) tiledMap.dispose();
+        if (gameMap != null) gameMap.dispose();
         for (Enemy e : enemies) e.dispose();
         for (Bullet b : bullets) b.dispose();
         for (Chest c : chests) c.dispose();
@@ -381,11 +345,11 @@ public class World {
     public static void load() {
         String[] saves = Utils.readSave();
         if (saves == null) {
-            Logger.log("World.load()", "Save file is null.");
+            logger.info("Save file is empty");
             return;
         }
         if (saves[0] == null || saves[0].equals("")) {
-            Logger.log("World.load()", "Save file corrupted! Map is not valid.");
+            logger.info("Save file corrupted!");
             return;
         }
         loadNewMap(saves[0]);
@@ -412,9 +376,9 @@ public class World {
     }
 
     public static void draw() {
-        CameraManager.update(tiledMapRenderer);
+        CameraManager.update(gameMap.getRenderer());
         DrawManager.end();
-        tiledMapRenderer.render(backgroundLayers);
+        gameMap.render(backgroundLayers);
         if (!Game.assetManager.update()) return;
         for (Enemy e : enemies) e.draw();
         for (Bullet b : bullets) b.draw();
@@ -423,7 +387,7 @@ public class World {
         story.draw();
         DrawHitValue.draw();
         DrawManager.end();
-        tiledMapRenderer.render(foregroundLayers);
+        gameMap.render(foregroundLayers);
         for (SavePillar savePillar : savePillars) {
             savePillar.draw();
             if (BoundingShape.intersect(player.getBoundingShape(), savePillar.getBoundingShape()))
@@ -433,5 +397,13 @@ public class World {
             if (BoundingShape.intersect(player.getBoundingShape(), e)) {
                 DrawManager.write("Press " + Constants.INTERACTION_KEY + " to exit...", 10, 30, Color.GREEN);
             }
+    }
+
+    public static float getWidth() {
+        return gameMap.getWidth();
+    }
+
+    public static float getHeight() {
+        return gameMap.getHeight();
     }
 }

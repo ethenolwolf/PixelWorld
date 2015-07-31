@@ -1,6 +1,7 @@
 package com.mygdx.pixelworld.data.utilities;
 
-import com.mygdx.pixelworld.GUI.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 import java.nio.charset.Charset;
@@ -13,7 +14,7 @@ import java.nio.file.Paths;
 @SuppressWarnings("SameParameterValue")
 public abstract class Utils {
     private static final String SAVE_PATH = "core/assets/saves/save.save";
-
+    private static final Logger logger = LogManager.getLogger();
     /**
      * Maps a value from a range to another range.
      *
@@ -39,11 +40,11 @@ public abstract class Utils {
         try {
             out = readFile(SAVE_PATH);
         } catch (IOException e) {
-            Logger.log("Utils.readSave()", "Save file not found!");
+            logger.error("Save file not found!");
             return null;
         }
         if (out.length != 5) {
-            Logger.log("Utils.readSave()", "Save file not valid : " + out.length + " lines!");
+            logger.error("Save file not valid : " + out.length + " lines!");
             return null;
         }
         return out;

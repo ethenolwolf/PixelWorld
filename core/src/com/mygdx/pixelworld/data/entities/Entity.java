@@ -7,6 +7,8 @@ import com.mygdx.pixelworld.data.utilities.Damaging;
 import com.mygdx.pixelworld.data.utilities.EntityStats;
 import com.mygdx.pixelworld.data.utilities.bounding.BoundingRect;
 import com.mygdx.pixelworld.data.utilities.bounding.BoundingShape;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.List;
 
@@ -14,6 +16,7 @@ import java.util.List;
  * Class used to generify entity in game
  */
 public abstract class Entity implements Disposable {
+    protected static final Logger logger = LogManager.getLogger();
     protected Vector2 pos;
     protected DrawData img;
     protected EntityStats stats;

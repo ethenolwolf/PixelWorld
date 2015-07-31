@@ -18,20 +18,19 @@ import com.mygdx.pixelworld.debug.Debug;
  */
 public class Game extends ApplicationAdapter implements InputProcessor {
 
-    public static AssetManager assetManager;
-    public static GameStates gameState = GameStates.MENU;
+    public static final AssetManager assetManager = new AssetManager();
+    public static GameState gameState = GameState.MENU;
 
     @Override
     public void create() {
         Debug.init();
         Gdx.input.setInputProcessor(this);
         CameraManager.init();
-        assetManager = new AssetManager();
         GUI.loadImage();
         assetManager.finishLoading();
         DrawManager.init();
         GUI.init();
-        if (Debug.isTrue("SKIP_MAIN_MENU")) Game.gameState = Game.GameStates.GAME;
+        if (Debug.isTrue("SKIP_MAIN_MENU")) Game.gameState = GameState.GAME;
         World.init();
     }
 
@@ -52,7 +51,7 @@ public class Game extends ApplicationAdapter implements InputProcessor {
                     break;
                 case LOAD:
                     World.load();
-                    gameState = GameStates.GAME;
+                    gameState = GameState.GAME;
                     break;
             }
         } else {
@@ -66,10 +65,11 @@ public class Game extends ApplicationAdapter implements InputProcessor {
      */
     private void gameLoop() {
         //Logic update
-        if (gameState == GameStates.GAME) {
+        if (gameState == GameState.GAME) {
             World.update();
             DrawManager.setColor(DrawManager.Type.BATCH, 1.0f, 1.0f, 1.0f, 1.0f);
         } else {
+            //fade all
             DrawManager.setColor(DrawManager.Type.BATCH, 0.5f, 0.5f, 0.5f, 1);
         }
 
@@ -99,13 +99,12 @@ public class Game extends ApplicationAdapter implements InputProcessor {
             case GAME:
                 if (keycode == Input.Keys.SPACE) World.manaTrigger();
                 if (keycode == Input.Keys.valueOf(Constants.INTERACTION_KEY)) World.interaction();
-                if (keycode == Input.Keys.P) gameState = GameStates.PAUSE;
+                if (keycode == Input.Keys.P) gameState = GameState.PAUSE;
                 break;
             case PAUSE:
-                if (keycode == Input.Keys.P) gameState = GameStates.GAME;
+                if (keycode == Input.Keys.P) gameState = GameState.GAME;
                 break;
         }
-
         return false;
     }
 
@@ -149,7 +148,11 @@ public class Game extends ApplicationAdapter implements InputProcessor {
         return false;
     }
 
-    public enum GameStates {
+    public GameState getState() {
+        return gameState;
+    }
+
+    public enum GameState {
         MENU, GAME, LOAD, PAUSE
     }
 
